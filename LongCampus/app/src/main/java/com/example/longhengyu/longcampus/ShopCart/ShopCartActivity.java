@@ -119,16 +119,39 @@ public class ShopCartActivity extends BaseActivity implements ShopCartInterface 
     }
 
     @Override
+    public void requestItemError(String error) {
+
+    }
+
+    @Override
     public void onClickHeader(int poist) {
         switch (poist){
             case 0:
-                mPresenter.requestItem("/api/getDishList.api.php","1",mBean.getRes_id(),"1");
+                Intent todayIntent = new Intent(ShopCartActivity.this,TodayFeatureActivity.class);
+                todayIntent.putExtra("TitleName","今日推荐");
+                todayIntent.putExtra("path","/api/getDishList.api.php");
+                todayIntent.putExtra("res_id",mBean.getRes_id());
+                todayIntent.putExtra("index","1");
+                startActivity(todayIntent);
+                //mPresenter.requestItem("/api/getDishList.api.php","1",mBean.getRes_id(),"1");
                 break;
             case 1:
-                mPresenter.requestItem("/api/getDishList.api.php","1",mBean.getRes_id(),"2");
+                Intent saleIntent = new Intent(ShopCartActivity.this,TodayFeatureActivity.class);
+                saleIntent.putExtra("TitleName","特价优惠");
+                saleIntent.putExtra("path","/api/getDishList.api.php");
+                saleIntent.putExtra("res_id",mBean.getRes_id());
+                saleIntent.putExtra("index","2");
+                startActivity(saleIntent);
+                //mPresenter.requestItem("/api/getDishList.api.php","1",mBean.getRes_id(),"2");
                 break;
             case 2:
-                mPresenter.requestItem("/api/getMeal.api.php","1",mBean.getRes_id(),"3");
+                Intent freatureIntent = new Intent(ShopCartActivity.this,TodayFeatureActivity.class);
+                freatureIntent.putExtra("TitleName","特色套餐");
+                freatureIntent.putExtra("path","/api/getMeal.api.php");
+                freatureIntent.putExtra("res_id",mBean.getRes_id());
+                freatureIntent.putExtra("index","3");
+                startActivity(freatureIntent);
+                //mPresenter.requestItem("/api/getMeal.api.php","1",mBean.getRes_id(),"3");
                 break;
             case 3:
                 mPresenter.requestItem("/api/getDishList.api.php","1",mBean.getRes_id(),"4");

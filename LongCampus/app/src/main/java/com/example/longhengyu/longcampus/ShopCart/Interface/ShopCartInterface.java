@@ -13,14 +13,16 @@ import java.util.List;
 
 public interface ShopCartInterface {
 
-    public void requestItemSuccess(List<ShopCartBean> list, ShopCartHeaderBean headerBean,String tag);
+     void requestItemSuccess(List<ShopCartBean> list, ShopCartHeaderBean headerBean,String tag);
 
-    public void onClickHeader(int poist);
+     void requestItemError(String error);
 
-    public void onClickItem(int poist);
+     void onClickHeader(int poist);
 
-    public void onClickItemAdd(int poist , TextView addText);
+     void onClickItem(int poist);
 
-    public void onClickItemReduce(int poist, TextView jianText);
+     void onClickItemAdd(int poist , TextView addText);
+
+     void onClickItemReduce(int poist, TextView jianText);
 
 }
