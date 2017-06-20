@@ -1,5 +1,6 @@
 package com.example.longhengyu.longcampus.Person;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import com.example.longhengyu.longcampus.Base.BaseFragment;
 import com.example.longhengyu.longcampus.Person.Adapter.PersonAdapter;
 import com.example.longhengyu.longcampus.Person.Bean.PersonBean;
+import com.example.longhengyu.longcampus.Person.Interface.PersonInterface;
 import com.example.longhengyu.longcampus.Person.Presenter.PersonPresenter;
+import com.example.longhengyu.longcampus.PersonSubs.Collection.CollectionActivity;
 import com.example.longhengyu.longcampus.R;
 
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by longhengyu on 2017/4/20.
  */
 
-public class PersonFragment extends BaseFragment {
+public class PersonFragment extends BaseFragment implements PersonInterface {
 
     @BindView(R.id.recycle_my)
     RecyclerView mRecycleMy;
@@ -63,8 +66,34 @@ public class PersonFragment extends BaseFragment {
         mPresenter.setContext(getContext());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecycleMy.setLayoutManager(manager);
-        PersonAdapter adapter = new PersonAdapter(mList,getContext());
+        PersonAdapter adapter = new PersonAdapter(mList,getContext(),this);
         mRecycleMy.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onClickHeaderView(int headerIndex) {
+        switch (headerIndex){
+            case 0:
+                Intent collectionIntent = new Intent(getActivity(), CollectionActivity.class);
+                getActivity().startActivity(collectionIntent);
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onClickItem(int itemIndex) {
+
+    }
+
+    @Override
+    public void onClickLogout() {
 
     }
 }

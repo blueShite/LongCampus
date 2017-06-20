@@ -59,6 +59,14 @@
         </activity>
         <activity android:name=".ShopCart.TodayFeatureActivity">
         </activity>
+        <activity android:name=".ShopCart.MyMenuActivity">
+        </activity>
+        <activity android:name=".PersonSubs.Collection.CollectionActivity">
+        </activity>
+        <activity android:name=".PersonSubs.Integral.IntegralActivity">
+        </activity>
+        <activity android:name=".PersonSubs.Order.OrderActivity">
+        </activity>
     </application>
 
 </manifest>

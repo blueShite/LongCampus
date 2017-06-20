@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.Person.Bean.PersonBean;
+import com.example.longhengyu.longcampus.Person.Interface.PersonInterface;
 import com.example.longhengyu.longcampus.R;
 
 import org.w3c.dom.Text;
@@ -32,11 +33,13 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     private View headerView;
     private View footerView;
     private Context mContext;
+    private PersonInterface mInterface;
 
-    public PersonAdapter(List<PersonBean> list, Context context){
+    public PersonAdapter(List<PersonBean> list, Context context,PersonInterface anInterface){
 
         mList = list;
         mContext = context;
+        mInterface = anInterface;
 
     }
 
@@ -79,16 +82,17 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(PersonAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(PersonAdapter.ViewHolder holder, final int position) {
 
         if(position==0){
 
             for (int i=0;i<holder.mRelativeLayouts.size();i++){
                 RelativeLayout relativeLayout = holder.mRelativeLayouts.get(i);
+                final int finalI = i;
                 relativeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        mInterface.onClickHeaderView(finalI);
                     }
                 });
             }
@@ -100,7 +104,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
             holder.footerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    mInterface.onClickLogout();
                 }
             });
             return;
@@ -108,6 +112,12 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
         holder.nameText.setText(mList.get(position).getTitle());
         holder.mImageView.setImageResource(mList.get(position).getImageId());
+        holder.selfView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickItem(position);
+            }
+        });
 
     }
 
@@ -121,6 +131,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         //item的视图
         private TextView nameText;
         private ImageView mImageView;
+        private View selfView;
 
         //headerView的视图
         private List<RelativeLayout> mRelativeLayouts = new ArrayList<>();
@@ -153,6 +164,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
                 return;
             }
+            selfView = itemView;
             nameText = (TextView)itemView.findViewById(R.id.text_person_itemName);
             mImageView = (ImageView)itemView.findViewById(R.id.image_person_item);
         }
