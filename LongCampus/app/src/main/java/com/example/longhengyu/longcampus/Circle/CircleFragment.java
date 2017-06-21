@@ -3,6 +3,7 @@ package com.example.longhengyu.longcampus.Circle;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,12 +31,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import es.dmoral.toasty.Toasty;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by longhengyu on 2017/4/20.
  */
 
-public class CircleFragment extends BaseFragment implements CircleInterface {
+public class CircleFragment extends SupportFragment implements CircleInterface {
 
 
     @BindView(R.id.recyclerview_circle)
@@ -57,27 +59,20 @@ public class CircleFragment extends BaseFragment implements CircleInterface {
         return fragment;
     }
 
+    @Nullable
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_circle;
-    }
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-    @Override
-    protected void initView() {
-        ButterKnife.bind(this, convertView);
+        View view = inflater.inflate(R.layout.fragment_circle, container, false);
+        ButterKnife.bind(this, view);
         customView();
-    }
-
-    @Override
-    protected void initData() {
-
         mPresenter.requestBanner();
+        return view;
     }
 
     private void customView(){
 
         mPresenter.setContext(getContext());
-
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerviewCircle.setLayoutManager(manager);
         CircleAdapter circleAdapter = new CircleAdapter(mBannerList,mItemList,getContext(),this);

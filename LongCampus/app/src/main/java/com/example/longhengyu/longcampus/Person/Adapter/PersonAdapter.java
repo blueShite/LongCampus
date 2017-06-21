@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.Person.Bean.PersonBalanceBean;
 import com.example.longhengyu.longcampus.Person.Bean.PersonBean;
 import com.example.longhengyu.longcampus.Person.Interface.PersonInterface;
 import com.example.longhengyu.longcampus.R;
@@ -34,6 +35,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     private View footerView;
     private Context mContext;
     private PersonInterface mInterface;
+    private PersonBalanceBean mBalanceBean;
 
     public PersonAdapter(List<PersonBean> list, Context context,PersonInterface anInterface){
 
@@ -48,6 +50,13 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         mList = list;
         notifyDataSetChanged();
     }
+
+    public void reloadHeader(PersonBalanceBean balanceBean){
+
+        mBalanceBean = balanceBean;
+        notifyItemChanged(0);
+    }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -97,7 +106,12 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
                 });
             }
             holder.titleNameText.setText("昵称:"+LoginManage.getInstance().getLoginBean().getNickname());
-            holder.titlejifenText.setText("积分:"+LoginManage.getInstance().getLoginBean().getBalance());
+            if(mBalanceBean==null){
+                holder.titlejifenText.setText("积分:"+LoginManage.getInstance().getLoginBean().getBalance());
+            }else {
+                holder.titlejifenText.setText("积分:"+mBalanceBean.getIntegral());
+            }
+
             return;
         }
         if(position==mList.size()-1){

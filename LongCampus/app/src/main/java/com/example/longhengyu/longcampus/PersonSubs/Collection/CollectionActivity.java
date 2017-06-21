@@ -96,7 +96,14 @@ public class CollectionActivity extends BaseActivity implements CollectionInterf
     }
 
     @Override
-    public void onClickCollectSelect() {
+    public void onClickCollectSelect(int index) {
 
+        mPresenter.requestCancelCollection(LoginManage.getInstance().getLoginBean().getId(),mList.get(index).getMenu_id(),index);
+    }
+
+    @Override
+    public void requestCancelCollection(int index) {
+        mList.remove(index);
+        collectAdapter.notifyItemRemoved(index);
     }
 }

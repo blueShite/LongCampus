@@ -46,7 +46,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         CollectionBean bean = mList.get(position);
 
@@ -58,7 +58,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         holder.mButtonCollectionSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickCollectSelect();
+                mInterface.onClickCollectSelect(position);
             }
         });
     }

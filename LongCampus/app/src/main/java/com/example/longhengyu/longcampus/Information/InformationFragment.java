@@ -3,6 +3,7 @@ package com.example.longhengyu.longcampus.Information;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,12 +28,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by longhengyu on 2017/4/20.
  */
 
-public class InformationFragment extends BaseFragment implements InformationInterface {
+public class InformationFragment extends SupportFragment implements InformationInterface {
 
     @BindView(R.id.recyclerview_information)
     RecyclerView mRecyclerviewInformation;
@@ -52,23 +54,15 @@ public class InformationFragment extends BaseFragment implements InformationInte
         return fragment;
     }
 
-
+    @Nullable
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_information;
-    }
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-    @Override
-    protected void initView() {
-
-        ButterKnife.bind(this, convertView);
+        View view = inflater.inflate(R.layout.fragment_information, container, false);
+        ButterKnife.bind(this, view);
         customView();
-    }
-
-    @Override
-    protected void initData() {
-
         mInformationPresenter.requestBanner();
+        return view;
     }
 
     private void customView(){

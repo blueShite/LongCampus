@@ -3,8 +3,12 @@ package com.example.longhengyu.longcampus.Home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -30,12 +34,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by longhengyu on 2017/4/20.
  */
 
-public class HomeFragment extends BaseFragment implements HomeInterface,HomeAdapterInterface,LongLocationListener {
+public class HomeFragment extends SupportFragment implements HomeInterface,HomeAdapterInterface,LongLocationListener {
 
     @BindView(R.id.text_home_dingwei)
     TextView mTextHomeDingwei;
@@ -51,6 +56,7 @@ public class HomeFragment extends BaseFragment implements HomeInterface,HomeAdap
 
     private LongLocation mLongLocation;
 
+
     public static HomeFragment newInstance(String info) {
         Bundle args = new Bundle();
         HomeFragment fragment = new HomeFragment();
@@ -59,27 +65,25 @@ public class HomeFragment extends BaseFragment implements HomeInterface,HomeAdap
         return fragment;
     }
 
+    @Nullable
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_home;
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this, view);
+        initView();
+        mPresenter.requestHomeData(page);
+        mLongLocation.startLocation();
+        return view;
     }
 
-    @Override
     protected void initView() {
 
-        ButterKnife.bind(this, convertView);
         customView();
         page = "1";
         mLongLocation = new LongLocation(getContext(),this);
         mTextHomeDingwei.setText(locationStr);
 
-    }
-
-    @Override
-    protected void initData() {
-
-        mPresenter.requestHomeData(page);
-        mLongLocation.startLocation();
     }
 
     private void customView(){

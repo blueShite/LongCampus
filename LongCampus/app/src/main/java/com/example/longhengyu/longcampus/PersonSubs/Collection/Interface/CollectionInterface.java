@@ -12,6 +12,7 @@ public interface CollectionInterface {
 
     void requestCollectionSucess(List<CollectionBean> list,String page);
     void requestCollectionError(String error);
-    void onClickCollectSelect();
+    void onClickCollectSelect(int index);
+    void requestCancelCollection(int index);
 
 }

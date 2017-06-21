@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.example.longhengyu.longcampus.Tab.TabActivity">
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <FrameLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomBar"/>
 
     <TextView
         android:id="@+id/textView"
@@ -26,12 +22,9 @@
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
         android:background="#ffffff"
-        app:bb_activeTabAlpha="1"
-        app:bb_activeTabColor="@color/colorPrimary"
-        app:bb_behavior="underNavbar"
-        app:bb_inActiveTabAlpha="1"
-        app:bb_inActiveTabColor="@color/ColorLine"
+        app:bb_activeTabColor="@color/colorAccent"
         app:bb_tabXmlResource="@xml/bottombar_sample_activity"/>
 
-</LinearLayout>
+</RelativeLayout>
