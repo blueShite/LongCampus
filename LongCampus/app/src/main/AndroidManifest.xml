@@ -67,6 +67,16 @@
         </activity>
         <activity android:name=".PersonSubs.Order.OrderActivity">
         </activity>
+        <activity
+            android:name=".PersonSubs.SetLike.SetLikeActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        </activity>
+        <activity android:name=".PersonSubs.AboutUs.AboutUsActivity">
+        </activity>
+        <activity android:name=".PersonSubs.Feedback.FeedbackActivity">
+        </activity>
+        <activity android:name=".PersonSubs.SetPerson.SetPersonActivity">
+        </activity>
     </application>
 
 </manifest>

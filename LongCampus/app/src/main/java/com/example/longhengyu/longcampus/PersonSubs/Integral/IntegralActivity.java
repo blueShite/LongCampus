@@ -88,6 +88,8 @@ public class IntegralActivity extends BaseActivity implements IntegralInterface 
 
     @Override
     public void requestIntegralSucess(List<IntegralBean> list) {
+        mIntegralRefresh.finishLoadmore();
+        mIntegralRefresh.finishRefreshing();
         if(page.equals("1")){
             mList.clear();
         }
@@ -97,6 +99,7 @@ public class IntegralActivity extends BaseActivity implements IntegralInterface 
 
     @Override
     public void requestImtegralError(String error) {
-
+        mIntegralRefresh.finishLoadmore();
+        mIntegralRefresh.finishRefreshing();
     }
 }

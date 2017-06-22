@@ -22,7 +22,10 @@ public class LoginManage  {
     private String loginStr = "SaveLogin";
 
     public void saveLoginBean(LoginBean bean) {
-
+        if(bean==null){
+            SharePrefUtil.saveString(MyApplication.getContext(),loginStr,"");
+            return;
+        }
         String beanStr = JSON.toJSONString(bean);
         SharePrefUtil.saveString(MyApplication.getContext(),loginStr,beanStr);
 
