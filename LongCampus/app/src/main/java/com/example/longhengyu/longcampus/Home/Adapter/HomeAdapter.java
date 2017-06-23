@@ -77,8 +77,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }
         CanteenBean bean = mList.get(position);
         String[] all=bean.getRes_img().split("[=]");
-        if(!all[1].isEmpty()){
-            Picasso.with(mContext).load(all[1]).resize(90,90).into(holder.mImageView);
+        if(!bean.getRes_img().isEmpty()){
+            Picasso.with(mContext).load(bean.getRes_img()).resize(90,90).into(holder.mImageView);
         }
         holder.subText.setText(bean.getRes_intro());
         holder.nameText.setText(bean.getRes_name());

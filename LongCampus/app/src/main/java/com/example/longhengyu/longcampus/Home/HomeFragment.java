@@ -130,6 +130,8 @@ public class HomeFragment extends SupportFragment implements HomeInterface,HomeA
     @Override
     public void requestHomeDataSucess(List<CanteenBean> list) {
 
+        mRefreshLayoutHome.finishRefreshing();
+        mRefreshLayoutHome.finishLoadmore();
         if(page.equals("1")){
 
             mList = list;
@@ -139,6 +141,12 @@ public class HomeFragment extends SupportFragment implements HomeInterface,HomeA
             mRefreshLayoutHome.finishRefreshing();
 
         }
+    }
+
+    @Override
+    public void requestHomeDataError(String error) {
+        mRefreshLayoutHome.finishRefreshing();
+        mRefreshLayoutHome.finishLoadmore();
     }
 
     //点击item的监听

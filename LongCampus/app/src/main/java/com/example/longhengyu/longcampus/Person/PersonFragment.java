@@ -25,6 +25,7 @@ import com.example.longhengyu.longcampus.PersonSubs.Feedback.FeedbackActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.IntegralActivity;
 import com.example.longhengyu.longcampus.PersonSubs.SetLike.Bean.SetLikeBean;
 import com.example.longhengyu.longcampus.PersonSubs.SetLike.SetLikeActivity;
+import com.example.longhengyu.longcampus.PersonSubs.SetPerson.SetPersonActivity;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.Tools.ActivityCollector;
 
@@ -119,7 +120,8 @@ public class PersonFragment extends SupportFragment implements PersonInterface {
     public void onClickItem(int itemIndex) {
         switch (itemIndex){
             case 1:
-
+                Intent setIntent = new Intent(getActivity(), SetPersonActivity.class);
+                startActivity(setIntent);
                 break;
             case 2:
 

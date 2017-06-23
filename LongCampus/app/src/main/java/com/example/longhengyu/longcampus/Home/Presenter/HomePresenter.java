@@ -32,13 +32,18 @@ public class HomePresenter extends BasePresenter {
 
         showDialog();
         Map<String,String> map = new HashMap<>();
-        map.put("sch_id", LoginManage.getInstance().getLoginBean().getStuid());
+        if(LoginManage.getInstance().getLoginBean().getStuid().isEmpty()){
+            map.put("sch_id", "1");
+        }else {
+            map.put("sch_id", LoginManage.getInstance().getLoginBean().getStuid());
+        }
         map.put("page",page);
         RequestTools.getInstance().postRequest("/api/getResList.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 dismissDialog();
                 super.onError(call, e, id);
+                mHomeInterface.requestHomeDataError("请求失败");
             }
 
             @Override
@@ -48,7 +53,8 @@ public class HomePresenter extends BasePresenter {
                     List<CanteenBean> list = JSON.parseArray(response.getData(),CanteenBean.class);
                     mHomeInterface.requestHomeDataSucess(list);
                 }else {
-                    Toasty.error(mContext,"请求失败").show();
+                    Toasty.error(mContext,response.getMes()).show();
+                    mHomeInterface.requestHomeDataError(response.getMes());
                 }
                 super.onResponse(response, id);
             }

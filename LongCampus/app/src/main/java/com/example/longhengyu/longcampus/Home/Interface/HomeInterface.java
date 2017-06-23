@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface HomeInterface  {
 
-    public void requestHomeDataSucess(List<CanteenBean> list);
+    void requestHomeDataSucess(List<CanteenBean> list);
+
+    void requestHomeDataError(String error);
 
 }

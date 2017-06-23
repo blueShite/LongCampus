@@ -33,7 +33,7 @@
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/mima2"
+        android:src="@drawable/mima2"
         android:layout_marginTop="37dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar15"
         android:layout_marginLeft="8dp"

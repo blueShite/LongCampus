@@ -51,7 +51,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Circle.CircleDetail.CircleDetailActivity">
+        <activity android:name=".Circle.CircleDetail.CircleDetailActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
         </activity>
         <activity android:name=".ShopCart.ShopCartActivity">
         </activity>

@@ -103,6 +103,9 @@ public class ShopCartActivity extends BaseActivity implements ShopCartInterface 
     @Override
 
     public void requestItemSuccess(List<ShopCartBean> list, ShopCartHeaderBean headerBean,String tag) {
+        if(list==null){
+            return;
+        }
         ShopCartAdapter adapter = (ShopCartAdapter) mRecyclerviewShopCart.getAdapter();
         mList = list;
         mList.add(0,new ShopCartBean());
