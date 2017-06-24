@@ -10,10 +10,14 @@ import java.util.List;
 
 public interface InformationInterface {
 
-    public void requestSuccess(List<InformationBean> bannerList,List<InformationBean> itemList);
+    void requestHeaderSucess(List<InformationBean> bannerList);
 
-    public void onClickHeader(int poist);
+    void requestSuccess(List<InformationBean> itemList);
 
-    public void onClickitem(int poist);
+    void requestError(String error);
+
+    void onClickHeader(int poist);
+
+    void onClickitem(int poist);
 
 }

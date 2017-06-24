@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.EditText;
 
 import com.example.longhengyu.longcampus.Base.BaseActivity;
 import com.example.longhengyu.longcampus.Circle.Bean.CircleHeaderBean;
@@ -24,7 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import es.dmoral.toasty.Toasty;
+import butterknife.OnClick;
 
 public class CircleDetailActivity extends BaseActivity implements CircleDetailInterface {
 
@@ -32,8 +33,11 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
     RecyclerView mRecyclerviewCircleDetail;
     @BindView(R.id.refreshLayout_circleDetail)
     TwinklingRefreshLayout mRefreshLayoutCircleDetail;
+    @BindView(R.id.edit_circle_detail)
+    EditText mEditCircleDetail;
 
     private String groupId;
+    private String page;
 
     private List<CircleDetailItemBean> mList = new ArrayList<>();
     private CircleDetailHeaderBean mBean;
@@ -45,7 +49,8 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
         setContentView(R.layout.activity_circle_detail);
         ButterKnife.bind(this);
         customView();
-        mPresenter.requestData(groupId,"1");
+        page = "1";
+        mPresenter.requestData(groupId, page);
     }
 
     private void customView() {
@@ -62,7 +67,7 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
 
         LinearLayoutManager manager = new LinearLayoutManager(CircleDetailActivity.this);
         mRecyclerviewCircleDetail.setLayoutManager(manager);
-        CircleDetailAdapter adapter = new CircleDetailAdapter(mList,mBean,CircleDetailActivity.this);
+        CircleDetailAdapter adapter = new CircleDetailAdapter(mList, mBean, CircleDetailActivity.this);
         mRecyclerviewCircleDetail.setAdapter(adapter);
 
         //定制刷新加载
@@ -73,33 +78,54 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
 
         LoadingView loadingView = new LoadingView(CircleDetailActivity.this);
         mRefreshLayoutCircleDetail.setBottomView(loadingView);
-        mRefreshLayoutCircleDetail.setOnRefreshListener(new RefreshListenerAdapter(){
+        mRefreshLayoutCircleDetail.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                mRefreshLayoutCircleDetail.finishRefreshing();
+                page = "1";
+                mPresenter.requestData(groupId, page);
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayoutCircleDetail.finishLoadmore();
-                    }
-                },2000);
+                int pageIndex = Integer.parseInt(page)+1;
+                page = pageIndex+"";
+                mPresenter.requestData(groupId, page);
             }
         });
 
     }
 
-    @Override
-    public void requestSucess(CircleDetailHeaderBean headerBean, List<CircleDetailItemBean> list) {
+    @OnClick(R.id.text_circle_detail_Submit)
+    public void onViewClicked() {
+    }
 
-        mList = list;
-        mList.add(0,new CircleDetailItemBean());
-        mBean = headerBean;
-        CircleDetailAdapter adapter = (CircleDetailAdapter)mRecyclerviewCircleDetail.getAdapter();
-        adapter.reoadItem(mList,mBean);
+    @Override
+    public void requestHeaderData(CircleDetailHeaderBean headerBean) {
+
+        CircleDetailAdapter adapter = (CircleDetailAdapter) mRecyclerviewCircleDetail.getAdapter();
+        adapter.reloadHeader(headerBean);
+    }
+
+    @Override
+    public void requestSucess(List<CircleDetailItemBean> list) {
+
+        if(page.equals("1")){
+            mList.clear();
+            mList.add(0, new CircleDetailItemBean());
+        }
+        mList.addAll(list);
+        CircleDetailAdapter adapter = (CircleDetailAdapter) mRecyclerviewCircleDetail.getAdapter();
+        adapter.reoadItem(mList);
+        mPresenter.requestHeaderData(groupId);
 
     }
+
+    @Override
+    public void requestError(String error) {
+        mList.clear();
+        mList.add(0, new CircleDetailItemBean());
+        mPresenter.requestHeaderData(groupId);
+    }
+
+
 }

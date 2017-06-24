@@ -106,17 +106,15 @@ public class HomeFragment extends SupportFragment implements HomeInterface,HomeA
         mRefreshLayoutHome.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
+                page = "1";
                 mPresenter.requestHomeData(page);
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayoutHome.finishLoadmore();
-                    }
-                },2000);
+                int pageIndex = Integer.parseInt(page)+1;
+                page = pageIndex+"";
+                mPresenter.requestHomeData(page);
             }
         });
     }

@@ -32,8 +32,6 @@
 
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
         android:id="@+id/refreshLayout_information"
-        app:tr_enable_loadmore="false"
-        app:tr_autoLoadMore="false"
         app:tr_showLoadingWhenOverScroll="false"
         android:layout_width="0dp"
         android:layout_height="0dp"

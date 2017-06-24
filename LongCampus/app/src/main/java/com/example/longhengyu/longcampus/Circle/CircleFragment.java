@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.longhengyu.longcampus.Base.BaseFragment;
 import com.example.longhengyu.longcampus.Circle.Adapter.CircleAdapter;
 import com.example.longhengyu.longcampus.Circle.Bean.CircleHeaderBean;
 import com.example.longhengyu.longcampus.Circle.Bean.CircleItemBean;
@@ -28,9 +27,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-import es.dmoral.toasty.Toasty;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**

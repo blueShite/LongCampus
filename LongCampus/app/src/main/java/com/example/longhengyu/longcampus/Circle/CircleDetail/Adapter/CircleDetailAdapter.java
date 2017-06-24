@@ -34,9 +34,13 @@ public class CircleDetailAdapter extends RecyclerView.Adapter<CircleDetailAdapte
         mContext = context;
     }
 
-    public void reoadItem(List<CircleDetailItemBean> list,CircleDetailHeaderBean bean){
-        mList = list;
+    public void reloadHeader(CircleDetailHeaderBean bean){
         mBean = bean;
+        notifyItemChanged(0);
+    }
+
+    public void reoadItem(List<CircleDetailItemBean> list){
+        mList = list;
         notifyDataSetChanged();
     }
 
@@ -67,7 +71,6 @@ public class CircleDetailAdapter extends RecyclerView.Adapter<CircleDetailAdapte
     public void onBindViewHolder(CircleDetailAdapter.ViewHolder holder, int position) {
 
         if(position==0) {
-
             Picasso.with(mContext).load(RequestTools.BaseUrl+mBean.getHeadimg()).fit().centerCrop().placeholder(R.drawable.touxinag).into(holder.headerImage);
             Picasso.with(mContext).load(RequestTools.BaseUrl+mBean.getGroup_litpic().get(0)).fit().centerCrop().into(holder.headerSubImage);
             holder.headerNameText.setText(mBean.getNickname());

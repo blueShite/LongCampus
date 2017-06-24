@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface CircleDetailInterface {
 
-    public void requestSucess(CircleDetailHeaderBean headerBean, List<CircleDetailItemBean> list);
-
+    void requestHeaderData(CircleDetailHeaderBean headerBean);
+    void requestSucess(List<CircleDetailItemBean> list);
+    void requestError(String error);
 }

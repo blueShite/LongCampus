@@ -32,11 +32,9 @@ public class InformationPresenter extends BasePresenter {
 
     public void requestBanner(){
 
-        showDialog();
         RequestTools.getInstance().getRequest("/api/getNewsTop.api.php", false, null, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
-                requestItem();
                 super.onError(call, e, id);
             }
 
@@ -44,10 +42,9 @@ public class InformationPresenter extends BasePresenter {
             public void onResponse(RequestBean response, int id) {
                 if(response.isRes()){
                     bannerList = JSON.parseArray(response.getData(), InformationBean.class);
-                    requestItem();
+                    mInterface.requestHeaderSucess(bannerList);
                 }else {
                     Toasty.error(mContext,"轮播图请求失败").show();
-                    requestItem();
                 }
                 super.onResponse(response, id);
             }
@@ -55,12 +52,15 @@ public class InformationPresenter extends BasePresenter {
 
     }
 
-    public void requestItem(){
-
-        RequestTools.getInstance().getRequest("/api/getHTinfo.api.php", false, null, "", new RequestCallBack(mContext) {
+    public void requestItem(String page){
+        showDialog();
+        Map<String ,String> map = new HashMap<>();
+        map.put("page",page);
+        RequestTools.getInstance().getRequest("/api/getHTinfo.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 dismissDialog();
+                mInterface.requestError("请求失败");
                 super.onError(call, e, id);
             }
 
@@ -69,11 +69,9 @@ public class InformationPresenter extends BasePresenter {
                 dismissDialog();
                 if(response.isRes()){
                     List<InformationBean> list = JSON.parseArray(response.getData(),InformationBean.class);
-                    mInterface.requestSuccess(bannerList,list);
+                    mInterface.requestSuccess(list);
                 }else {
-
-                    List<InformationBean> list = new ArrayList<InformationBean>();
-                    mInterface.requestSuccess(bannerList,list);
+                    mInterface.requestError(response.getMes());
                     Toasty.error(mContext,"资讯请求失败").show();
 
                 }

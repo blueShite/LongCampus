@@ -11,6 +11,7 @@ import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartBean;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
 import com.example.longhengyu.longcampus.ShopCart.Interface.ShopCartInterface;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class ShopCartPresenter extends BasePresenter {
 
     private ShopCartInterface mInterface;
 
-    private List<ShopCartBean> mList;
+    private List<ShopCartBean> mList = new ArrayList<>();
 
     public ShopCartPresenter(ShopCartInterface shopCartInterface){
 

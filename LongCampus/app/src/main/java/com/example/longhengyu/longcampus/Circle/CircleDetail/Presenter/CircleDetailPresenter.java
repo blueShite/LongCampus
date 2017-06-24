@@ -1,7 +1,5 @@
 package com.example.longhengyu.longcampus.Circle.CircleDetail.Presenter;
 
-import android.widget.TextView;
-
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BasePresenter;
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Bean.CircleDetailHeaderBean;
@@ -41,8 +39,9 @@ public class CircleDetailPresenter extends BasePresenter {
         RequestTools.getInstance().postRequest("/api/getGroupCommentList.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
-                requestHeaderData(groupId);
+                dismissDialog();
                 super.onError(call, e, id);
+                mInterface.requestError("请求失败");
             }
 
             @Override
@@ -50,10 +49,11 @@ public class CircleDetailPresenter extends BasePresenter {
                 super.onResponse(response, id);
                 if(response.isRes()){
                     mList = JSON.parseArray(response.getData(),CircleDetailItemBean.class);
+                    mInterface.requestSucess(mList);
                 }else {
                     Toasty.error(mContext,"获取列表失败").show();
+                    mInterface.requestError(response.getMes());
                 }
-                requestHeaderData(groupId);
             }
         });
 
@@ -66,22 +66,20 @@ public class CircleDetailPresenter extends BasePresenter {
         RequestTools.getInstance().postRequest("/api/getDieCircleCon.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
-                dismissDialog();
-                mInterface.requestSucess(new CircleDetailHeaderBean(),mList);
+
                 super.onError(call, e, id);
             }
 
             @Override
             public void onResponse(RequestBean response, int id) {
-                dismissDialog();
                 super.onResponse(response, id);
                 if(response.isRes()){
 
                     CircleDetailHeaderBean bean = JSON.parseArray(response.getData(),CircleDetailHeaderBean.class).get(0);
-                    mInterface.requestSucess(bean,mList);
+                    mInterface.requestHeaderData(bean);
                 }else {
                     Toasty.error(mContext,"获取信息失败").show();
-                    mInterface.requestSucess(new CircleDetailHeaderBean(),mList);
+
                 }
             }
         });

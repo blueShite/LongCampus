@@ -43,10 +43,14 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
 
     }
 
-    public void reloadItem(List<InformationBean> itemList,List<InformationBean> bannerList){
+    public void reloadHeader(List<InformationBean> bannerList){
+        mbannerList = bannerList;
+        notifyItemChanged(0);
+    }
+
+    public void reloadItem(List<InformationBean> itemList){
 
         mitemList = itemList;
-        mbannerList = bannerList;
         notifyDataSetChanged();
     }
 
@@ -78,6 +82,9 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
 
         if(position==0){
 
+            if(mbannerList==null||mbannerList.size()<1){
+                return;
+            }
             Banner banner = holder.mBanner;
             List<String> list = new ArrayList<>();
             for (int i=0;i<mbannerList.size();i++){
@@ -95,7 +102,7 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
             return;
         }
 
-        InformationBean informationBean = mitemList.get(position);
+        InformationBean informationBean = mitemList.get(position-1);
         String imageUrl = RequestTools.BaseUrl+informationBean.getLitpic();
         Picasso.with(mContext).load(imageUrl).resize(45,45).into(holder.mImageView);
         holder.nameText.setText(informationBean.getHtinfo());
@@ -103,14 +110,14 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
         holder.selfView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickitem(position);
+                mInterface.onClickitem(position-1);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mitemList.size();
+        return mitemList.size()+1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

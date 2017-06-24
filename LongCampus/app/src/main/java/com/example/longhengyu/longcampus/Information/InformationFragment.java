@@ -41,11 +41,11 @@ public class InformationFragment extends SupportFragment implements InformationI
     @BindView(R.id.refreshLayout_information)
     TwinklingRefreshLayout mRefreshLayoutInformation;
 
-    List<InformationBean> mbannerList = new ArrayList<>();
-    List<InformationBean> mitemList = new ArrayList<>();
+    private List<InformationBean> mbannerList = new ArrayList<>();
+    private List<InformationBean> mitemList = new ArrayList<>();
 
-    InformationPresenter mInformationPresenter = new InformationPresenter(this);
-
+    private InformationPresenter mInformationPresenter = new InformationPresenter(this);
+    private String page;
     public static InformationFragment newInstance(String info) {
         Bundle args = new Bundle();
         InformationFragment fragment = new InformationFragment();
@@ -61,7 +61,9 @@ public class InformationFragment extends SupportFragment implements InformationI
         View view = inflater.inflate(R.layout.fragment_information, container, false);
         ButterKnife.bind(this, view);
         customView();
+        page = "1";
         mInformationPresenter.requestBanner();
+        mInformationPresenter.requestItem(page);
         return view;
     }
 
@@ -82,35 +84,50 @@ public class InformationFragment extends SupportFragment implements InformationI
         headerView.setArrowResource(R.drawable.arrow);
         headerView.setTextColor(0xff745D5C);
         mRefreshLayoutInformation.setHeaderView(headerView);
+
+        LoadingView loadingView = new LoadingView(getContext());
+        mRefreshLayoutInformation.setBottomView(loadingView);
         mRefreshLayoutInformation.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
                 mInformationPresenter.requestBanner();
+                page = "1";
+                mInformationPresenter.requestItem(page);
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayoutInformation.finishLoadmore();
-                    }
-                },2000);
+
+                int pageIndex = Integer.parseInt(page)+1;
+                page = pageIndex+"";
+                mInformationPresenter.requestItem(page);
             }
         });
     }
 
 
     @Override
-    public void requestSuccess(List<InformationBean> bannerList, List<InformationBean> itemList) {
-
-        mRefreshLayoutInformation.finishRefreshing();
-        mitemList = itemList;
-        mbannerList = bannerList;
-        mitemList.add(0,new InformationBean());
+    public void requestHeaderSucess(List<InformationBean> bannerList) {
         InformationAdapter adapter = (InformationAdapter) mRecyclerviewInformation.getAdapter();
-        adapter.reloadItem(itemList,mbannerList);
+        adapter.reloadHeader(bannerList);
+    }
 
+    @Override
+    public void requestSuccess(List<InformationBean> itemList) {
+        mRefreshLayoutInformation.finishRefreshing();
+        mRefreshLayoutInformation.finishLoadmore();
+        if(page.equals("1")){
+            mitemList.clear();
+        }
+        mitemList.addAll(itemList);
+        InformationAdapter adapter = (InformationAdapter) mRecyclerviewInformation.getAdapter();
+        adapter.reloadItem(mitemList);
+    }
+
+    @Override
+    public void requestError(String error) {
+        mRefreshLayoutInformation.finishRefreshing();
+        mRefreshLayoutInformation.finishLoadmore();
     }
 
     @Override
