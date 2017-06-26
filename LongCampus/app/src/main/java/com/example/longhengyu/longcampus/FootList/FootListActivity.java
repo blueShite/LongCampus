@@ -1,0 +1,133 @@
+package com.example.longhengyu.longcampus.FootList;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.example.longhengyu.longcampus.FootList.Interface.FootListInterface;
+import com.example.longhengyu.longcampus.FootList.Presenter.FootListPresenter;
+import com.example.longhengyu.longcampus.FootList.SubFootList.FeatureFragment;
+import com.example.longhengyu.longcampus.FootList.SubFootList.MyPackageFragment;
+import com.example.longhengyu.longcampus.FootList.SubFootList.RecommendFragment;
+import com.example.longhengyu.longcampus.FootList.SubFootList.SaleFragment;
+import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
+import com.example.longhengyu.longcampus.Information.Adapter.PicassoImageLoader;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
+import com.example.longhengyu.longcampus.R;
+import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import me.yokeyword.fragmentation.SupportActivity;
+
+public class FootListActivity extends SupportActivity implements FootListInterface {
+
+    @BindView(R.id.layout_footList)
+    FrameLayout mLayoutFootList;
+    @BindView(R.id.text_footList_title)
+    TextView mTextFootListTitle;
+    @BindView(R.id.banner_shopCart)
+    Banner mBannerShopCart;
+    @BindView(R.id.relative_shopCart_jinrituijian)
+    RelativeLayout mRelativeShopCartJinrituijian;
+    @BindView(R.id.relative_shopCart_tejiayouhui)
+    RelativeLayout mRelativeShopCartTejiayouhui;
+    @BindView(R.id.relative_shopCart_tesetaocan)
+    RelativeLayout mRelativeShopCartTesetaocan;
+    @BindView(R.id.relative_shopCart_wodecaidan)
+    RelativeLayout mRelativeShopCartWodecaidan;
+    @BindView(R.id.image_shopCart_tuijian)
+    ImageView mImageShopCartTuijian;
+    @BindView(R.id.text_shopCartHeader_name)
+    TextView mTextShopCartHeaderName;
+
+    private RecommendFragment mRecommendFragment;
+    private FeatureFragment mFeatureFragment;
+    private SaleFragment mSaleFragment;
+    private MyPackageFragment mMyPackageFragment;
+    private CanteenBean mBean;
+    private FootListPresenter mPresenter = new FootListPresenter(this);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_foot_list);
+        ButterKnife.bind(this);
+        mBean = (CanteenBean) getIntent().getSerializableExtra("canteenBean");
+        customView();
+        mPresenter.requestFootListHeader(mBean.getRes_id());
+    }
+
+    private void customView() {
+
+        mBannerShopCart.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        mBannerShopCart.setImageLoader(new PicassoImageLoader());
+
+        mPresenter.setContext(FootListActivity.this);
+        mRecommendFragment = new RecommendFragment(mBean);
+        mFeatureFragment = new FeatureFragment(mBean);
+        mSaleFragment = new SaleFragment(mBean);
+        mMyPackageFragment = new MyPackageFragment(mBean);
+        loadMultipleRootFragment(R.id.layout_footList, 0, mRecommendFragment,mSaleFragment,mFeatureFragment,mMyPackageFragment);
+
+    }
+
+    @OnClick({R.id.relative_shopCart_jinrituijian, R.id.relative_shopCart_tejiayouhui, R.id.relative_shopCart_tesetaocan, R.id.relative_shopCart_wodecaidan})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.relative_shopCart_jinrituijian:
+                mTextShopCartHeaderName.setText("今日推荐");
+                mImageShopCartTuijian.setImageResource(R.drawable.tuijian);
+                mRecommendFragment = findFragment(RecommendFragment.class);
+                if (mRecommendFragment != null) {
+                    showHideFragment(mRecommendFragment);
+                }
+                break;
+            case R.id.relative_shopCart_tejiayouhui:
+                mTextShopCartHeaderName.setText("特价优惠");
+                mImageShopCartTuijian.setImageResource(R.drawable.youhui);
+                mSaleFragment = findFragment(SaleFragment.class);
+                if (mSaleFragment != null) {
+                    showHideFragment(mSaleFragment);
+                }
+                break;
+            case R.id.relative_shopCart_tesetaocan:
+                mTextShopCartHeaderName.setText("特色套餐");
+                mImageShopCartTuijian.setImageResource(R.drawable.taocan);
+                mFeatureFragment = findFragment(FeatureFragment.class);
+                if (mFeatureFragment != null) {
+                    showHideFragment(mFeatureFragment);
+                }
+                break;
+            case R.id.relative_shopCart_wodecaidan:
+                mTextShopCartHeaderName.setText("我的菜单");
+                mImageShopCartTuijian.setImageResource(R.drawable.caidan);
+                mMyPackageFragment = findFragment(MyPackageFragment.class);
+                if (mMyPackageFragment != null) {
+                    showHideFragment(mMyPackageFragment);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void requestSucess(ShopCartHeaderBean headerBean) {
+
+        List<String> list = new ArrayList<>();
+        for (int i=0;i<headerBean.getRes_img().size();i++){
+            list.add(RequestTools.BaseUrl+headerBean.getRes_img().get(i));
+        }
+        mBannerShopCart.setImages(list);
+        mBannerShopCart.start();
+        mTextFootListTitle.setText(headerBean.getRes_name());
+    }
+}

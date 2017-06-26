@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.example.longhengyu.longcampus.Base.BaseFragment;
+import com.example.longhengyu.longcampus.FootList.FootListActivity;
 import com.example.longhengyu.longcampus.Home.Adapter.HomeAdapter;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
 import com.example.longhengyu.longcampus.Home.Interface.HomeAdapterInterface;
@@ -151,7 +152,10 @@ public class HomeFragment extends SupportFragment implements HomeInterface,HomeA
     @Override
     public void onClickAdapter(int posit) {
 
-        Intent intent = new Intent(getActivity(), ShopCartActivity.class);
+        /*Intent intent = new Intent(getActivity(), ShopCartActivity.class);
+        intent.putExtra("canteenBean",mList.get(posit));
+        startActivity(intent);*/
+        Intent intent = new Intent(getActivity(), FootListActivity.class);
         intent.putExtra("canteenBean",mList.get(posit));
         startActivity(intent);
 
