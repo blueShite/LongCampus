@@ -19,12 +19,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
     <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
+        android:anyDensity="true"
         android:largeScreens="true"
+        android:normalScreens="true"
         android:resizeable="true"
-        android:anyDensity="true" />
+        android:smallScreens="true"/>
 
     <application
         android:name=".Tools.MyApplication"
@@ -86,7 +87,8 @@
         <activity android:name=".PersonSubs.SetPerson.SetPersonActivity">
         </activity>
         <activity android:name=".FootList.FootListActivity">
-
+        </activity>
+        <activity android:name=".Circle.ReleaseCircle.ReleaseCircleActivity">
         </activity>
     </application>
 

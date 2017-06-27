@@ -1,9 +1,11 @@
 package com.example.longhengyu.longcampus.Circle.CircleDetail;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.longhengyu.longcampus.Base.BaseActivity;
@@ -14,6 +16,7 @@ import com.example.longhengyu.longcampus.Circle.CircleDetail.Bean.CircleDetailHe
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Bean.CircleDetailItemBean;
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Interface.CircleDetailInterface;
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Presenter.CircleDetailPresenter;
+import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.R;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -26,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 public class CircleDetailActivity extends BaseActivity implements CircleDetailInterface {
 
@@ -51,6 +55,7 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
         customView();
         page = "1";
         mPresenter.requestData(groupId, page);
+        mPresenter.requestHeaderData(groupId);
     }
 
     private void customView() {
@@ -97,6 +102,14 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
 
     @OnClick(R.id.text_circle_detail_Submit)
     public void onViewClicked() {
+
+        if(mEditCircleDetail.getText().length()<1){
+            Toasty.error(CircleDetailActivity.this,"请输入要评论的文字").show();
+            return;
+        }
+
+        mPresenter.requestComment(groupId,mEditCircleDetail.getText().toString(), LoginManage.getInstance().getLoginBean().getId());
+
     }
 
     @Override
@@ -109,22 +122,33 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
     @Override
     public void requestSucess(List<CircleDetailItemBean> list) {
 
+        mRefreshLayoutCircleDetail.finishLoadmore();
+        mRefreshLayoutCircleDetail.finishRefreshing();
         if(page.equals("1")){
             mList.clear();
-            mList.add(0, new CircleDetailItemBean());
         }
         mList.addAll(list);
         CircleDetailAdapter adapter = (CircleDetailAdapter) mRecyclerviewCircleDetail.getAdapter();
         adapter.reoadItem(mList);
-        mPresenter.requestHeaderData(groupId);
-
     }
 
     @Override
     public void requestError(String error) {
-        mList.clear();
-        mList.add(0, new CircleDetailItemBean());
-        mPresenter.requestHeaderData(groupId);
+        mRefreshLayoutCircleDetail.finishLoadmore();
+        mRefreshLayoutCircleDetail.finishRefreshing();
+
+    }
+
+    @Override
+    public void requestCommentSucess(String commentStr) {
+
+        mEditCircleDetail.setText("");
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEditCircleDetail.getWindowToken(), 0);
+        page="1";
+        mPresenter.requestData(groupId,"1");
+
     }
 
 

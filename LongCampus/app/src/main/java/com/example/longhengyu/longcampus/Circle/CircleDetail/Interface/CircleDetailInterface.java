@@ -14,4 +14,5 @@ public interface CircleDetailInterface {
     void requestHeaderData(CircleDetailHeaderBean headerBean);
     void requestSucess(List<CircleDetailItemBean> list);
     void requestError(String error);
+    void requestCommentSucess(String commentStr);
 }

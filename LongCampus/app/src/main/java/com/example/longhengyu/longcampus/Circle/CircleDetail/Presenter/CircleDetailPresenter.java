@@ -46,6 +46,7 @@ public class CircleDetailPresenter extends BasePresenter {
 
             @Override
             public void onResponse(RequestBean response, int id) {
+                dismissDialog();
                 super.onResponse(response, id);
                 if(response.isRes()){
                     mList = JSON.parseArray(response.getData(),CircleDetailItemBean.class);
@@ -79,7 +80,31 @@ public class CircleDetailPresenter extends BasePresenter {
                     mInterface.requestHeaderData(bean);
                 }else {
                     Toasty.error(mContext,"获取信息失败").show();
+                }
+            }
+        });
+    }
 
+    public void requestComment(String groupId , final String comment, String uId){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("group_id",groupId);
+        map.put("text",comment);
+        map.put("u_id",uId);
+        RequestTools.getInstance().postRequest("/api/groupComment.api.php", false, map, "", new RequestCallBack(mContext) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    Toasty.success(mContext,"评论成功!").show();
+                    mInterface.requestCommentSucess(comment);
+                }else {
+                    Toasty.error(mContext,response.getMes()).show();
                 }
             }
         });

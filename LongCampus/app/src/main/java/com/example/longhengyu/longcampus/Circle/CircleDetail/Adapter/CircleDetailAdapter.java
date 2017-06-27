@@ -71,6 +71,9 @@ public class CircleDetailAdapter extends RecyclerView.Adapter<CircleDetailAdapte
     public void onBindViewHolder(CircleDetailAdapter.ViewHolder holder, int position) {
 
         if(position==0) {
+            if(mBean==null){
+                return;
+            }
             Picasso.with(mContext).load(RequestTools.BaseUrl+mBean.getHeadimg()).fit().centerCrop().placeholder(R.drawable.touxinag).into(holder.headerImage);
             Picasso.with(mContext).load(RequestTools.BaseUrl+mBean.getGroup_litpic().get(0)).fit().centerCrop().into(holder.headerSubImage);
             holder.headerNameText.setText(mBean.getNickname());
@@ -80,7 +83,7 @@ public class CircleDetailAdapter extends RecyclerView.Adapter<CircleDetailAdapte
             return;
         }
 
-        CircleDetailItemBean bean = mList.get(position);
+        CircleDetailItemBean bean = mList.get(position-1);
         Picasso.with(mContext).load(RequestTools.BaseUrl+bean.getHeadimg()).fit().centerCrop().placeholder(R.drawable.touxinag).into(holder.itemImage);
         holder.itemNameText.setText(bean.getNickname());
         holder.itemTimeText.setText(bean.getReply_time());
@@ -89,7 +92,7 @@ public class CircleDetailAdapter extends RecyclerView.Adapter<CircleDetailAdapte
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mList.size()+1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
