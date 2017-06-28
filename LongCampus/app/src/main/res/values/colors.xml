@@ -10,5 +10,7 @@
     <color name="ColorBlcak">#000000</color>
     <color name="ColorYellow">#F49427</color>
     <color name="ColorTransparent">#00000000</color>
+    <color name="ColorBorBlack">#F5F5F5</color>
+
 
 </resources>

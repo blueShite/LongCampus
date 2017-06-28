@@ -16,6 +16,7 @@ import com.example.longhengyu.longcampus.Circle.Bean.CircleItemBean;
 import com.example.longhengyu.longcampus.Circle.CircleDetail.CircleDetailActivity;
 import com.example.longhengyu.longcampus.Circle.Interface.CircleInterface;
 import com.example.longhengyu.longcampus.Circle.Presenter.CirclePresenter;
+import com.example.longhengyu.longcampus.Circle.ReleaseCircle.ReleaseCircleActivity;
 import com.example.longhengyu.longcampus.R;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -41,10 +43,12 @@ public class CircleFragment extends SupportFragment implements CircleInterface {
     @BindView(R.id.refreshLayout_circle)
     TwinklingRefreshLayout mRefreshLayoutCircle;
 
-    CirclePresenter mPresenter = new CirclePresenter(this);
+    private CirclePresenter mPresenter = new CirclePresenter(this);
 
-    List<CircleHeaderBean> mBannerList = new ArrayList<>();
-    List<CircleItemBean> mItemList = new ArrayList<>();
+    private List<CircleHeaderBean> mBannerList = new ArrayList<>();
+    private List<CircleItemBean> mItemList = new ArrayList<>();
+    private String page;
+    private CircleAdapter circleAdapter;
 
 
     public static CircleFragment newInstance(String info) {
@@ -62,16 +66,18 @@ public class CircleFragment extends SupportFragment implements CircleInterface {
         View view = inflater.inflate(R.layout.fragment_circle, container, false);
         ButterKnife.bind(this, view);
         customView();
+        page="1";
         mPresenter.requestBanner();
+        mPresenter.requestItem(page);
         return view;
     }
 
-    private void customView(){
+    private void customView() {
 
         mPresenter.setContext(getContext());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerviewCircle.setLayoutManager(manager);
-        CircleAdapter circleAdapter = new CircleAdapter(mBannerList,mItemList,getContext(),this);
+        circleAdapter = new CircleAdapter(mBannerList, mItemList, getContext(), this);
         mRecyclerviewCircle.setAdapter(circleAdapter);
 
         //定制刷新加载
@@ -82,41 +88,59 @@ public class CircleFragment extends SupportFragment implements CircleInterface {
 
         LoadingView loadingView = new LoadingView(getContext());
         mRefreshLayoutCircle.setBottomView(loadingView);
-        mRefreshLayoutCircle.setOnRefreshListener(new RefreshListenerAdapter(){
+        mRefreshLayoutCircle.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                mPresenter.requestBanner();
+                page="1";
+                mPresenter.requestItem(page);
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayoutCircle.finishLoadmore();
-                    }
-                },2000);
+                int indexPage = Integer.parseInt(page)+1;
+                page = indexPage+"";
+                mPresenter.requestItem(page);
             }
         });
     }
 
+    @OnClick(R.id.image_circle_camare)
+    public void onViewClicked() {
+
+        Intent intent = new Intent(getActivity(), ReleaseCircleActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
-    public void requestSucess(List<CircleHeaderBean> bannerList, List<CircleItemBean> itemList) {
+    public void requestHeader(List<CircleHeaderBean> bannerList) {
+        mBannerList.addAll(bannerList);
+        circleAdapter.reloadHeader(mBannerList);
+    }
+
+    @Override
+    public void requestSucess( List<CircleItemBean> itemList) {
 
         mRefreshLayoutCircle.finishRefreshing();
-        mItemList = itemList;
-        mItemList.add(0,new CircleItemBean());
-        mBannerList = bannerList;
-        CircleAdapter adapter = (CircleAdapter) mRecyclerviewCircle.getAdapter();
-        adapter.reloadItem(bannerList, itemList);
+        mRefreshLayoutCircle.finishLoadmore();
+        if(page.equals("1")){
+            mItemList.clear();
+        }
+        mItemList.addAll(itemList);
+        circleAdapter.reloadItem(mItemList);
+    }
 
+    @Override
+    public void requestError(String error) {
+        mRefreshLayoutCircle.finishRefreshing();
+        mRefreshLayoutCircle.finishLoadmore();
     }
 
     @Override
     public void onClickHeader(int poist) {
 
         Intent intent = new Intent(getActivity(), CircleDetailActivity.class);
-        intent.putExtra("circleHeaderBean",mBannerList.get(poist));
+        intent.putExtra("circleHeaderBean", mBannerList.get(poist));
         startActivity(intent);
 
     }
@@ -124,9 +148,16 @@ public class CircleFragment extends SupportFragment implements CircleInterface {
     @Override
     public void onClickItem(int poist) {
 
-        Intent intent = new Intent(getActivity(),CircleDetailActivity.class);
-        intent.putExtra("circleItemBean",mItemList.get(poist));
+        Intent intent = new Intent(getActivity(), CircleDetailActivity.class);
+        intent.putExtra("circleItemBean", mItemList.get(poist));
         startActivity(intent);
 
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+
 }

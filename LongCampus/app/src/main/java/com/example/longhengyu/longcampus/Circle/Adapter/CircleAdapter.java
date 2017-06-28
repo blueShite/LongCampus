@@ -47,9 +47,13 @@ public class CircleAdapter extends RecyclerView.Adapter<CircleAdapter.ViewHolder
 
     }
 
-    public void reloadItem(List<CircleHeaderBean> bannerList,List<CircleItemBean> itemList){
-
+    public void reloadHeader(List<CircleHeaderBean> bannerList){
         mBannerList = bannerList;
+        notifyItemChanged(0);
+    }
+
+    public void reloadItem(List<CircleItemBean> itemList){
+
         mItemList = itemList;
         notifyDataSetChanged();
     }
@@ -80,6 +84,9 @@ public class CircleAdapter extends RecyclerView.Adapter<CircleAdapter.ViewHolder
     public void onBindViewHolder(CircleAdapter.ViewHolder holder, final int position) {
 
         if(position==0){
+            if(mBannerList==null||mBannerList.size()<1){
+                return;
+            }
             Banner banner = holder.mBanner;
             List<String> list = new ArrayList<>();
             for (int i=0;i<mBannerList.size();i++){
@@ -97,7 +104,7 @@ public class CircleAdapter extends RecyclerView.Adapter<CircleAdapter.ViewHolder
             return;
         }
 
-        CircleItemBean bean = mItemList.get(position);
+        CircleItemBean bean = mItemList.get(position-1);
         holder.nameText.setText(bean.getGroup_title());
         String[] all=bean.getGroup_time().split("[ ]");
         holder.timeText.setText(all[0]);
@@ -108,7 +115,7 @@ public class CircleAdapter extends RecyclerView.Adapter<CircleAdapter.ViewHolder
         holder.selfView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickItem(position);
+                mInterface.onClickItem(position-1);
             }
         });
 
@@ -116,7 +123,7 @@ public class CircleAdapter extends RecyclerView.Adapter<CircleAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mItemList.size();
+        return mItemList.size()+1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

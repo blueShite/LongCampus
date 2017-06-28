@@ -52,7 +52,7 @@ public class BitmapUtils {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(path, options);
-		options.inSampleSize = calculateInSampleSize(options, 480, 800);
+		options.inSampleSize = calculateInSampleSize(options, 800, 800);
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeFile(path, options);
 	}

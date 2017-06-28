@@ -12,7 +12,9 @@ import com.example.longhengyu.longcampus.NetWorks.RequestCallBack;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
@@ -33,11 +35,9 @@ public class CirclePresenter extends BasePresenter {
 
     public void requestBanner(){
 
-        showDialog();
         RequestTools.getInstance().getRequest("/api/getDieCircleTop.api.php", false, null, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
-                requestItem();
                 super.onError(call, e, id);
             }
 
@@ -46,22 +46,26 @@ public class CirclePresenter extends BasePresenter {
                 super.onResponse(response, id);
                 if(response.isRes()){
                     mBannerList = JSON.parseArray(response.getData(),CircleHeaderBean.class);
-                    requestItem();
+                    mInterface.requestHeader(mBannerList);
                 }else {
-                    requestItem();
+
                     Toasty.error(mContext,"获取轮播图失败").show();
                 }
             }
         });
     }
 
-    public void requestItem(){
+    public void requestItem(String page){
 
-        RequestTools.getInstance().getRequest("/api/getDieCircle.api.php", false, null, "", new RequestCallBack(mContext) {
+        showDialog();
+        Map<String,String> map = new HashMap<>();
+        map.put("page",page);
+        RequestTools.getInstance().getRequest("/api/getDieCircle.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 dismissDialog();
                 super.onError(call, e, id);
+                mInterface.requestError("请求失败");
             }
 
             @Override
@@ -71,13 +75,12 @@ public class CirclePresenter extends BasePresenter {
                 if(response.isRes()){
 
                     List<CircleItemBean> list = JSON.parseArray(response.getData(),CircleItemBean.class);
-                    mInterface.requestSucess(mBannerList,list);
+                    mInterface.requestSucess(list);
 
                 }else {
 
                     Toasty.error(mContext,"获取列表失败").show();
-                    List<CircleItemBean> list = new ArrayList<CircleItemBean>();
-                    mInterface.requestSucess(mBannerList,list);
+                    mInterface.requestError(response.getMes());
                 }
 
             }

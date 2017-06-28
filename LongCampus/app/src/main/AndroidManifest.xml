@@ -90,6 +90,10 @@
         </activity>
         <activity android:name=".Circle.ReleaseCircle.ReleaseCircleActivity">
         </activity>
+        <activity android:name=".PersonSubs.Address.AddressListActivity">
+        </activity>
+        <activity android:name=".PersonSubs.Address.AddAddressActivity">
+        </activity>
     </application>
 
 </manifest>

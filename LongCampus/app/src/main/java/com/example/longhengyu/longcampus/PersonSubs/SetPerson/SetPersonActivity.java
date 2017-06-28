@@ -2,6 +2,7 @@ package com.example.longhengyu.longcampus.PersonSubs.SetPerson;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 
 import com.example.longhengyu.longcampus.Base.BaseActivity;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.PersonSubs.Address.AddressListActivity;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Adapter.SetPersonAdapter;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Bean.SetPersonBean;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Interface.SetPersonInterface;
@@ -138,6 +140,8 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
                 }, mYear, mMonth, mDay).show();
                 break;
             case 5:
+                Intent intent = new Intent(SetPersonActivity.this, AddressListActivity.class);
+                startActivity(intent);
                 break;
             case 6:
                 showEditAlert(itemIndex, "请输入学校");

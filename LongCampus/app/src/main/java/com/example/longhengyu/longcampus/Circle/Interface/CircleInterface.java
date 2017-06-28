@@ -11,10 +11,14 @@ import java.util.List;
 
 public interface CircleInterface {
 
-    public void requestSucess(List<CircleHeaderBean> bannerList, List<CircleItemBean> itemList);
+    void requestHeader(List<CircleHeaderBean> bannerList);
 
-    public void onClickHeader(int poist);
+    void requestSucess(List<CircleItemBean> itemList);
 
-    public void onClickItem(int poist);
+    void requestError(String error);
+
+    void onClickHeader(int poist);
+
+    void onClickItem(int poist);
 
 }
