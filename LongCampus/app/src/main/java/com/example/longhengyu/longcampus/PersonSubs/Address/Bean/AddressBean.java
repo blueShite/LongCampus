@@ -19,6 +19,15 @@ public class AddressBean {
     private String acc_phone;
     private String acc_name;
     private String acc_address;
+    private boolean isSelect;
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
 
     public String getAcc_id() {
         return acc_id;

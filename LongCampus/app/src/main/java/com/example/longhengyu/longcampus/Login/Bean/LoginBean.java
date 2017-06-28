@@ -56,8 +56,18 @@ public class LoginBean {
     private String like_id;
     private String hate_menu;
     private String hate;
+
+    public String getLaddressId() {
+        return laddressId;
+    }
+
+    public void setLaddressId(String laddressId) {
+        this.laddressId = laddressId;
+    }
+
     private String nation;
     private String taboos;
+    private String laddressId;
 
     public String getId() {
         return id;

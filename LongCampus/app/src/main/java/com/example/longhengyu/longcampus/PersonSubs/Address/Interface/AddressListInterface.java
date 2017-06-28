@@ -14,6 +14,8 @@ public interface AddressListInterface {
 
     void requestError(String error);
 
+    void requestDeleteSucess(int poist);
+
     void onClickSelectBtn(int poist);
 
     void onClickSeting(int poist);

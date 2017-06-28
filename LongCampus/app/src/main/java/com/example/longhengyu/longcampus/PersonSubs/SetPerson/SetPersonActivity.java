@@ -22,6 +22,7 @@ import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Interface.SetPerso
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Presenter.SetPersonPresenter;
 import com.example.longhengyu.longcampus.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
     RecyclerView mSetPersonRecycler;
 
     private SetPersonPresenter mPresenter = new SetPersonPresenter(this);
-    private List<SetPersonBean> mList;
+    private List<SetPersonBean> mList = new ArrayList<>();
     private SetPersonAdapter mPersonAdapter;
 
     private String[] sexArray = new String[]{"男", "女"};
@@ -54,12 +55,19 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
         customView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mList.clear();
+        mList.addAll(mPresenter.addPersonData());
+        mPersonAdapter.notifyDataSetChanged();
+    }
+
     private void customView() {
 
         mPresenter.setContext(SetPersonActivity.this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(SetPersonActivity.this);
         mSetPersonRecycler.setLayoutManager(layoutManager);
-        mList = mPresenter.addPersonData();
         mPersonAdapter = new SetPersonAdapter(mList, SetPersonActivity.this, this);
         mSetPersonRecycler.setAdapter(mPersonAdapter);
 
