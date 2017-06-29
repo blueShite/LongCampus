@@ -37,6 +37,7 @@ public class FeaturePresenter extends BasePresenter {
         params.put("page", page);
         params.put("res_id", res_id);
         params.put("u_id", LoginManage.getInstance().getLoginBean().getId());
+        params.put("flag","3");
         RequestTools.getInstance().postRequest("/api/getMeal.api.php", false, params, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {

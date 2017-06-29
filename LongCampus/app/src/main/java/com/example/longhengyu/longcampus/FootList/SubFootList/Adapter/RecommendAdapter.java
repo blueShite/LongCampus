@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.RecommendInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
@@ -28,11 +29,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.ViewHolder> {
 
 
-    private List<ShopCartBean> mList;
+    private List<FeatureBean> mList;
     private Context mContext;
     private RecommendInterface mInterface;
 
-    public RecommendAdapter(List<ShopCartBean> list, Context context,RecommendInterface anInterface) {
+    public RecommendAdapter(List<FeatureBean> list, Context context,RecommendInterface anInterface) {
         mList = list;
         mContext = context;
         mInterface = anInterface;
@@ -48,14 +49,14 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        ShopCartBean bean = mList.get(position);
-        String imageStr = RequestTools.BaseUrl+bean.getLitpic();
+        FeatureBean bean = mList.get(position);
+        String imageStr = RequestTools.BaseUrl+bean.getMeal_litpic();
         Picasso.with(mContext).load(imageStr).resize(50,50).into(holder.mImageShopCartItem);
         holder.mTextShopCartItemName.setText(bean.getDish());
-        holder.mTextShopCartItemSub.setText(bean.getIntro());
+        holder.mTextShopCartItemSub.setText(bean.getMealinfo());
         holder.mTextShopCartItemPrice.setText("¥"+bean.getPrice()+"元");
-        holder.mTextShopCartOldPrice.setText("原价:"+bean.getPack()+"元");
-        holder.mTextShopCartOldNum.setText("已售"+bean.getSalnum()+"份");
+        holder.mTextShopCartOldPrice.setText("原价:"+bean.getPrice()+"元");
+        holder.mTextShopCartOldNum.setText("已售"+bean.getNum()+"份");
         holder.mTextShopCartItemNum.setText(bean.getAddNum());
         holder.selfView.setOnClickListener(new View.OnClickListener() {
             @Override

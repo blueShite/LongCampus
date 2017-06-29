@@ -52,4 +52,30 @@ public class AddAddressPresenter extends BasePresenter {
 
     }
 
+    public void requestSetAddress(String addressId,String name,String phone,String address){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("id",addressId);
+        map.put("acc_address",address);
+        map.put("acc_name",name);
+        map.put("acc_phone",phone);
+        RequestTools.getInstance().postRequest("/api/updata_address.api.php", false, map, "", new RequestCallBack(mContext) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    mInterface.requestSubmitSucess();
+                }else {
+                    Toasty.error(mContext,response.getMes()).show();
+                }
+            }
+        });
+
+    }
+
 }

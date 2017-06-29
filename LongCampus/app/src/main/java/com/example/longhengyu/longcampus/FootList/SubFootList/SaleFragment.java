@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.SaleAdapter;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.SaleInterface;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Presenter.SalePresenter;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
@@ -39,9 +40,10 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
 
     private View mView;
     private SaleAdapter mAdapter;
-    private List<ShopCartBean> mList = new ArrayList<>();
+    private List<FeatureBean> mList = new ArrayList<>();
     private SalePresenter mPresenter = new SalePresenter(this);
     private CanteenBean mCanteenBean;
+    private String page;
 
     public SaleFragment(CanteenBean canteenBean) {
         mCanteenBean = canteenBean;
@@ -54,7 +56,8 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
         mView = inflater.inflate(R.layout.fragment_sale, container, false);
         ButterKnife.bind(this, mView);
         customView();
-        mPresenter.requestList(mCanteenBean.getRes_id());
+        page="1";
+        mPresenter.requestList(mCanteenBean.getRes_id(),page);
         return mView;
     }
 
@@ -71,11 +74,19 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
         headerView.setArrowResource(R.drawable.arrow);
         headerView.setTextColor(0xff745D5C);
         mSaleRefresh.setHeaderView(headerView);
-        mSaleRefresh.setEnableLoadmore(false);
+        LoadingView loadingView = new LoadingView(getContext());
+        mSaleRefresh.setBottomView(loadingView);
         mSaleRefresh.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-
+                page="1";
+                mPresenter.requestList(mCanteenBean.getRes_id(),page);
+            }
+            @Override
+            public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
+                int pageIndex = Integer.parseInt(page)+1;
+                page = pageIndex+"";
+                mPresenter.requestList(mCanteenBean.getRes_id(),page);
             }
         });
 
@@ -88,10 +99,19 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
     }
 
     @Override
-    public void requestSucess(List<ShopCartBean> list) {
+    public void requestSucess(List<FeatureBean> list) {
+
+        mSaleRefresh.finishLoadmore();
+        mSaleRefresh.finishRefreshing();
         mList.clear();
         mList.addAll(list);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void requestError(String error) {
+        mSaleRefresh.finishLoadmore();
+        mSaleRefresh.finishRefreshing();
     }
 
     @Override

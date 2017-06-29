@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.SaleInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
@@ -25,11 +26,11 @@ import butterknife.ButterKnife;
 
 public class SaleAdapter extends RecyclerView.Adapter<SaleAdapter.ViewHolder> {
 
-    private List<ShopCartBean> mList;
+    private List<FeatureBean> mList;
     private Context mContext;
     private SaleInterface mInterface;
 
-    public SaleAdapter(List<ShopCartBean> list,Context context,SaleInterface anInterface){
+    public SaleAdapter(List<FeatureBean> list,Context context,SaleInterface anInterface){
         mList = list;
         mContext = context;
         mInterface = anInterface;
@@ -45,11 +46,11 @@ public class SaleAdapter extends RecyclerView.Adapter<SaleAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        ShopCartBean bean = mList.get(position);
-        String imageStr = RequestTools.BaseUrl+bean.getLitpic();
+        FeatureBean bean = mList.get(position);
+        String imageStr = RequestTools.BaseUrl+bean.getMeal_litpic();
         Picasso.with(mContext).load(imageStr).resize(50,50).into(holder.mImageSaleComm);
         holder.mTextSalePrice.setText("现价:"+bean.getPrice()+"元");
-        holder.mTextSaleOldprice.setText("原价:"+bean.getPack()+"元");
+        holder.mTextSaleOldprice.setText("原价:"+bean.getPrice()+"元");
         holder.mTextSaleName.setText(bean.getDish());
         holder.mImageSaleAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override

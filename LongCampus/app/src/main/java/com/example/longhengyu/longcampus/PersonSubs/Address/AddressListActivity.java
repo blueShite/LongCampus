@@ -62,6 +62,7 @@ public class AddressListActivity extends BaseActivity  implements AddressListInt
     @OnClick(R.id.button_add_address_submit)
     public void onViewClicked() {
         Intent intent = new Intent(AddressListActivity.this,AddAddressActivity.class);
+        intent.putExtra("isSeting","0");
         startActivity(intent);
     }
 
@@ -102,7 +103,10 @@ public class AddressListActivity extends BaseActivity  implements AddressListInt
 
     @Override
     public void onClickSeting(int poist) {
-
+        Intent intent = new Intent(AddressListActivity.this,AddAddressActivity.class);
+        intent.putExtra("isSeting","1");
+        intent.putExtra("AddressBean",mList.get(poist));
+        startActivity(intent);
     }
 
     @Override

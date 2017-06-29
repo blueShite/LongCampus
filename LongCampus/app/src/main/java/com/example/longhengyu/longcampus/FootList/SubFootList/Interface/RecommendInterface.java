@@ -2,6 +2,7 @@ package com.example.longhengyu.longcampus.FootList.SubFootList.Interface;
 
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartBean;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public interface RecommendInterface {
 
-    void requestSucess(List<ShopCartBean> list);
+    void requestSucess(List<FeatureBean> list);
 
     void requestError(String error);
 

@@ -6,37 +6,38 @@ package com.example.longhengyu.longcampus.FootList.SubFootList.Bean;
 
 public class FeatureBean {
 
+
     /**
-     * menu_id : 51
-     * mealinfo : 排骨米饭是我国传统的饮食之一，碗碗香排骨米饭根据百年的祖传配方，经过自己多年来的不断摸索研究、反复实践、精心制作而成，以选料精良，配料巧妙及严格的传统制作工艺为基础，终以其风味独特、肉质酥香、香而不腻，使人百吃不厌，更有百余种凉菜的搭配，品种多，选一二种小
-     * discount : 1.00
-     * typename : 套餐
-     * salnum : 1
-     * once : 1.00
-     * pack : 0.20
-     * meal_litpic : /images/menu_img/20160817/20160817172258.jpg
-     * price : 0.00
-     * res_id : 1
+     * menu_id : 465
+     * dish : 早餐
+     * pack : 1.50
+     * res_id : 22
+     * price : 17.00
+     * discount : 2.00
+     * num : 100
+     * mealinfo : 早餐，营养丰富，美味
+     * meal_litpic : /images/menu_img/20170525/20170525084455.jpg
+     * res_name : 一窗口
      * ifkeep : 0
-     * mealname : 排骨米饭套餐
-     * num : 0
-     * res_name : 一食堂
+     * typename : 特色套餐
+     * fen_s : 0.20
+     * nums : 0
      */
 
     private String menu_id;
-    private String mealinfo;
-    private String discount;
-    private String typename;
-    private String salnum;
-    private String once;
+    private String dish;
     private String pack;
-    private String meal_litpic;
-    private String price;
     private String res_id;
-    private int ifkeep;
-    private String mealname;
+    private String price;
+    private String discount;
     private String num;
+    private String mealinfo;
+    private String meal_litpic;
     private String res_name;
+    private int ifkeep;
+    private String typename;
+    private String fen_s;
+    private int nums;
     private String addNum;
 
     public String getAddNum() {
@@ -55,44 +56,12 @@ public class FeatureBean {
         this.menu_id = menu_id;
     }
 
-    public String getMealinfo() {
-        return mealinfo;
+    public String getDish() {
+        return dish;
     }
 
-    public void setMealinfo(String mealinfo) {
-        this.mealinfo = mealinfo;
-    }
-
-    public String getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(String discount) {
-        this.discount = discount;
-    }
-
-    public String getTypename() {
-        return typename;
-    }
-
-    public void setTypename(String typename) {
-        this.typename = typename;
-    }
-
-    public String getSalnum() {
-        return salnum;
-    }
-
-    public void setSalnum(String salnum) {
-        this.salnum = salnum;
-    }
-
-    public String getOnce() {
-        return once;
-    }
-
-    public void setOnce(String once) {
-        this.once = once;
+    public void setDish(String dish) {
+        this.dish = dish;
     }
 
     public String getPack() {
@@ -103,12 +72,12 @@ public class FeatureBean {
         this.pack = pack;
     }
 
-    public String getMeal_litpic() {
-        return meal_litpic;
+    public String getRes_id() {
+        return res_id;
     }
 
-    public void setMeal_litpic(String meal_litpic) {
-        this.meal_litpic = meal_litpic;
+    public void setRes_id(String res_id) {
+        this.res_id = res_id;
     }
 
     public String getPrice() {
@@ -119,28 +88,12 @@ public class FeatureBean {
         this.price = price;
     }
 
-    public String getRes_id() {
-        return res_id;
+    public String getDiscount() {
+        return discount;
     }
 
-    public void setRes_id(String res_id) {
-        this.res_id = res_id;
-    }
-
-    public int getIfkeep() {
-        return ifkeep;
-    }
-
-    public void setIfkeep(int ifkeep) {
-        this.ifkeep = ifkeep;
-    }
-
-    public String getMealname() {
-        return mealname;
-    }
-
-    public void setMealname(String mealname) {
-        this.mealname = mealname;
+    public void setDiscount(String discount) {
+        this.discount = discount;
     }
 
     public String getNum() {
@@ -151,11 +104,59 @@ public class FeatureBean {
         this.num = num;
     }
 
+    public String getMealinfo() {
+        return mealinfo;
+    }
+
+    public void setMealinfo(String mealinfo) {
+        this.mealinfo = mealinfo;
+    }
+
+    public String getMeal_litpic() {
+        return meal_litpic;
+    }
+
+    public void setMeal_litpic(String meal_litpic) {
+        this.meal_litpic = meal_litpic;
+    }
+
     public String getRes_name() {
         return res_name;
     }
 
     public void setRes_name(String res_name) {
         this.res_name = res_name;
+    }
+
+    public int getIfkeep() {
+        return ifkeep;
+    }
+
+    public void setIfkeep(int ifkeep) {
+        this.ifkeep = ifkeep;
+    }
+
+    public String getTypename() {
+        return typename;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
+    }
+
+    public String getFen_s() {
+        return fen_s;
+    }
+
+    public void setFen_s(String fen_s) {
+        this.fen_s = fen_s;
+    }
+
+    public int getNums() {
+        return nums;
+    }
+
+    public void setNums(int nums) {
+        this.nums = nums;
     }
 }

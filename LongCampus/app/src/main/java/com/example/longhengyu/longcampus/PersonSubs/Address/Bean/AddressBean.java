@@ -1,10 +1,12 @@
 package com.example.longhengyu.longcampus.PersonSubs.Address.Bean;
 
+import java.io.Serializable;
+
 /**
  * Created by longhengyu on 2017/6/28.
  */
 
-public class AddressBean {
+public class AddressBean implements Serializable {
 
     /**
      * acc_id : 1044

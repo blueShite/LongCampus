@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BasePresenter;
+import com.example.longhengyu.longcampus.Login.Bean.LoginBean;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.NetWorks.RequestBean;
 import com.example.longhengyu.longcampus.NetWorks.RequestCallBack;
@@ -39,7 +40,6 @@ public class AddressListPresenter extends BasePresenter {
                 dismissDialog();
                 super.onError(call, e, id);
                 mInterface.requestError("请求失败");
-
             }
 
             @Override
@@ -55,17 +55,18 @@ public class AddressListPresenter extends BasePresenter {
                         }
                         if(LoginManage.getInstance().getLoginBean().getLaddressId().equals(bean.getId())){
                             bean.setSelect(true);
+                            LoginBean loginBean = LoginManage.getInstance().getLoginBean();
+                            loginBean.setAddress(bean.getAcc_address());
+                            LoginManage.getInstance().saveLoginBean(loginBean);
                             break;
                         }
                     }
                     mInterface.requestSucess(list);
                 }else {
-
+                    Toasty.error(mContext,response.getMes()).show();
                 }
-
             }
         });
-
     }
     public void requestDelect(String addressId, final int poist){
 
@@ -88,7 +89,5 @@ public class AddressListPresenter extends BasePresenter {
                 }
             }
         });
-
     }
-
 }

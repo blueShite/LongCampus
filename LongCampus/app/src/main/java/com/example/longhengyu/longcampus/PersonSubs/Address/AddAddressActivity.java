@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import com.example.longhengyu.longcampus.Circle.ReleaseCircle.ReleaseCircleActivity;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.PersonSubs.Address.Bean.AddressBean;
 import com.example.longhengyu.longcampus.PersonSubs.Address.Interface.AddAddressInterface;
 import com.example.longhengyu.longcampus.PersonSubs.Address.Presenter.AddAddressPresenter;
 import com.example.longhengyu.longcampus.R;
@@ -26,6 +27,8 @@ public class AddAddressActivity extends AppCompatActivity implements AddAddressI
     EditText mEditAddAddressName;
 
     private AddAddressPresenter mPresenter = new AddAddressPresenter(this);
+    private AddressBean mAddressBean;
+    private String isSeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,14 @@ public class AddAddressActivity extends AppCompatActivity implements AddAddressI
         setContentView(R.layout.activity_add_address);
         ButterKnife.bind(this);
         mPresenter.setContext(AddAddressActivity.this);
+        isSeting = getIntent().getStringExtra("isSeting");
+        if(isSeting.equals("1")){
+            mAddressBean = (AddressBean) getIntent().getSerializableExtra("AddressBean");
+            mEditAddAddressName.setText(mAddressBean.getAcc_name());
+            mEditAddAddressPhone.setText(mAddressBean.getAcc_phone());
+            mEditAddAddressAddress.setText(mAddressBean.getAcc_address());
+        }
+
     }
 
     @OnClick(R.id.button_add_address_submit)
@@ -50,11 +61,20 @@ public class AddAddressActivity extends AppCompatActivity implements AddAddressI
             Toasty.error(AddAddressActivity.this,"请输入地址").show();
             return;
         }
-        mPresenter.requestSubmitSucess(
-                LoginManage.getInstance().getLoginBean().getId(),
-                mEditAddAddressName.getText().toString(),
-                mEditAddAddressPhone.getText().toString(),
-                mEditAddAddressAddress.getText().toString());
+        if(isSeting.equals("0")){
+            mPresenter.requestSubmitSucess(
+                    LoginManage.getInstance().getLoginBean().getId(),
+                    mEditAddAddressName.getText().toString(),
+                    mEditAddAddressPhone.getText().toString(),
+                    mEditAddAddressAddress.getText().toString());
+        }else {
+            mPresenter.requestSetAddress(
+                    mAddressBean.getId(),
+                    mEditAddAddressName.getText().toString(),
+                    mEditAddAddressPhone.getText().toString(),
+                    mEditAddAddressAddress.getText().toString());
+        }
+
     }
 
     @Override

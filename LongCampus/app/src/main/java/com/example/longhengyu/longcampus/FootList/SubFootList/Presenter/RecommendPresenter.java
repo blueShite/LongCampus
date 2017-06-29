@@ -2,6 +2,7 @@ package com.example.longhengyu.longcampus.FootList.SubFootList.Presenter;
 
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BasePresenter;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.RecommendInterface;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.NetWorks.RequestBean;
@@ -36,7 +37,7 @@ public class RecommendPresenter extends BasePresenter {
         map.put("res_id",resId);
         map.put("u_id", LoginManage.getInstance().getLoginBean().getId());
         map.put("flag",flag);
-        RequestTools.getInstance().postRequest("/api/getDishList.api.php", false, map, "", new RequestCallBack(mContext) {
+        RequestTools.getInstance().postRequest("/api/getMeal.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 dismissDialog();
@@ -49,8 +50,8 @@ public class RecommendPresenter extends BasePresenter {
                 dismissDialog();
                 super.onResponse(response, id);
                 if(response.isRes()){
-                    List<ShopCartBean> list = JSON.parseArray(response.getData(),ShopCartBean.class);
-                    for (ShopCartBean bean:list){
+                    List<FeatureBean> list = JSON.parseArray(response.getData(),FeatureBean.class);
+                    for (FeatureBean bean:list){
                         bean.setAddNum("0");
                     }
                     mInterface.requestSucess(list);

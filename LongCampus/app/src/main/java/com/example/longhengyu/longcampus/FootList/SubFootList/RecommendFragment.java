@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.RecommendAdapter;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.RecommendInterface;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Presenter.RecommendPresenter;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
@@ -41,7 +42,7 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
     TwinklingRefreshLayout mRecommendRefresh;
 
     private View mView;
-    private List<ShopCartBean> mList = new ArrayList<>();
+    private List<FeatureBean> mList = new ArrayList<>();
     private RecommendPresenter mPresenter = new RecommendPresenter(this);
     private String page;
     private CanteenBean mCanteenBean;
@@ -105,7 +106,7 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
     }
 
     @Override
-    public void requestSucess(List<ShopCartBean> list) {
+    public void requestSucess(List<FeatureBean> list) {
 
         mRecommendRefresh.finishLoadmore();
         mRecommendRefresh.finishRefreshing();

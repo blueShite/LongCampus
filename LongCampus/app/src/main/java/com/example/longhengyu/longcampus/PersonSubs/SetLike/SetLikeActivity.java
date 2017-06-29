@@ -1,6 +1,7 @@
 package com.example.longhengyu.longcampus.PersonSubs.SetLike;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.example.longhengyu.longcampus.Base.BaseActivity;
 import com.example.longhengyu.longcampus.Login.Bean.LoginBean;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.PersonSubs.Address.AddAddressActivity;
 import com.example.longhengyu.longcampus.PersonSubs.SetLike.Bean.SetLikeBean;
 import com.example.longhengyu.longcampus.PersonSubs.SetLike.Interface.SetLikeInterface;
 import com.example.longhengyu.longcampus.PersonSubs.SetLike.Presenter.SetLikePresenter;
@@ -251,7 +253,14 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
         LoginBean bean = LoginManage.getInstance().getLoginBean();
         bean.setLike_id(likeStr);
         LoginManage.getInstance().saveLoginBean(bean);
-        finish();
+        Toasty.success(SetLikeActivity.this,"提交成功").show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2000);
     }
 
     @Override
@@ -259,7 +268,14 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
         LoginBean bean = LoginManage.getInstance().getLoginBean();
         bean.setHate(hateStr);
         LoginManage.getInstance().saveLoginBean(bean);
-        finish();
+        Toasty.success(SetLikeActivity.this,"提交成功").show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2000);
     }
 
     @Override

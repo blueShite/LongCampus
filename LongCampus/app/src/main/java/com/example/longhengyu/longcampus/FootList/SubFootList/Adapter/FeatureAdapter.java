@@ -50,11 +50,11 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
         FeatureBean bean = mList.get(position);
         String imageStr = RequestTools.BaseUrl + bean.getMeal_litpic();
         Picasso.with(mContext).load(imageStr).resize(50, 50).into(holder.mImageShopCartItem);
-        holder.mTextShopCartItemName.setText(bean.getMealname());
+        holder.mTextShopCartItemName.setText(bean.getDish());
         holder.mTextShopCartItemSub.setText(bean.getMealinfo());
         holder.mTextShopCartItemPrice.setText("¥" + bean.getPrice() + "元");
-        holder.mTextShopCartOldPrice.setText("原价:" + bean.getPack() + "元");
-        holder.mTextShopCartOldNum.setText("已售" + bean.getSalnum() + "份");
+        holder.mTextShopCartOldPrice.setText("原价:" + bean.getPrice() + "元");
+        holder.mTextShopCartOldNum.setText("已售" + bean.getNum() + "份");
         holder.mTextShopCartItemNum.setText(bean.getAddNum());
     }
 
