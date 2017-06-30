@@ -49,13 +49,10 @@ public class AddressListPresenter extends BasePresenter {
                 if(response.isRes()){
                     List<AddressBean> list = JSON.parseArray(response.getData(),AddressBean.class);
                     for (AddressBean bean:list){
-                        if(LoginManage.getInstance().getLoginBean().getLaddressId()==null||
-                                LoginManage.getInstance().getLoginBean().getLaddressId().isEmpty()){
-                            break;
-                        }
-                        if(LoginManage.getInstance().getLoginBean().getLaddressId().equals(bean.getId())){
-                            bean.setSelect(true);
+
+                        if(bean.getAcc_state().equals("1")){
                             LoginBean loginBean = LoginManage.getInstance().getLoginBean();
+                            loginBean.setLaddressId(bean.getId());
                             loginBean.setAddress(bean.getAcc_address());
                             LoginManage.getInstance().saveLoginBean(loginBean);
                             break;
@@ -84,6 +81,33 @@ public class AddressListPresenter extends BasePresenter {
                 if(response.isRes()){
                     Toasty.success(mContext,"删除成功!").show();
                     mInterface.requestDeleteSucess(poist);
+                }else {
+                    Toasty.error(mContext,response.getMes()).show();
+                }
+            }
+        });
+    }
+
+    public void requestSetDefaultAddress(String uId, final String addressId, final String address, final int poist){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("u_id",uId);
+        map.put("id",addressId);
+        RequestTools.getInstance().postRequest("/api/default.api.php", false, map, "", new RequestCallBack(mContext) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    LoginBean loginBean = LoginManage.getInstance().getLoginBean();
+                    loginBean.setAddress(address);
+                    loginBean.setLaddressId(addressId);
+                    LoginManage.getInstance().saveLoginBean(loginBean);
+                    mInterface.requestDefaultSucess(poist);
                 }else {
                     Toasty.error(mContext,response.getMes()).show();
                 }

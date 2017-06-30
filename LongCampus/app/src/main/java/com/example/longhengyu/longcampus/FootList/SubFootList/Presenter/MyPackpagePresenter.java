@@ -59,7 +59,6 @@ public class MyPackpagePresenter extends BasePresenter {
     }
 
     public void requestCommodityList(String hateId,String likeId, String page, final String resId, String uId, String taboos, final boolean isFirst){
-
         showDialog();
         Map<String,String> map = new HashMap<>();
         if(hateId!=null&&!hateId.isEmpty()){
@@ -104,9 +103,7 @@ public class MyPackpagePresenter extends BasePresenter {
                         mInterface.requestCommodityError(response.getMes());
                     }
                 }
-
             }
         });
     }
-
 }

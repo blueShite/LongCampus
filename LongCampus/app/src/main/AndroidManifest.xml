@@ -94,6 +94,10 @@
         </activity>
         <activity android:name=".PersonSubs.Address.AddAddressActivity">
         </activity>
+        <activity android:name=".PersonSubs.Coupon.CouponActivity">
+        </activity>
+        <activity android:name=".PersonSubs.Coupon.CouponOverdueActivity">
+        </activity>
     </application>
 
 </manifest>

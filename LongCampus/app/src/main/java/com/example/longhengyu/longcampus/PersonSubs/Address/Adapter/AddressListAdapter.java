@@ -49,7 +49,11 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         holder.mTextAddressListItemName.setText(bean.getAcc_name());
         holder.mTextAddressListItemAddress.setText(bean.getAcc_address());
         holder.mTextAddressListPhone.setText(bean.getAcc_phone());
-        holder.mButtonAddressListItemSelect.setSelected(bean.isSelect());
+        if(bean.getAcc_state().equals("0")){
+            holder.mButtonAddressListItemSelect.setSelected(false);
+        }else {
+            holder.mButtonAddressListItemSelect.setSelected(true);
+        }
         holder.mTextAddressListSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

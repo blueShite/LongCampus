@@ -85,20 +85,24 @@ public class AddressListActivity extends BaseActivity  implements AddressListInt
     }
 
     @Override
-    public void onClickSelectBtn(int poist) {
-        LoginBean loginBean = LoginManage.getInstance().getLoginBean();
-        AddressBean bean = mList.get(poist);
-        loginBean.setLaddressId(bean.getId());
-        loginBean.setAddress(bean.getAcc_address());
-        LoginManage.getInstance().saveLoginBean(loginBean);
+    public void requestDefaultSucess(int poist) {
         for (int i=0;i<mList.size();i++){
             if(i==poist){
-                mList.get(i).setSelect(true);
+                mList.get(i).setAcc_state("1");
             }else {
-                mList.get(i).setSelect(false);
+                mList.get(i).setAcc_state("0");
             }
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClickSelectBtn(int poist) {
+
+        AddressBean bean = mList.get(poist);
+        mPresenter.requestSetDefaultAddress(LoginManage.getInstance().getLoginBean().getId(),
+                bean.getId(),bean.getAcc_address(),poist);
+
     }
 
     @Override

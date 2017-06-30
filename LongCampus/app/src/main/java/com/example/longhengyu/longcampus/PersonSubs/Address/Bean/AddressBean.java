@@ -21,14 +21,13 @@ public class AddressBean implements Serializable {
     private String acc_phone;
     private String acc_name;
     private String acc_address;
-    private boolean isSelect;
+    private String acc_state;
 
-    public boolean isSelect() {
-        return isSelect;
+    public String getAcc_state() {
+        return acc_state;
     }
-
-    public void setSelect(boolean select) {
-        isSelect = select;
+    public void setAcc_state(String acc_state) {
+        this.acc_state = acc_state;
     }
 
     public String getAcc_id() {

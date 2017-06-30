@@ -9,11 +9,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.FeatureInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -49,13 +52,24 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         FeatureBean bean = mList.get(position);
         String imageStr = RequestTools.BaseUrl + bean.getMeal_litpic();
-        Picasso.with(mContext).load(imageStr).resize(50, 50).into(holder.mImageShopCartItem);
+        Picasso.with(mContext).load(imageStr).resize(100, 100).into(holder.mImageShopCartItem);
         holder.mTextShopCartItemName.setText(bean.getDish());
         holder.mTextShopCartItemSub.setText(bean.getMealinfo());
         holder.mTextShopCartItemPrice.setText("¥" + bean.getPrice() + "元");
         holder.mTextShopCartOldPrice.setText("原价:" + bean.getPrice() + "元");
         holder.mTextShopCartOldNum.setText("已售" + bean.getNum() + "份");
         holder.mTextShopCartItemNum.setText(bean.getAddNum());
+        if(bean.getIfkeep()==0){
+            holder.mButtonItemShopcartCollection.setSelected(false);
+        }else {
+            holder.mButtonItemShopcartCollection.setSelected(true);
+        }
+        holder.mImageShopCartItemJia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventBus.getDefault().post(new FootListShopEvent("更新购物车"));
+            }
+        });
     }
 
     @Override

@@ -51,4 +51,8 @@ public class FootListPresenter extends BasePresenter {
         });
     }
 
+    public void requestShopCartNum(){
+
+    }
+
 }

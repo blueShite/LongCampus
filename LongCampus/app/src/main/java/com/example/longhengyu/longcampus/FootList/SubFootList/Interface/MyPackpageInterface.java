@@ -1,5 +1,7 @@
 package com.example.longhengyu.longcampus.FootList.SubFootList.Interface;
 
+import android.widget.TextView;
+
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageCommodityBean;
 
@@ -19,6 +21,9 @@ public interface MyPackpageInterface {
 
     void onClickClasses(int poist);
 
-    void requestCollectionSucess(int poist);
+    void onClickCollection(int poist);
 
+    void onClickAddShopCart(int poist, TextView numTextView);
+
+    void onClickReduxShopCart(int poist, TextView numTextView);
 }

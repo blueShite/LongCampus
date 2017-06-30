@@ -51,7 +51,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         FeatureBean bean = mList.get(position);
         String imageStr = RequestTools.BaseUrl+bean.getMeal_litpic();
-        Picasso.with(mContext).load(imageStr).resize(50,50).into(holder.mImageShopCartItem);
+        Picasso.with(mContext).load(imageStr).resize(100,100).into(holder.mImageShopCartItem);
         holder.mTextShopCartItemName.setText(bean.getDish());
         holder.mTextShopCartItemSub.setText(bean.getMealinfo());
         holder.mTextShopCartItemPrice.setText("¥"+bean.getPrice()+"元");
@@ -76,6 +76,11 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
                 mInterface.onClickItemReduce(position,holder.mTextShopCartItemNum);
             }
         });
+        if(bean.getIfkeep()==0){
+            holder.mButtonItemShopcartCollection.setSelected(false);
+        }else {
+            holder.mButtonItemShopcartCollection.setSelected(true);
+        }
     }
 
     @Override

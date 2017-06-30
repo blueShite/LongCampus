@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
 import com.example.longhengyu.longcampus.FootList.Interface.FootListInterface;
 import com.example.longhengyu.longcampus.FootList.Presenter.FootListPresenter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.FeatureFragment;
@@ -20,6 +21,9 @@ import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +53,10 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
     ImageView mImageShopCartTuijian;
     @BindView(R.id.text_shopCartHeader_name)
     TextView mTextShopCartHeaderName;
+    @BindView(R.id.text_footList_shopCartSub)
+    TextView mTextFootListShopCartSub;
+    @BindView(R.id.text_footList_shopCart)
+    TextView mTextFootListShopCart;
 
     private RecommendFragment mRecommendFragment;
     private FeatureFragment mFeatureFragment;
@@ -62,9 +70,26 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_foot_list);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         mBean = (CanteenBean) getIntent().getSerializableExtra("canteenBean");
         customView();
         mPresenter.requestFootListHeader(mBean.getRes_id());
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Subscribe
+    public void onMessageEvent(FootListShopEvent event) {
+
     }
 
     private void customView() {
@@ -77,7 +102,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mFeatureFragment = new FeatureFragment(mBean);
         mSaleFragment = new SaleFragment(mBean);
         mMyPackageFragment = new MyPackageFragment(mBean);
-        loadMultipleRootFragment(R.id.layout_footList, 0, mRecommendFragment,mSaleFragment,mFeatureFragment,mMyPackageFragment);
+        loadMultipleRootFragment(R.id.layout_footList, 0, mRecommendFragment, mSaleFragment, mFeatureFragment, mMyPackageFragment);
 
     }
 
@@ -123,8 +148,8 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
     public void requestSucess(ShopCartHeaderBean headerBean) {
 
         List<String> list = new ArrayList<>();
-        for (int i=0;i<headerBean.getRes_img().size();i++){
-            list.add(RequestTools.BaseUrl+headerBean.getRes_img().get(i));
+        for (int i = 0; i < headerBean.getRes_img().size(); i++) {
+            list.add(RequestTools.BaseUrl + headerBean.getRes_img().get(i));
         }
         mBannerShopCart.setImages(list);
         mBannerShopCart.start();

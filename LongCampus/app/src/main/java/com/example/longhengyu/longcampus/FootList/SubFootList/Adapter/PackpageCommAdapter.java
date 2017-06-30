@@ -9,10 +9,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageCommodityBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.MyPackpageInterface;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
+import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -44,12 +49,36 @@ public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         PackpageCommodityBean commodityBean = mList.get(position);
         holder.mTextPackCommName.setText(commodityBean.getDish());
         holder.mTextPackCommSub.setText(commodityBean.getIntro());
         holder.mTextPackCommNum.setText(commodityBean.getNums());
+        Picasso.with(mContext).load(RequestTools.BaseUrl+commodityBean.getLitpic()).resize(120,120).into(holder.mImagePackCommHeader);
+        holder.mButtonPackCommCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickCollection(position);
+            }
+        });
+        if(commodityBean.getIfkeep()==0){
+            holder.mButtonPackCommCollection.setSelected(false);
+        }else {
+            holder.mButtonPackCommCollection.setSelected(true);
+        }
+        holder.mImagePackCommAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickAddShopCart(position,holder.mTextPackCommNum);
+            }
+        });
+        holder.mImagePackCommRedux.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickReduxShopCart(position,holder.mTextPackCommNum);
+            }
+        });
 
     }
 

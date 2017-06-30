@@ -48,7 +48,7 @@ public class SaleAdapter extends RecyclerView.Adapter<SaleAdapter.ViewHolder> {
 
         FeatureBean bean = mList.get(position);
         String imageStr = RequestTools.BaseUrl+bean.getMeal_litpic();
-        Picasso.with(mContext).load(imageStr).resize(50,50).into(holder.mImageSaleComm);
+        Picasso.with(mContext).load(imageStr).resize(100,100).into(holder.mImageSaleComm);
         holder.mTextSalePrice.setText("现价:"+bean.getPrice()+"元");
         holder.mTextSaleOldprice.setText("原价:"+bean.getPrice()+"元");
         holder.mTextSaleName.setText(bean.getDish());
@@ -58,6 +58,7 @@ public class SaleAdapter extends RecyclerView.Adapter<SaleAdapter.ViewHolder> {
                 mInterface.onClickAddShopCart(position);
             }
         });
+
     }
 
     @Override
