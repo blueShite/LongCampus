@@ -51,7 +51,25 @@ public class FootListPresenter extends BasePresenter {
         });
     }
 
-    public void requestShopCartNum(){
+    public void requestShopCartNum(String uId,String restId){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("u_id",uId);
+        map.put("res_cid",restId);
+        RequestTools.getInstance().postRequest("/api/shoping_state.api.php", false, map, "", new RequestCallBack(mContext) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    mInterface.requestShopNum(response.getData()+"");
+                }
+            }
+        });
 
     }
 

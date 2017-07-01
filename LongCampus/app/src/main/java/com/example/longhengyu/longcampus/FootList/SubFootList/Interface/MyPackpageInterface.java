@@ -2,8 +2,8 @@ package com.example.longhengyu.longcampus.FootList.SubFootList.Interface;
 
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
-import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageCommodityBean;
 
 import java.util.List;
 
@@ -13,13 +13,15 @@ import java.util.List;
 
 public interface MyPackpageInterface {
 
-    void requestClassesSuccess(List<PackpageClassesBean> list,List<PackpageCommodityBean> commodityList);
+    void requestClassesSuccess(List<PackpageClassesBean> list,List<FeatureBean> commodityList);
 
-    void requestCommoditySuccess(List<PackpageCommodityBean> list);
+    void requestCommoditySuccess(List<FeatureBean> list);
 
     void requestCommodityError(String error);
 
     void onClickClasses(int poist);
+
+    void onClickMenu(int poist);
 
     void onClickCollection(int poist);
 

@@ -1,10 +1,12 @@
 package com.example.longhengyu.longcampus.FootList.SubFootList.Bean;
 
+import java.io.Serializable;
+
 /**
  * Created by longhengyu on 2017/6/27.
  */
 
-public class FeatureBean {
+public class FeatureBean implements Serializable {
 
 
     /**
@@ -37,8 +39,26 @@ public class FeatureBean {
     private int ifkeep;
     private String typename;
     private String fen_s;
-    private int nums;
+    private String nums;
     private String addNum;
+    private String intro;
+    private String litpic;
+
+    public String getLitpic() {
+        return litpic;
+    }
+
+    public void setLitpic(String litpic) {
+        this.litpic = litpic;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
 
     public String getAddNum() {
         return addNum;
@@ -152,11 +172,11 @@ public class FeatureBean {
         this.fen_s = fen_s;
     }
 
-    public int getNums() {
+    public String getNums() {
         return nums;
     }
 
-    public void setNums(int nums) {
+    public void setNums(String nums) {
         this.nums = nums;
     }
 }

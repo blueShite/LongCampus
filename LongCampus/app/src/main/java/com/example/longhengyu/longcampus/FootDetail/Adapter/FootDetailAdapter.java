@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootDetail.Bean.FootDetailBean;
 import com.example.longhengyu.longcampus.FootDetail.Bean.FootDetailItemBean;
+import com.example.longhengyu.longcampus.FootDetail.Interface.FootDetailInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartBean;
@@ -26,13 +28,15 @@ public class FootDetailAdapter extends RecyclerView.Adapter<FootDetailAdapter.Vi
     private Context mContext;
 
     private List<FootDetailItemBean> mList;
-    private ShopCartBean mShopCartBean;
+    private FootDetailBean mShopCartBean;
+    private FootDetailInterface mInterface;
 
-    public FootDetailAdapter(List<FootDetailItemBean> list,ShopCartBean shopCartBean, Context context){
+    public FootDetailAdapter(List<FootDetailItemBean> list, FootDetailBean shopCartBean, Context context,FootDetailInterface anInterface){
 
         mList = list;
         mShopCartBean = shopCartBean;
         mContext = context;
+        mInterface = anInterface;
     }
 
     @Override
@@ -58,16 +62,33 @@ public class FootDetailAdapter extends RecyclerView.Adapter<FootDetailAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(FootDetailAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final FootDetailAdapter.ViewHolder holder, int position) {
 
         if(position==0){
 
-            Picasso.with(mContext).load(RequestTools.BaseUrl+mShopCartBean.getLitpic()).fit().centerCrop().into(holder.headerImage);
-            holder.nameText.setText(mShopCartBean.getDish());
+            if(mShopCartBean.isMy()){
+                holder.nameText.setText(mShopCartBean.getMealname());
+                Picasso.with(mContext).load(RequestTools.BaseUrl+mShopCartBean.getMeal_litpic()).fit().centerCrop().into(holder.headerImage);
+            }else {
+                holder.nameText.setText(mShopCartBean.getDish());
+                Picasso.with(mContext).load(RequestTools.BaseUrl+mShopCartBean.getLitpic()).fit().centerCrop().into(holder.headerImage);
+            }
             holder.numText.setText("月售"+mShopCartBean.getSalnum()+"份");
             holder.priceText.setText("¥"+mShopCartBean.getPrice());
             holder.oldPriceText.setText("原价"+mShopCartBean.getPrice()+"元");
-            holder.addNumText.setText(mShopCartBean.getAddNum());
+            holder.addNumText.setText(mShopCartBean.getNums());
+            holder.addImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mInterface.onClickAdd(holder.addNumText);
+                }
+            });
+            holder.jianImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mInterface.onClickRedux(holder.addNumText);
+                }
+            });
             return;
         }
 

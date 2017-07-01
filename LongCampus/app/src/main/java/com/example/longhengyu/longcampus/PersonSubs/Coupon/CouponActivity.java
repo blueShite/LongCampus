@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.Base.BaseActivity;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
-import com.example.longhengyu.longcampus.PersonSubs.Collection.CollectionActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.Adapter.CouponAdapter;
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.Bean.CouponBean;
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.Interface.CouponInterface;
@@ -31,6 +32,8 @@ public class CouponActivity extends BaseActivity implements CouponInterface {
     RecyclerView mCouponRecycle;
     @BindView(R.id.coupon_refresh)
     TwinklingRefreshLayout mCouponRefresh;
+    @BindView(R.id.text_coupon_receive)
+    TextView mTextCouponReceive;
 
     private CouponPresenter mPresenter = new CouponPresenter(this);
     private List<CouponBean> mList = new ArrayList<>();
@@ -51,15 +54,15 @@ public class CouponActivity extends BaseActivity implements CouponInterface {
     protected void onResume() {
         super.onResume();
         page = "1";
-        mPresenter.requestList(LoginManage.getInstance().getLoginBean().getId(),page,"1");
+        mPresenter.requestList(LoginManage.getInstance().getLoginBean().getId(), page, "1");
     }
 
-    private void customView(){
+    private void customView() {
 
         mPresenter.setContext(CouponActivity.this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(CouponActivity.this);
         mCouponRecycle.setLayoutManager(layoutManager);
-        mAdapter = new CouponAdapter(mList,CouponActivity.this,this);
+        mAdapter = new CouponAdapter(mList, CouponActivity.this, this);
         mCouponRecycle.setAdapter(mAdapter);
 
         //定制刷新加载
@@ -70,34 +73,43 @@ public class CouponActivity extends BaseActivity implements CouponInterface {
 
         LoadingView loadingView = new LoadingView(CouponActivity.this);
         mCouponRefresh.setBottomView(loadingView);
-        mCouponRefresh.setOnRefreshListener(new RefreshListenerAdapter(){
+        mCouponRefresh.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
                 page = "1";
-                mPresenter.requestList(LoginManage.getInstance().getLoginBean().getId(),page,"1");
+                mPresenter.requestList(LoginManage.getInstance().getLoginBean().getId(), page, "1");
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
-                int pageIndex = Integer.parseInt(page)+1;
-                page = pageIndex+"";
-                mPresenter.requestList(LoginManage.getInstance().getLoginBean().getId(),page,"1");
+                int pageIndex = Integer.parseInt(page) + 1;
+                page = pageIndex + "";
+                mPresenter.requestList(LoginManage.getInstance().getLoginBean().getId(), page, "1");
+            }
+        });
+
+        mTextCouponReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CouponActivity.this,CouponReceiveActivity.class);
+                startActivity(intent);
             }
         });
     }
 
     @OnClick(R.id.text_coupon_overdue)
     public void onViewClicked() {
-        Intent intent = new Intent(CouponActivity.this,CouponOverdueActivity.class);
+        Intent intent = new Intent(CouponActivity.this, CouponOverdueActivity.class);
         startActivity(intent);
     }
+
 
     @Override
     public void requestCouponList(List<CouponBean> list) {
 
         mCouponRefresh.finishLoadmore();
         mCouponRefresh.finishRefreshing();
-        if(page.equals("1")){
+        if (page.equals("1")) {
             mList.clear();
         }
         mList.addAll(list);
@@ -109,4 +121,16 @@ public class CouponActivity extends BaseActivity implements CouponInterface {
         mCouponRefresh.finishLoadmore();
         mCouponRefresh.finishRefreshing();
     }
+
+    @Override
+    public void onClickCoupon(int poist) {
+
+    }
+
+    @Override
+    public void requestReceiveSucess(int poist) {
+
+    }
+
+
 }

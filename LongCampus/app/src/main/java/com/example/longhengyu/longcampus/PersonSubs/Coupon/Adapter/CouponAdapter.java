@@ -42,7 +42,26 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+
+        CouponBean bean = mList.get(position);
+        holder.mTextCouponItemTime.setText("有效期"+bean.getDate()+"-"+bean.getEtime());
+        holder.mTextCouponItemPrice.setText("¥"+bean.getAmount());
+        holder.mTextCouponItemSub.setText(bean.getTitle());
+        if(bean.getlCouponType().equals("0")){
+            holder.mLayoutCouponItemLeft.setBackgroundResource(R.color.ColorCouponLeft);
+            holder.mLayoutCouponItemRight.setBackgroundResource(R.drawable.bg_yhq_used);
+        }
+        if(bean.getlCouponType().equals("2")){
+            holder.mLayoutCouponItemRight.setBackgroundResource(R.drawable.bg_yhq_lq);
+        }
+        holder.selfView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickCoupon(position);
+            }
+        });
+
 
     }
 
@@ -64,9 +83,12 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
         @BindView(R.id.layout_coupon_item_right)
         ConstraintLayout mLayoutCouponItemRight;
 
+        View selfView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            selfView = itemView;
         }
     }
 }

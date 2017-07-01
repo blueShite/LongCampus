@@ -58,4 +58,14 @@ public class CouponOverdueActivity extends BaseActivity implements CouponInterfa
     public void requestCouponError(String error) {
 
     }
+
+    @Override
+    public void onClickCoupon(int poist) {
+
+    }
+
+    @Override
+    public void requestReceiveSucess(int poist) {
+
+    }
 }

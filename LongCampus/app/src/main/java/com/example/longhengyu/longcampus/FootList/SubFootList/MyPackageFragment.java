@@ -1,6 +1,7 @@
 package com.example.longhengyu.longcampus.FootList.SubFootList;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootDetail.FootDetailActivity;
 import com.example.longhengyu.longcampus.FootList.CollectionRequest.CollectionRequest;
 import com.example.longhengyu.longcampus.FootList.CollectionRequest.CollectionRequestInterface;
 import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
@@ -17,8 +19,8 @@ import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopCartChange
 import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopcartRequest;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.PackpageClassesAdapter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.PackpageCommAdapter;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
-import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageCommodityBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.MyPackpageInterface;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Presenter.MyPackpagePresenter;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
@@ -56,7 +58,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     private PackpageClassesAdapter mClassesAdapter;
     private PackpageCommAdapter mCommAdapter;
     private List<PackpageClassesBean> mClassesBeenList = new ArrayList<>();
-    private List<PackpageCommodityBean> mCommodityBeenList = new ArrayList<>();
+    private List<FeatureBean> mCommodityBeenList = new ArrayList<>();
     private MyPackpagePresenter mPresenter = new MyPackpagePresenter(this);
     private CanteenBean mCanteenBean;
     private PackpageClassesBean selectClassesBean;
@@ -75,8 +77,13 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
         ButterKnife.bind(this, mView);
         customView();
         page="1";
-        mPresenter.requestClassesList(mCanteenBean.getRes_id());
         return mView;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        mPresenter.requestClassesList(mCanteenBean.getRes_id());
     }
 
     private void customView(){
@@ -130,7 +137,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     }
 
     @Override
-    public void requestClassesSuccess(List<PackpageClassesBean> list, List<PackpageCommodityBean> commodityList) {
+    public void requestClassesSuccess(List<PackpageClassesBean> list, List<FeatureBean> commodityList) {
 
         mClassesBeenList.clear();
         mClassesBeenList.addAll(list);
@@ -146,7 +153,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     }
 
     @Override
-    public void requestCommoditySuccess(List<PackpageCommodityBean> list) {
+    public void requestCommoditySuccess(List<FeatureBean> list) {
 
         mPackpageCommRefresh.finishLoadmore();
         mPackpageCommRefresh.finishRefreshing();
@@ -184,6 +191,15 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     }
 
     @Override
+    public void onClickMenu(int poist) {
+        Intent intent = new Intent(getActivity(), FootDetailActivity.class);
+        intent.putExtra("featureBean",mCommodityBeenList.get(poist));
+        intent.putExtra("isMyMenu","0");
+        intent.putExtra("resId",mCanteenBean.getRes_id());
+        startActivity(intent);
+    }
+
+    @Override
     public void onClickCollection(final int poist) {
 
         CollectionRequest.requestCollection(LoginManage.getInstance().getLoginBean().getId(),
@@ -200,7 +216,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     @Override
     public void onClickAddShopCart(final int poist, final TextView numTextView) {
 
-        final PackpageCommodityBean bean = mCommodityBeenList.get(poist);
+        final FeatureBean bean = mCommodityBeenList.get(poist);
         final String numsStr = (Integer.parseInt(bean.getNums())+1)+"";
         ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
             @Override
@@ -215,7 +231,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
 
     @Override
     public void onClickReduxShopCart(final int poist, final TextView numTextView) {
-        final PackpageCommodityBean bean = mCommodityBeenList.get(poist);
+        final FeatureBean bean = mCommodityBeenList.get(poist);
         if(Integer.parseInt(bean.getNums())<1){
             Toasty.error(getContext(),"已经是0了,不能再少了").show();
             return;

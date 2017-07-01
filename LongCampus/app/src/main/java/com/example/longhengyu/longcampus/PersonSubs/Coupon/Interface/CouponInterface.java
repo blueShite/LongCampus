@@ -15,4 +15,7 @@ public interface CouponInterface {
 
     void requestCouponError(String error);
 
+    void onClickCoupon(int poist);
+
+    void  requestReceiveSucess(int poist);
 }

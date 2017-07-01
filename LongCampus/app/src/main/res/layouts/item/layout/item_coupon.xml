@@ -62,7 +62,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="0dp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/bg_yhq"
         app:layout_constraintLeft_toRightOf="@+id/layout_coupon_item_left"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView44">

@@ -10,4 +10,5 @@ public interface FootListInterface {
 
     void requestSucess(ShopCartHeaderBean headerBean);
 
+    void requestShopNum(String shopNum);
 }

@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
-import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageCommodityBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.MyPackpageInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
@@ -31,11 +31,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapter.ViewHolder> {
 
-    private List<PackpageCommodityBean> mList;
+    private List<FeatureBean> mList;
     private Context mContext;
     private MyPackpageInterface mInterface;
 
-    public PackpageCommAdapter (List<PackpageCommodityBean> list,Context context,MyPackpageInterface anInterface){
+    public PackpageCommAdapter (List<FeatureBean> list,Context context,MyPackpageInterface anInterface){
         mList = list;
         mContext = context;
         mInterface = anInterface;
@@ -51,7 +51,7 @@ public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        PackpageCommodityBean commodityBean = mList.get(position);
+        FeatureBean commodityBean = mList.get(position);
         holder.mTextPackCommName.setText(commodityBean.getDish());
         holder.mTextPackCommSub.setText(commodityBean.getIntro());
         holder.mTextPackCommNum.setText(commodityBean.getNums());
@@ -79,6 +79,12 @@ public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapte
                 mInterface.onClickReduxShopCart(position,holder.mTextPackCommNum);
             }
         });
+        holder.selfView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickMenu(position);
+            }
+        });
 
     }
 
@@ -104,9 +110,12 @@ public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapte
         @BindView(R.id.image_pack_comm_redux)
         ImageView mImagePackCommRedux;
 
+        View selfView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            selfView = itemView;
         }
     }
 }

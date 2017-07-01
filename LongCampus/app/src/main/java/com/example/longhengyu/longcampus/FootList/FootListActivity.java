@@ -16,6 +16,7 @@ import com.example.longhengyu.longcampus.FootList.SubFootList.RecommendFragment;
 import com.example.longhengyu.longcampus.FootList.SubFootList.SaleFragment;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
 import com.example.longhengyu.longcampus.Information.Adapter.PicassoImageLoader;
+import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
@@ -74,6 +75,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mBean = (CanteenBean) getIntent().getSerializableExtra("canteenBean");
         customView();
         mPresenter.requestFootListHeader(mBean.getRes_id());
+        mPresenter.requestShopCartNum(LoginManage.getInstance().getLoginBean().getId(),mBean.getRes_id());
     }
 
     @Override
@@ -89,7 +91,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
 
     @Subscribe
     public void onMessageEvent(FootListShopEvent event) {
-
+        mPresenter.requestShopCartNum(LoginManage.getInstance().getLoginBean().getId(),mBean.getRes_id());
     }
 
     private void customView() {
@@ -103,6 +105,8 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mSaleFragment = new SaleFragment(mBean);
         mMyPackageFragment = new MyPackageFragment(mBean);
         loadMultipleRootFragment(R.id.layout_footList, 0, mRecommendFragment, mSaleFragment, mFeatureFragment, mMyPackageFragment);
+        mTextFootListShopCart.setVisibility(View.INVISIBLE);
+        mTextFootListShopCartSub.setVisibility(View.VISIBLE);
 
     }
 
@@ -154,5 +158,16 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mBannerShopCart.setImages(list);
         mBannerShopCart.start();
         mTextFootListTitle.setText(headerBean.getRes_name());
+    }
+
+    @Override
+    public void requestShopNum(String shopNum) {
+        if(Integer.parseInt(shopNum)>0){
+            mTextFootListShopCart.setVisibility(View.VISIBLE);
+            mTextFootListShopCartSub.setVisibility(View.INVISIBLE);
+        }else {
+            mTextFootListShopCart.setVisibility(View.INVISIBLE);
+            mTextFootListShopCartSub.setVisibility(View.VISIBLE);
+        }
     }
 }

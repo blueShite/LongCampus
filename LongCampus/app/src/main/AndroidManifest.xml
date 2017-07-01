@@ -98,6 +98,10 @@
         </activity>
         <activity android:name=".PersonSubs.Coupon.CouponOverdueActivity">
         </activity>
+        <activity android:name=".PersonSubs.Coupon.CouponReceiveActivity">
+        </activity>
+        <activity android:name=".ShopCartList.ShopCartListActivity">
+        </activity>
     </application>
 
 </manifest>

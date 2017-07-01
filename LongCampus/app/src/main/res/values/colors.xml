@@ -11,6 +11,7 @@
     <color name="ColorYellow">#F49427</color>
     <color name="ColorTransparent">#00000000</color>
     <color name="ColorBorBlack">#F5F5F5</color>
-
+    <color name="ColorCouponLeft">#D4D4D4</color>
+    <color name="ColorCouponRight">#B9B9B9</color>
 
 </resources>
