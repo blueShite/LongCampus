@@ -2,7 +2,6 @@ package com.example.longhengyu.longcampus.FootList.SubFootList.Presenter;
 
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BasePresenter;
-import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.PackpageClassesAdapter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.MyPackpageInterface;

@@ -49,7 +49,7 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         FeatureBean bean = mList.get(position);
         String imageStr = RequestTools.BaseUrl + bean.getMeal_litpic();
         Picasso.with(mContext).load(imageStr).resize(100, 100).into(holder.mImageShopCartItem);
@@ -68,6 +68,24 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(new FootListShopEvent("更新购物车"));
+            }
+        });
+        holder.selfView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickItem(position);
+            }
+        });
+        holder.mImageShopCartItemJia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickAddShopCart(position,holder.mTextShopCartItemNum);
+            }
+        });
+        holder.mImageShopCartItemJian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickReduxShopCart(position,holder.mTextShopCartItemNum);
             }
         });
     }
@@ -99,9 +117,12 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
         @BindView(R.id.button_item_shopcart_collection)
         Button mButtonItemShopcartCollection;
 
+        View selfView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            selfView = itemView;
         }
     }
 }

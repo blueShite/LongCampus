@@ -76,13 +76,13 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
         mView = inflater.inflate(R.layout.fragment_my_package, container, false);
         ButterKnife.bind(this, mView);
         customView();
-        page="1";
         return mView;
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        page="1";
         mPresenter.requestClassesList(mCanteenBean.getRes_id());
     }
 

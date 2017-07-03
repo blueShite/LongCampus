@@ -1,6 +1,7 @@
 package com.example.longhengyu.longcampus.FootList.SubFootList;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.longhengyu.longcampus.FootDetail.FootDetailActivity;
+import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
+import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopCartChangeInterface;
+import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopcartRequest;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.SaleAdapter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.SaleInterface;
@@ -20,6 +25,8 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +63,14 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
         mView = inflater.inflate(R.layout.fragment_sale, container, false);
         ButterKnife.bind(this, mView);
         customView();
+        return mView;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         page="1";
         mPresenter.requestList(mCanteenBean.getRes_id(),page);
-        return mView;
     }
 
     private void customView() {
@@ -115,7 +127,24 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
     }
 
     @Override
-    public void onClickAddShopCart(int poist) {
+    public void onClickSelfItem(int poist) {
+        Intent intent = new Intent(getActivity(), FootDetailActivity.class);
+        intent.putExtra("featureBean",mList.get(poist));
+        intent.putExtra("isMyMenu","0");
+        intent.putExtra("resId",mCanteenBean.getRes_id());
+        startActivity(intent);
+    }
 
+    @Override
+    public void onClickAddShopCart(int poist) {
+        final FeatureBean bean = mList.get(poist);
+        final String numsStr = (Integer.parseInt(bean.getNums())+1)+"";
+        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
+            @Override
+            public void changeShopCart() {
+                bean.setNums(numsStr);
+                EventBus.getDefault().post(new FootListShopEvent("更新购物车"));
+            }
+        });
     }
 }

@@ -102,6 +102,12 @@
         </activity>
         <activity android:name=".ShopCartList.ShopCartListActivity">
         </activity>
+        <activity android:name=".PersonSubs.Integral.IntegralExchange.IntegralExchangeActivity">
+        </activity>
+        <activity android:name=".PersonSubs.Integral.IntegralExchange.ExchangeRecord.ExchangeRecordActivity">
+        </activity>
+        <activity android:name=".ShopCartList.ShopCartOrder.ShopCartOrderActivity">
+        </activity>
     </application>
 
 </manifest>

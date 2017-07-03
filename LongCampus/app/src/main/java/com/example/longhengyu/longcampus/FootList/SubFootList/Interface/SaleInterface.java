@@ -15,5 +15,7 @@ public interface SaleInterface  {
 
     void requestError(String error);
 
+    void onClickSelfItem(int poist);
+
     void onClickAddShopCart(int poist);
 }

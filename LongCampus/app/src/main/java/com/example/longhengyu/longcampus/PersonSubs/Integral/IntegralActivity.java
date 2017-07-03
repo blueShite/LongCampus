@@ -1,5 +1,6 @@
 package com.example.longhengyu.longcampus.PersonSubs.Integral;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import com.example.longhengyu.longcampus.Base.BaseActivity;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.Adapter.IntegralAdapter;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.Bean.IntegralBean;
+import com.example.longhengyu.longcampus.PersonSubs.Integral.IntegralExchange.IntegralExchangeActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.Interface.IntegralInterface;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.Presenter.IntegralPresenter;
 import com.example.longhengyu.longcampus.R;
@@ -55,7 +57,9 @@ public class IntegralActivity extends BaseActivity implements IntegralInterface 
         mTextIntegralExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                Intent intent = new Intent(IntegralActivity.this, IntegralExchangeActivity.class);
+                intent.putExtra("integral",getIntent().getStringExtra("integral"));
+                startActivity(intent);
             }
         });
 

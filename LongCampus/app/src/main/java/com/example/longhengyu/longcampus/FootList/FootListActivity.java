@@ -1,5 +1,6 @@
 package com.example.longhengyu.longcampus.FootList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,6 +21,7 @@ import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
+import com.example.longhengyu.longcampus.ShopCartList.ShopCartListActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -108,6 +110,14 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mTextFootListShopCart.setVisibility(View.INVISIBLE);
         mTextFootListShopCartSub.setVisibility(View.VISIBLE);
 
+        mTextFootListShopCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FootListActivity.this, ShopCartListActivity.class);
+                intent.putExtra("resId",mBean.getRes_id());
+                startActivity(intent);
+            }
+        });
     }
 
     @OnClick({R.id.relative_shopCart_jinrituijian, R.id.relative_shopCart_tejiayouhui, R.id.relative_shopCart_tesetaocan, R.id.relative_shopCart_wodecaidan})

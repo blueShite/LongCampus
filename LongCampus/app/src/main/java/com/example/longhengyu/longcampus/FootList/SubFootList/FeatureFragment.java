@@ -1,6 +1,7 @@
 package com.example.longhengyu.longcampus.FootList.SubFootList;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,7 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootDetail.FootDetailActivity;
+import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
+import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopCartChangeInterface;
+import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopcartRequest;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.FeatureAdapter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.RecommendAdapter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.SaleAdapter;
@@ -23,11 +29,14 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -61,9 +70,14 @@ public class FeatureFragment extends SupportFragment implements FeatureInterface
         mView = inflater.inflate(R.layout.fragment_feature, container, false);
         ButterKnife.bind(this, mView);
         customView();
+        return mView;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         page = "1";
         mPresenter.requestList(page,mCanteenBean.getRes_id());
-        return mView;
     }
 
     private void customView() {
@@ -120,5 +134,46 @@ public class FeatureFragment extends SupportFragment implements FeatureInterface
     public void requestError(String error) {
         mFeatureRefresh.finishLoadmore();
         mFeatureRefresh.finishRefreshing();
+    }
+
+    @Override
+    public void onClickItem(int poist) {
+        Intent intent = new Intent(getActivity(), FootDetailActivity.class);
+        intent.putExtra("featureBean",mList.get(poist));
+        intent.putExtra("isMyMenu","1");
+        intent.putExtra("resId",mCanteenBean.getRes_id());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClickAddShopCart(int poist, final TextView numTextView) {
+        final FeatureBean bean = mList.get(poist);
+        final String numsStr = (Integer.parseInt(bean.getNums())+1)+"";
+        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
+            @Override
+            public void changeShopCart() {
+                bean.setNums(numsStr);
+                numTextView.setText(numsStr);
+                EventBus.getDefault().post(new FootListShopEvent("更新购物车"));
+            }
+        });
+    }
+
+    @Override
+    public void onClickReduxShopCart(int poist, final TextView numTextView) {
+        final FeatureBean bean = mList.get(poist);
+        if(Integer.parseInt(bean.getNums())<1){
+            Toasty.error(getContext(),"已经是0了,不能再少了").show();
+            return;
+        }
+        final String numsStr = (Integer.parseInt(bean.getNums())-1)+"";
+        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
+            @Override
+            public void changeShopCart() {
+                bean.setNums(numsStr);
+                numTextView.setText(numsStr);
+                EventBus.getDefault().post(new FootListShopEvent("更新购物车"));
+            }
+        });
     }
 }
