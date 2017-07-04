@@ -19,6 +19,8 @@ public interface RecommendInterface {
 
     void onClickItem(int poist);
 
+    void onClickCollection(int poist);
+
     void onClickItemAdd(int poist , TextView addText);
 
     void onClickItemReduce(int poist, TextView jianText);

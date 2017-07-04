@@ -1,5 +1,7 @@
 package com.example.longhengyu.longcampus.FootList.SubFootList.Interface;
 
+import android.widget.TextView;
+
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartBean;
 
@@ -17,5 +19,9 @@ public interface SaleInterface  {
 
     void onClickSelfItem(int poist);
 
-    void onClickAddShopCart(int poist);
+    void onClickCollection(int poist);
+
+    void onClickItemAdd(int poist , TextView addText);
+
+    void onClickItemReduce(int poist, TextView jianText);
 }

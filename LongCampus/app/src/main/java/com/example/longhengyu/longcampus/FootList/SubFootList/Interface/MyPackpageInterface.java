@@ -19,8 +19,6 @@ public interface MyPackpageInterface {
 
     void requestCommodityError(String error);
 
-    void onClickClasses(int poist);
-
     void onClickMenu(int poist);
 
     void onClickCollection(int poist);

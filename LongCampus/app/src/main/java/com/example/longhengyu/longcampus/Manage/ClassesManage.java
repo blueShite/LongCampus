@@ -19,7 +19,12 @@ public class ClassesManage {
     public List<PackpageClassesBean> mList;
 
     public List<PackpageClassesBean> returnClasses(){
-
+        if(mList==null){
+            return null;
+        }
+        for (PackpageClassesBean bean:mList){
+            bean.setSelect(false);
+        }
         return mList;
     }
 

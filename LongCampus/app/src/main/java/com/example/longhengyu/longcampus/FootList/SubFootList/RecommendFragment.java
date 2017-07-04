@@ -12,14 +12,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.FootDetail.FootDetailActivity;
+import com.example.longhengyu.longcampus.FootList.ClassesRequest.ClassesRequest;
+import com.example.longhengyu.longcampus.FootList.CollectionRequest.CollectionRequest;
+import com.example.longhengyu.longcampus.FootList.CollectionRequest.CollectionRequestInterface;
 import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
 import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopCartChangeInterface;
 import com.example.longhengyu.longcampus.FootList.ShopCartRequest.ShopcartRequest;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.PackpageClassesAdapter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Adapter.RecommendAdapter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.RecommendInterface;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Presenter.RecommendPresenter;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
+import com.example.longhengyu.longcampus.Manage.ClassesManage;
+import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.R;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -54,7 +61,9 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
     private String page;
     private CanteenBean mCanteenBean;
     private RecommendAdapter mAdapter;
-
+    private PackpageClassesAdapter mClassesAdapter;
+    private List<PackpageClassesBean> mClassesList = new ArrayList<>();
+    private PackpageClassesBean selectClassesBean;
     public RecommendFragment(CanteenBean canteenBean) {
         mCanteenBean = canteenBean;
     }
@@ -67,14 +76,57 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
         mView = inflater.inflate(R.layout.fragment_recommend, container, false);
         ButterKnife.bind(this, mView);
         customView();
+        if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
+            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
+                @Override
+                public void requestClassesList(List<PackpageClassesBean> list) {
+                    ClassesManage.getInstance().saveClasses(list);
+                    mClassesList.clear();
+                    mClassesList.addAll(list);
+                    mClassesList.get(0).setSelect(true);
+                    selectClassesBean = mClassesList.get(0);
+                    mClassesAdapter.notifyDataSetChanged();
+                    page = "1";
+                    mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
+                }
+            });
+        }else {
+            mClassesList.clear();
+            mClassesList.addAll(ClassesManage.getInstance().returnClasses());
+            mClassesList.get(0).setSelect(true);
+            selectClassesBean = mClassesList.get(0);
+            selectClassesBean.setSelect(true);
+            mClassesAdapter.notifyDataSetChanged();
+            page = "1";
+            mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
+        }
         return mView;
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        if(ClassesManage.getInstance().mList==null||ClassesManage.getInstance().mList.size()<1){
+            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
+                @Override
+                public void requestClassesList(List<PackpageClassesBean> list) {
+                    ClassesManage.getInstance().saveClasses(list);
+                    mClassesList.clear();
+                    mClassesList.addAll(list);
+                    mClassesList.get(0).setSelect(true);
+                    selectClassesBean = mClassesList.get(0);
+                    mClassesAdapter.notifyDataSetChanged();
+                    page = "1";
+                    mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
+                }
+            });
+            return;
+        }
+        if(selectClassesBean==null||selectClassesBean.getRes_id()==null){
+            return;
+        }
         page = "1";
-        mPresenter.requestList(page, mCanteenBean.getRes_id(), "1");
+        mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
     }
 
     private void customView() {
@@ -82,12 +134,27 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
         mPresenter.setContext(getContext());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecommendFragmentRecycler.setLayoutManager(manager);
-        LinearLayoutManager manager1 = new LinearLayoutManager(getContext());
-        mRecommendFragmentClasserRecycle.setLayoutManager(manager1);
         mAdapter = new RecommendAdapter(mList, getContext(), this);
         mRecommendFragmentRecycler.setAdapter(mAdapter);
-
-
+        LinearLayoutManager manager1 = new LinearLayoutManager(getContext());
+        mRecommendFragmentClasserRecycle.setLayoutManager(manager1);
+        mClassesAdapter = new PackpageClassesAdapter(mClassesList, getContext(), new PackpageClassesAdapter.ClassesInterface() {
+            @Override
+            public void onClickClassesItem(int poist) {
+                for (int i=0;i<mClassesList.size();i++){
+                    if(i==poist){
+                        mClassesList.get(i).setSelect(true);
+                    }else {
+                        mClassesList.get(i).setSelect(false);
+                    }
+                }
+                mClassesAdapter.notifyDataSetChanged();
+                selectClassesBean = mClassesList.get(poist);
+                page = "1";
+                mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
+            }
+        });
+        mRecommendFragmentClasserRecycle.setAdapter(mClassesAdapter);
         //定制刷新加载
         SinaRefreshView headerView = new SinaRefreshView(getContext());
         headerView.setArrowResource(R.drawable.arrow);
@@ -100,14 +167,14 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
                 page = "1";
-                mPresenter.requestList(page, mCanteenBean.getRes_id(), "1");
+                mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
                 int pageIndex = Integer.parseInt(page) + 1;
                 page = pageIndex + "";
-                mPresenter.requestList(page, mCanteenBean.getRes_id(), "1");
+                mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
             }
         });
 
@@ -145,6 +212,18 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
         intent.putExtra("isMyMenu", "0");
         intent.putExtra("resId", mCanteenBean.getRes_id());
         startActivity(intent);
+    }
+
+    @Override
+    public void onClickCollection(final int poist) {
+        CollectionRequest.requestCollection(LoginManage.getInstance().getLoginBean().getId(),
+                mList.get(poist).getMenu_id(), getContext(), new CollectionRequestInterface() {
+                    @Override
+                    public void collectionSucess() {
+                        mList.get(poist).setIfkeep(1);
+                        mAdapter.notifyItemChanged(poist);
+                    }
+                });
     }
 
     @Override

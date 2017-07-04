@@ -95,7 +95,24 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
         LinearLayoutManager commManager = new LinearLayoutManager(getContext());
         mPackpageCommRecycle.setLayoutManager(commManager);
 
-        mClassesAdapter = new PackpageClassesAdapter(mClassesBeenList,getContext(),this);
+        mClassesAdapter = new PackpageClassesAdapter(mClassesBeenList, getContext(), new PackpageClassesAdapter.ClassesInterface() {
+            @Override
+            public void onClickClassesItem(int poist) {
+                for (int i=0;i<mClassesBeenList.size();i++){
+                    if(i==poist){
+                        mClassesBeenList.get(i).setSelect(true);
+                    }else {
+                        mClassesBeenList.get(i).setSelect(false);
+                    }
+                }
+                mClassesAdapter.notifyDataSetChanged();
+                selectClassesBean = mClassesBeenList.get(poist);
+                page = "1";
+                mPresenter.requestCommodityList(LoginManage.getInstance().getLoginBean().getHate(),
+                        LoginManage.getInstance().getLoginBean().getLike_id(),page,selectClassesBean.getRes_id(),
+                        LoginManage.getInstance().getLoginBean().getId(),LoginManage.getInstance().getLoginBean().getTaboos(),false);
+            }
+        });
         mPackpageClassesRecycle.setAdapter(mClassesAdapter);
 
         mCommAdapter = new PackpageCommAdapter(mCommodityBeenList,getContext(),this);
@@ -169,25 +186,6 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     public void requestCommodityError(String error) {
         mPackpageCommRefresh.finishLoadmore();
         mPackpageCommRefresh.finishRefreshing();
-    }
-
-    @Override
-    public void onClickClasses(int poist) {
-
-        for (int i=0;i<mClassesBeenList.size();i++){
-            if(i==poist){
-                mClassesBeenList.get(i).setSelect(true);
-            }else {
-                mClassesBeenList.get(i).setSelect(false);
-            }
-        }
-        mClassesAdapter.notifyDataSetChanged();
-        selectClassesBean = mClassesBeenList.get(poist);
-        page = "1";
-        mPresenter.requestCommodityList(LoginManage.getInstance().getLoginBean().getHate(),
-                LoginManage.getInstance().getLoginBean().getLike_id(),page,selectClassesBean.getRes_id(),
-                LoginManage.getInstance().getLoginBean().getId(),LoginManage.getInstance().getLoginBean().getTaboos(),false);
-
     }
 
     @Override

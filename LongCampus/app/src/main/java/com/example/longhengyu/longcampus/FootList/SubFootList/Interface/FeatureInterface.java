@@ -18,6 +18,8 @@ public interface FeatureInterface {
 
     void onClickItem(int poist);
 
+    void onClickCollection(int poist);
+
     void onClickAddShopCart(int poist, TextView numTextView);
 
     void onClickReduxShopCart(int poist, TextView numTextView);

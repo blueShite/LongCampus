@@ -25,9 +25,9 @@ public class PackpageClassesAdapter extends RecyclerView.Adapter<PackpageClasses
 
     private List<PackpageClassesBean> mList;
     private Context mContext;
-    private MyPackpageInterface mInterface;
+    private ClassesInterface mInterface;
 
-    public PackpageClassesAdapter(List<PackpageClassesBean> list,Context context,MyPackpageInterface anInterface){
+    public PackpageClassesAdapter(List<PackpageClassesBean> list,Context context,ClassesInterface anInterface){
         mList = list;
         mContext = context;
         mInterface = anInterface;
@@ -53,7 +53,7 @@ public class PackpageClassesAdapter extends RecyclerView.Adapter<PackpageClasses
         holder.mLayoutPakeBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickClasses(position);
+                mInterface.onClickClassesItem(position);
             }
         });
     }
@@ -74,5 +74,9 @@ public class PackpageClassesAdapter extends RecyclerView.Adapter<PackpageClasses
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+
+    public interface ClassesInterface{
+        void onClickClassesItem(int poist);
     }
 }

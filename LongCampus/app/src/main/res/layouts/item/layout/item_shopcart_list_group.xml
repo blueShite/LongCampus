@@ -8,7 +8,7 @@
         android:id="@+id/textView54"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/ColorLine"
+        android:background="@color/ColorBorBlack"
         />
 
     <TextView

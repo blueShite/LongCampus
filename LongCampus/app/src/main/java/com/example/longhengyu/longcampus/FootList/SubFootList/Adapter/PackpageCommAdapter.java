@@ -9,15 +9,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
-import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Interface.MyPackpageInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.squareup.picasso.Picasso;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -31,11 +27,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapter.ViewHolder> {
 
+
     private List<FeatureBean> mList;
     private Context mContext;
     private MyPackpageInterface mInterface;
 
-    public PackpageCommAdapter (List<FeatureBean> list,Context context,MyPackpageInterface anInterface){
+    public PackpageCommAdapter(List<FeatureBean> list, Context context, MyPackpageInterface anInterface) {
         mList = list;
         mContext = context;
         mInterface = anInterface;
@@ -53,30 +50,31 @@ public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapte
 
         FeatureBean commodityBean = mList.get(position);
         holder.mTextPackCommName.setText(commodityBean.getDish());
-        holder.mTextPackCommSub.setText(commodityBean.getIntro());
+        holder.mTextPackCommSub.setText("¥"+commodityBean.getPrice());
+        holder.mTextPackCommOldPrice.setText("原价"+commodityBean.getPrice());
         holder.mTextPackCommNum.setText(commodityBean.getNums());
-        Picasso.with(mContext).load(RequestTools.BaseUrl+commodityBean.getLitpic()).resize(120,120).into(holder.mImagePackCommHeader);
+        Picasso.with(mContext).load(RequestTools.BaseUrl + commodityBean.getLitpic()).resize(120, 120).into(holder.mImagePackCommHeader);
         holder.mButtonPackCommCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mInterface.onClickCollection(position);
             }
         });
-        if(commodityBean.getIfkeep()==0){
+        if (commodityBean.getIfkeep() == 0) {
             holder.mButtonPackCommCollection.setSelected(false);
-        }else {
+        } else {
             holder.mButtonPackCommCollection.setSelected(true);
         }
         holder.mImagePackCommAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickAddShopCart(position,holder.mTextPackCommNum);
+                mInterface.onClickAddShopCart(position, holder.mTextPackCommNum);
             }
         });
         holder.mImagePackCommRedux.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickReduxShopCart(position,holder.mTextPackCommNum);
+                mInterface.onClickReduxShopCart(position, holder.mTextPackCommNum);
             }
         });
         holder.selfView.setOnClickListener(new View.OnClickListener() {
@@ -109,12 +107,14 @@ public class PackpageCommAdapter extends RecyclerView.Adapter<PackpageCommAdapte
         TextView mTextPackCommNum;
         @BindView(R.id.image_pack_comm_redux)
         ImageView mImagePackCommRedux;
+        @BindView(R.id.text_pack_comm_oldPrice)
+        TextView mTextPackCommOldPrice;
 
         View selfView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             selfView = itemView;
         }
     }

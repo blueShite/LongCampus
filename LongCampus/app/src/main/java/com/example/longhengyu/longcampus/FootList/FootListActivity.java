@@ -8,15 +8,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.FootList.ClassesRequest.ClassesRequest;
 import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
 import com.example.longhengyu.longcampus.FootList.Interface.FootListInterface;
 import com.example.longhengyu.longcampus.FootList.Presenter.FootListPresenter;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
 import com.example.longhengyu.longcampus.FootList.SubFootList.FeatureFragment;
 import com.example.longhengyu.longcampus.FootList.SubFootList.MyPackageFragment;
 import com.example.longhengyu.longcampus.FootList.SubFootList.RecommendFragment;
 import com.example.longhengyu.longcampus.FootList.SubFootList.SaleFragment;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
 import com.example.longhengyu.longcampus.Information.Adapter.PicassoImageLoader;
+import com.example.longhengyu.longcampus.Manage.ClassesManage;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
@@ -78,6 +81,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         customView();
         mPresenter.requestFootListHeader(mBean.getRes_id());
         mPresenter.requestShopCartNum(LoginManage.getInstance().getLoginBean().getId(),mBean.getRes_id());
+
     }
 
     @Override
