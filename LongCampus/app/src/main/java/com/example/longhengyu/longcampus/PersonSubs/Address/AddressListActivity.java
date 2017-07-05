@@ -94,6 +94,7 @@ public class AddressListActivity extends BaseActivity  implements AddressListInt
             }
         }
         mAdapter.notifyDataSetChanged();
+        finish();
     }
 
     @Override

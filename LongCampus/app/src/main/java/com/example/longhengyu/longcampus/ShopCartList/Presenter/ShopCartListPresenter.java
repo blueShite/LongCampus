@@ -10,6 +10,7 @@ import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.ShopCart.Interface.ShopCartInterface;
 import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartItemBean;
 import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartListBean;
+import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartPriceBean;
 import com.example.longhengyu.longcampus.ShopCartList.Interface.ShopCartListInterface;
 
 import java.util.ArrayList;
@@ -73,5 +74,30 @@ public class ShopCartListPresenter extends BasePresenter {
             }
         }
         return itemBeanList;
+    }
+
+    public void requestSubmitShopCart(String shopId){
+        showDialog();
+        Map<String,String> map = new HashMap<>();
+        map.put("id",shopId);
+        RequestTools.getInstance().postRequest("/api/shopping_show.api.php", false, map, "", new RequestCallBack(mContext) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                dismissDialog();
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                dismissDialog();
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    ShopCartPriceBean bean = JSON.parseObject(response.getData(),ShopCartPriceBean.class);
+                    mInterface.requestSubmitShopCartSucess(bean);
+                }else {
+                    Toasty.error(mContext,response.getMes()).show();
+                }
+            }
+        });
     }
 }

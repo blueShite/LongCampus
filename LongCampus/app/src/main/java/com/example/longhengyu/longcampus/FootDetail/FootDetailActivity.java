@@ -33,6 +33,7 @@ public class FootDetailActivity extends BaseActivity implements FootDetailInterf
     private FootDetailPresenter mPresenter = new FootDetailPresenter(this);
     private String isMyMenu;
     private String resId;
+    private String flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class FootDetailActivity extends BaseActivity implements FootDetailInterf
         mBean = (FeatureBean) getIntent().getSerializableExtra("featureBean");
         isMyMenu = getIntent().getStringExtra("isMyMenu");
         resId = getIntent().getStringExtra("resId");
+        flag = getIntent().getStringExtra("flag");
         LinearLayoutManager manager = new LinearLayoutManager(FootDetailActivity.this);
         mRecycleFootDetail.setLayoutManager(manager);
     }
@@ -75,7 +77,7 @@ public class FootDetailActivity extends BaseActivity implements FootDetailInterf
     public void onClickAdd(final TextView numTextView) {
         final String numStr = (Integer.parseInt(numTextView.getText().toString())+1)+"";
         ShopcartRequest.requestShopCart(resId, numStr,
-                mBean.getMenu_id(), FootDetailActivity.this, new ShopCartChangeInterface() {
+                mBean.getMenu_id(), flag,FootDetailActivity.this, new ShopCartChangeInterface() {
             @Override
             public void changeShopCart() {
 
@@ -88,7 +90,7 @@ public class FootDetailActivity extends BaseActivity implements FootDetailInterf
     public void onClickRedux(final TextView numTextView) {
         final String numStr = (Integer.parseInt(numTextView.getText().toString())-1)+"";
         ShopcartRequest.requestShopCart(resId, numStr,
-                mBean.getMenu_id(), FootDetailActivity.this, new ShopCartChangeInterface() {
+                mBean.getMenu_id(), flag,FootDetailActivity.this, new ShopCartChangeInterface() {
                     @Override
                     public void changeShopCart() {
                         numTextView.setText(numStr);

@@ -194,6 +194,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
         intent.putExtra("featureBean",mCommodityBeenList.get(poist));
         intent.putExtra("isMyMenu","0");
         intent.putExtra("resId",mCanteenBean.getRes_id());
+        intent.putExtra("flag","4");
         startActivity(intent);
     }
 
@@ -216,7 +217,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
 
         final FeatureBean bean = mCommodityBeenList.get(poist);
         final String numsStr = (Integer.parseInt(bean.getNums())+1)+"";
-        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
+        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(),"4", getContext(), new ShopCartChangeInterface() {
             @Override
             public void changeShopCart() {
                 bean.setNums(numsStr);
@@ -235,7 +236,7 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
             return;
         }
         final String numsStr = (Integer.parseInt(bean.getNums())-1)+"";
-        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
+        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(),numsStr, bean.getMenu_id(),"4", getContext(), new ShopCartChangeInterface() {
             @Override
             public void changeShopCart() {
                 bean.setNums(numsStr);

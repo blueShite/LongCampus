@@ -20,12 +20,13 @@ import okhttp3.Call;
 public class ShopcartRequest {
 
 
-    public static void requestShopCart(String res_cid,String num, String commId, final Context context, final ShopCartChangeInterface requestInterface){
+    public static void requestShopCart(String res_cid,String num, String commId,String flag,final Context context, final ShopCartChangeInterface requestInterface){
 
         Map<String,String> map = new HashMap<>();
         map.put("num",num);
         map.put("menu_id",commId);
         map.put("res_cid",res_cid);
+        map.put("flag",flag);
         map.put("u_id", LoginManage.getInstance().getLoginBean().getId());
         RequestTools.getInstance().postRequest("/api/update_shopping.api.php", false, map, "", new RequestCallBack(context) {
             @Override

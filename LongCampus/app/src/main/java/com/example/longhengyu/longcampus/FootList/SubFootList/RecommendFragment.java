@@ -210,6 +210,7 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
         Intent intent = new Intent(getActivity(), FootDetailActivity.class);
         intent.putExtra("featureBean", mList.get(poist));
         intent.putExtra("isMyMenu", "0");
+        intent.putExtra("flag","1");
         intent.putExtra("resId", mCanteenBean.getRes_id());
         startActivity(intent);
     }
@@ -230,7 +231,7 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
     public void onClickItemAdd(int poist, final TextView addText) {
         final FeatureBean bean = mList.get(poist);
         final String numsStr = (Integer.parseInt(bean.getNums()) + 1) + "";
-        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(), numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
+        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(), numsStr, bean.getMenu_id(),"1", getContext(), new ShopCartChangeInterface() {
             @Override
             public void changeShopCart() {
                 bean.setNums(numsStr);
@@ -248,7 +249,7 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
             return;
         }
         final String numsStr = (Integer.parseInt(bean.getNums()) - 1) + "";
-        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(), numsStr, bean.getMenu_id(), getContext(), new ShopCartChangeInterface() {
+        ShopcartRequest.requestShopCart(mCanteenBean.getRes_id(), numsStr, bean.getMenu_id(),"1", getContext(), new ShopCartChangeInterface() {
             @Override
             public void changeShopCart() {
                 bean.setNums(numsStr);

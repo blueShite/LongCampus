@@ -3,7 +3,7 @@
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,14 +11,14 @@
         android:text="TextView"
         android:textSize="@dimen/mainText"
         android:textColor="@color/ColorBlcak"
-        android:id="@+id/textView56"
+        android:id="@+id/text_shopcart_order_price"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
-        android:id="@+id/textView58"
+        android:id="@+id/text_shopcart_order_name"
         android:layout_width="0dp"
         android:textColor="@color/ColorBlcak"
         android:textSize="@dimen/mainText"
@@ -28,7 +28,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
-        app:layout_constraintRight_toLeftOf="@+id/textView56"
+        app:layout_constraintRight_toLeftOf="@+id/text_shopcart_order_price"
         android:layout_marginRight="8dp"/>
 
     <TextView
@@ -39,7 +39,7 @@
         android:textSize="@dimen/mainText"
         android:textColor="@color/ColorBlcak"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView58"
+        app:layout_constraintTop_toBottomOf="@+id/text_shopcart_order_name"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -57,21 +57,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView59"/>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/edit_shopcart_order_remark"
         android:layout_width="0dp"
-        android:paddingLeft="10dp"
         android:layout_height="32dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:ems="10"
         android:background="@color/ColorBorBlack"
-        android:inputType="textPersonName"
-        android:textSize="@dimen/smallText"
+        android:ems="10"
         android:hint="(10个字以内,例如:少放辣椒,不要香菜)"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textSize="@dimen/smallText"
         app:layout_constraintBottom_toTopOf="@+id/textView60"
         app:layout_constraintLeft_toRightOf="@+id/textView59"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView58"/>
+        app:layout_constraintTop_toBottomOf="@+id/text_shopcart_order_name"/>
 </android.support.constraint.ConstraintLayout>

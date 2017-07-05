@@ -3,6 +3,7 @@ package com.example.longhengyu.longcampus.ShopCartList.Interface;
 import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartItemBean;
+import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartPriceBean;
 
 import java.util.List;
 
@@ -14,8 +15,11 @@ public interface ShopCartListInterface {
 
     void requestShopListSucess(List<ShopCartItemBean> list);
 
+    void requestSubmitShopCartSucess(ShopCartPriceBean priceBean);
+
     void onClickItemAdd(int poist , TextView addText);
 
     void onClickItemReduce(int poist, TextView jianText);
 
+    void onClickItemDelete(int poist);
 }

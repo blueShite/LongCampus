@@ -83,6 +83,14 @@ public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapte
                 mInterface.onClickItemReduce(position,holder.mTextShopcartListNum);
             }
         });
+        holder.selfView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                mInterface.onClickItemDelete(position);
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -107,6 +115,8 @@ public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapte
         @BindView(R.id.image_shopcart_list_redux)
         ImageView mImageShopcartListRedux;
 
+        View selfView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             if (groupView != null && groupView == itemView) {
@@ -114,6 +124,7 @@ public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapte
                 return;
             }
             ButterKnife.bind(this,itemView);
+            selfView = itemView;
 
         }
     }

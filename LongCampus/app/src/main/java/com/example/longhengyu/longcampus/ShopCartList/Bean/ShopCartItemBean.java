@@ -1,10 +1,12 @@
 package com.example.longhengyu.longcampus.ShopCartList.Bean;
 
+import java.io.Serializable;
+
 /**
  * Created by longhengyu on 2017/7/4.
  */
 
-public class ShopCartItemBean {
+public class ShopCartItemBean implements Serializable {
 
     private String menu_id;
     private String res_names;
@@ -14,6 +16,33 @@ public class ShopCartItemBean {
     private String res_name;
     private String dish;
     private String itemType;
+    private String remark;
+    private String flag;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getItemType() {
         return itemType;
