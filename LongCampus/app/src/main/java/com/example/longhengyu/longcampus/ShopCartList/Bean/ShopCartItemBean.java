@@ -19,6 +19,15 @@ public class ShopCartItemBean implements Serializable {
     private String remark;
     private String flag;
     private String id;
+    private String selectType;
+
+    public String getSelectType() {
+        return selectType;
+    }
+
+    public void setSelectType(String selectType) {
+        this.selectType = selectType;
+    }
 
     public String getId() {
         return id;

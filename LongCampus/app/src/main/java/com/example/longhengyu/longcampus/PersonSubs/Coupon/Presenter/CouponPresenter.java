@@ -50,10 +50,8 @@ public class CouponPresenter extends BasePresenter {
                 super.onResponse(response, id);
                 if(response.isRes()){
                     List<CouponBean> list = JSON.parseArray(response.getData(),CouponBean.class);
-                    if(flag.equals("0")){
-                        for (CouponBean bean:list){
-                            bean.setlCouponType("0");
-                        }
+                    for (CouponBean bean:list){
+                        bean.setlCouponType(flag);
                     }
                     mInterface.requestCouponList(list);
                 }else {

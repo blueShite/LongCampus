@@ -14,10 +14,13 @@ import com.example.longhengyu.longcampus.PersonSubs.Coupon.Bean.CouponBean;
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.Interface.CouponInterface;
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.Presenter.CouponPresenter;
 import com.example.longhengyu.longcampus.R;
+import com.example.longhengyu.longcampus.ShopCartList.ShopCartOrder.Event.CouponShopCartOrderEvent;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,7 @@ public class CouponActivity extends BaseActivity implements CouponInterface {
     private List<CouponBean> mList = new ArrayList<>();
     private CouponAdapter mAdapter;
     private String page;
+    private String isSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class CouponActivity extends BaseActivity implements CouponInterface {
 
     private void customView() {
 
+        isSelect = getIntent().getStringExtra("isSelect");
         mPresenter.setContext(CouponActivity.this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(CouponActivity.this);
         mCouponRecycle.setLayoutManager(layoutManager);
@@ -124,7 +129,10 @@ public class CouponActivity extends BaseActivity implements CouponInterface {
 
     @Override
     public void onClickCoupon(int poist) {
-
+        if(isSelect.equals("1")){
+            EventBus.getDefault().post(new CouponShopCartOrderEvent(mList.get(poist)));
+            finish();
+        }
     }
 
     @Override

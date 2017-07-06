@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
  */
 
 public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapter.ViewHolder> {
+
 
 
     private List<ShopCartItemBean> mList;
@@ -63,24 +65,35 @@ public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapte
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         ShopCartItemBean itemBean = mList.get(position);
-        if(itemBean.getItemType().equals("0")){
+        if (itemBean.getItemType().equals("0")) {
 
             holder.groupTextView.setText(itemBean.getRes_name());
+            if (itemBean.getSelectType().equals("1")) {
+                holder.selectBtn.setSelected(true);
+            }else {
+                holder.selectBtn.setSelected(false);
+            }
+            holder.selectBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mInterface.onClickGroupItem(position);
+                }
+            });
             return;
         }
         holder.mTextShopcartListName.setText(itemBean.getDish());
-        holder.mTextShopcartListPrice.setText("¥"+itemBean.getTotal());
+        holder.mTextShopcartListPrice.setText("¥" + itemBean.getTotal());
         holder.mTextShopcartListNum.setText(itemBean.getNum());
         holder.mImageShopcartListAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickItemAdd(position,holder.mTextShopcartListNum);
+                mInterface.onClickItemAdd(position, holder.mTextShopcartListNum);
             }
         });
         holder.mImageShopcartListRedux.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInterface.onClickItemReduce(position,holder.mTextShopcartListNum);
+                mInterface.onClickItemReduce(position, holder.mTextShopcartListNum);
             }
         });
         holder.selfView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -101,6 +114,7 @@ public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView groupTextView;
+        Button selectBtn;
 
         @BindView(R.id.image_shopcart_list_commImage)
         ImageView mImageShopcartListCommImage;
@@ -121,9 +135,10 @@ public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapte
             super(itemView);
             if (groupView != null && groupView == itemView) {
                 groupTextView = (TextView) itemView.findViewById(R.id.text_shopcart_list_group);
+                selectBtn = (Button) itemView.findViewById(R.id.button_shopcart_list_group_select);
                 return;
             }
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             selfView = itemView;
 
         }

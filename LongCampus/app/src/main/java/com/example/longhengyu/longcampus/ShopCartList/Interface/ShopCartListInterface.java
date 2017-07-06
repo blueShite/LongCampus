@@ -15,7 +15,9 @@ public interface ShopCartListInterface {
 
     void requestShopListSucess(List<ShopCartItemBean> list);
 
-    void requestSubmitShopCartSucess(ShopCartPriceBean priceBean);
+    void requestSubmitShopCartSucess(ShopCartPriceBean priceBean,String shopId,List<ShopCartItemBean> selectList);
+
+    void onClickGroupItem(int poist);
 
     void onClickItemAdd(int poist , TextView addText);
 

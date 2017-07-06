@@ -126,6 +126,7 @@ public class PersonFragment extends SupportFragment implements PersonInterface {
                 break;
             case 2:
                 Intent couponIntent = new Intent(getActivity(), CouponActivity.class);
+                couponIntent.putExtra("isSelect","0");
                 startActivity(couponIntent);
                 break;
             case 3:

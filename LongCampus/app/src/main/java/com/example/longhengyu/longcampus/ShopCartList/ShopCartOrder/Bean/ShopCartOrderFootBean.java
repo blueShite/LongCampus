@@ -16,6 +16,24 @@ public class ShopCartOrderFootBean {
     String totalPrice;
     String packPrice;
     String payPrice;
+    String shopId;
+    String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 
     public String getTotalPrice() {
         return totalPrice;

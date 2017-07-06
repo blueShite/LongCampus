@@ -66,17 +66,19 @@ public class ShopCartListPresenter extends BasePresenter {
         for (ShopCartListBean listBean:list){
             ShopCartItemBean bean = new ShopCartItemBean();
             bean.setItemType("0");
+            bean.setSelectType("0");
             bean.setRes_name(listBean.getName());
             itemBeanList.add(bean);
             for (ShopCartItemBean itemBean:listBean.getItmes()){
                 itemBean.setItemType("1");
+                itemBean.setSelectType("0");
                 itemBeanList.add(itemBean);
             }
         }
         return itemBeanList;
     }
 
-    public void requestSubmitShopCart(String shopId){
+    public void requestSubmitShopCart(final String shopId, final List<ShopCartItemBean> selecList){
         showDialog();
         Map<String,String> map = new HashMap<>();
         map.put("id",shopId);
@@ -93,7 +95,7 @@ public class ShopCartListPresenter extends BasePresenter {
                 super.onResponse(response, id);
                 if(response.isRes()){
                     ShopCartPriceBean bean = JSON.parseObject(response.getData(),ShopCartPriceBean.class);
-                    mInterface.requestSubmitShopCartSucess(bean);
+                    mInterface.requestSubmitShopCartSucess(bean,shopId,selecList);
                 }else {
                     Toasty.error(mContext,response.getMes()).show();
                 }

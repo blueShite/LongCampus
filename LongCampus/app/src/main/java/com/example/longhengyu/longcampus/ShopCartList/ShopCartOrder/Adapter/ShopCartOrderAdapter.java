@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,9 +89,9 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
             }
             holder.mTextShopcartOrderFootCoupontext.setText(mFootBean.getCouponSub());
             holder.mTextShopcartOrderFootTime.setText(mFootBean.getTime());
-            holder.mTextShopcartOrderFootTotal.setText("总价:"+mFootBean.getTotalPrice()+"元");
-            holder.mTextShopcartOrderFootPackprice.setText("打包费:"+mFootBean.getPackPrice()+"元");
-            holder.mTextShopcartOrderFootPayprice.setText("应付:"+mFootBean.getPayPrice()+"元");
+            holder.mTextShopcartOrderFootTotal.setText("总价:" + mFootBean.getTotalPrice() + "元");
+            holder.mTextShopcartOrderFootPackprice.setText("打包费:" + mFootBean.getPackPrice() + "元");
+            holder.mTextShopcartOrderFootPayprice.setText("应付:" + mFootBean.getPayPrice() + "元");
             if (mFootBean.getGiveType() == 1) {
                 holder.mButtonShopcartOrderFootOthergive.setSelected(true);
                 holder.mButtonShopcartOrderFootPackgive.setSelected(false);
@@ -129,16 +130,22 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
                     mInterface.onClickGiveType(3);
                 }
             });
+            holder.mLayoutShopcartOrderFootCoupon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mInterface.onClickCoupon();
+                }
+            });
             return;
         }
         ShopCartItemBean bean = mList.get(position);
         if (bean.getItemType().equals("0")) {
             holder.groupText.setText(bean.getRes_name());
+            holder.selectBtn.setVisibility(View.GONE);
             return;
         }
-        holder.mTextShopcartOrderName.setText(bean.getDish()+"x1");
+        holder.mTextShopcartOrderName.setText(bean.getDish() + "x1");
         holder.mTextShopcartOrderPrice.setText("¥" + bean.getTotal());
-        holder.mEditShopcartOrderRemark.setText(bean.getRemark());
         holder.mEditShopcartOrderRemark.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence sequence, int i, int i1, int i2) {
@@ -147,17 +154,22 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
 
             @Override
             public void onTextChanged(CharSequence sequence, int i, int i1, int i2) {
-
+                Log.e("tag1","-------"+position+"-------"+holder.mEditShopcartOrderRemark.getText().toString());
+                mInterface.itemEditText(position, holder.mEditShopcartOrderRemark.getText().toString());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mInterface.itemEditText(position,holder.mEditShopcartOrderRemark.getText().toString());
+
             }
         });
+
+        holder.mEditShopcartOrderRemark.setText(bean.getRemark());
+
+
     }
 
-    @Override
+     @Override
     public int getItemCount() {
         return mList.size() + 1;
     }
@@ -166,6 +178,7 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
 
         //groupView
         TextView groupText;
+        Button selectBtn;
 
         //footView
         @BindView(R.id.text_shopcart_order_foot_total)
@@ -204,6 +217,7 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
             super(itemView);
             if (groupView != null && groupView == itemView) {
                 groupText = (TextView) itemView.findViewById(R.id.text_shopcart_list_group);
+                selectBtn = (Button)itemView.findViewById(R.id.button_shopcart_list_group_select);
                 return;
             }
             if (footView != null && footView == itemView) {

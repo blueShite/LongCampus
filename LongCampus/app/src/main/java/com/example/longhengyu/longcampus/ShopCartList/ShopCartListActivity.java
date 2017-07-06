@@ -16,6 +16,7 @@ import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.Login.LoginActivity;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.R;
+import com.example.longhengyu.longcampus.ShopCart.ShopCartActivity;
 import com.example.longhengyu.longcampus.ShopCartList.Adapter.ShopCartListAdapter;
 import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartItemBean;
 import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartPriceBean;
@@ -51,13 +52,8 @@ public class ShopCartListActivity extends BaseActivity implements ShopCartListIn
         setContentView(R.layout.activity_shop_cart_list);
         ButterKnife.bind(this);
         customView();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         mPresenter.requestShopCartList(LoginManage.getInstance().getLoginBean().getId(),mResId);
+
     }
 
     private void customView(){
@@ -73,15 +69,24 @@ public class ShopCartListActivity extends BaseActivity implements ShopCartListIn
     @OnClick(R.id.button_shopcart_list_submit)
     public void onViewClicked() {
 
-        String shopId = "";
+        List<ShopCartItemBean> selecList = new ArrayList<>();
         for (ShopCartItemBean bean:mList){
+            if(bean.getSelectType().equals("1")){
+                selecList.add(bean);
+            }
+        }
+        if(selecList.size()<1){
+            Toasty.error(ShopCartListActivity.this,"请选择您要购买的商品").show();
+            return;
+        }
+        String shopId = "";
+        for (ShopCartItemBean bean:selecList){
             if(bean.getItemType().equals("1")){
                 shopId = shopId+","+bean.getId();
             }
         }
         shopId = shopId.substring(1);
-
-        mPresenter.requestSubmitShopCart(shopId);
+        mPresenter.requestSubmitShopCart(shopId,selecList);
     }
 
     @Override
@@ -92,11 +97,29 @@ public class ShopCartListActivity extends BaseActivity implements ShopCartListIn
     }
 
     @Override
-    public void requestSubmitShopCartSucess(ShopCartPriceBean priceBean) {
+    public void requestSubmitShopCartSucess(ShopCartPriceBean priceBean,String shopId,List<ShopCartItemBean> selectList) {
         Intent intent = new Intent(ShopCartListActivity.this, ShopCartOrderActivity.class);
-        intent.putExtra("shopList", (Serializable) mList);
+        intent.putExtra("shopList", (Serializable) selectList);
         intent.putExtra("priceBean",priceBean);
+        intent.putExtra("shopId",shopId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClickGroupItem(int poist) {
+        ShopCartItemBean itemBean = mList.get(poist);
+        if(itemBean.getSelectType().equals("0")){
+            itemBean.setSelectType("1");
+        }else {
+            itemBean.setSelectType("0");
+        }
+
+        for (ShopCartItemBean bean:mList){
+            if(bean.getRes_name().equals(itemBean.getRes_name())){
+                bean.setSelectType(itemBean.getSelectType());
+            }
+        }
+        mAdapter.notifyItemChanged(poist);
     }
 
     @Override
@@ -124,7 +147,27 @@ public class ShopCartListActivity extends BaseActivity implements ShopCartListIn
             @Override
             public void changeShopCart() {
                 if(numsStr.equals("0")){
-                    mPresenter.requestShopCartList(LoginManage.getInstance().getLoginBean().getId(),mResId);
+                    int j=0;
+                    int groupIndex = -1;
+                    ShopCartItemBean cartItemBean = mList.get(poist);
+                    for (int i=0;i<mList.size();i++){
+                        ShopCartItemBean itemBean = mList.get(i);
+                        if(itemBean.getRes_name().equals(cartItemBean.getRes_name())){
+                            if(itemBean.getItemType().equals("0")){
+                                groupIndex = i;
+                            }
+                            j++;
+                        }
+                    }
+
+                    if(j>2){
+                        mList.remove(poist);
+                        mAdapter.notifyDataSetChanged();
+                    }else {
+                        mList.remove(poist);
+                        mList.remove(groupIndex);
+                        mAdapter.notifyDataSetChanged();
+                    }
                     return;
                 }
                 bean.setNum(numsStr);
@@ -146,13 +189,33 @@ public class ShopCartListActivity extends BaseActivity implements ShopCartListIn
                 ShopcartRequest.requestShopCart(bean.getRes_id(), "0", bean.getMenu_id(),bean.getFlag(), ShopCartListActivity.this, new ShopCartChangeInterface() {
                     @Override
                     public void changeShopCart() {
-                        mPresenter.requestShopCartList(LoginManage.getInstance().getLoginBean().getId(),mResId);
+                        //mPresenter.requestShopCartList(LoginManage.getInstance().getLoginBean().getId(),mResId);
+                        int j=0;
+                        int groupIndex = -1;
+                        ShopCartItemBean cartItemBean = mList.get(poist);
+                        for (int i=0;i<mList.size();i++){
+                            ShopCartItemBean itemBean = mList.get(i);
+                            if(itemBean.getRes_name().equals(cartItemBean.getRes_name())){
+                                if(itemBean.getItemType().equals("0")){
+                                    groupIndex = i;
+                                }
+                                j++;
+                            }
+                        }
+
+                        if(j>2){
+                            mList.remove(poist);
+                            mAdapter.notifyDataSetChanged();
+                        }else {
+                            mList.remove(poist);
+                            mList.remove(groupIndex);
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
             }
         });
         builder.setNegativeButton("取消",null);
         builder.show();
-
     }
 }
