@@ -63,17 +63,21 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     private CanteenBean mCanteenBean;
     private PackpageClassesBean selectClassesBean;
 
-    public MyPackageFragment(CanteenBean canteenBean) {
-        // Required empty public constructor
-        mCanteenBean = canteenBean;
-    }
+    public static MyPackageFragment newInstance(CanteenBean canteenBean) {
+        MyPackageFragment newFragment = new MyPackageFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("canteenBean",canteenBean);
+        newFragment.setArguments(bundle);
+        return newFragment;
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_my_package, container, false);
+        mCanteenBean =(CanteenBean) getArguments().getSerializable("canteenBean");
         ButterKnife.bind(this, mView);
         customView();
         return mView;

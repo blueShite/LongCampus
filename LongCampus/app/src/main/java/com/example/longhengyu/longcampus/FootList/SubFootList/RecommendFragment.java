@@ -64,8 +64,14 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
     private PackpageClassesAdapter mClassesAdapter;
     private List<PackpageClassesBean> mClassesList = new ArrayList<>();
     private PackpageClassesBean selectClassesBean;
-    public RecommendFragment(CanteenBean canteenBean) {
-        mCanteenBean = canteenBean;
+
+    public static RecommendFragment newInstance(CanteenBean canteenBean) {
+        RecommendFragment newFragment = new RecommendFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("canteenBean",canteenBean);
+        newFragment.setArguments(bundle);
+        return newFragment;
+
     }
 
 
@@ -74,6 +80,7 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_recommend, container, false);
+        mCanteenBean =(CanteenBean) getArguments().getSerializable("canteenBean");
         ButterKnife.bind(this, mView);
         customView();
         if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){

@@ -67,9 +67,13 @@ public class FeatureFragment extends SupportFragment implements FeatureInterface
     private List<PackpageClassesBean> mClassesList = new ArrayList<>();
     private PackpageClassesBean selectClassesBean;
 
-    public FeatureFragment(CanteenBean canteenBean) {
-        // Required empty public constructor
-        mCanteenBean = canteenBean;
+    public static FeatureFragment newInstance(CanteenBean canteenBean) {
+        FeatureFragment newFragment = new FeatureFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("canteenBean",canteenBean);
+        newFragment.setArguments(bundle);
+        return newFragment;
+
     }
 
 
@@ -78,6 +82,7 @@ public class FeatureFragment extends SupportFragment implements FeatureInterface
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_feature, container, false);
+        mCanteenBean =(CanteenBean) getArguments().getSerializable("canteenBean");
         ButterKnife.bind(this, mView);
         customView();
         if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){

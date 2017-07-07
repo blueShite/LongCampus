@@ -12,6 +12,8 @@ public interface ShopCartOrderInterface {
 
     void requestAddressList(List<AddressBean> list);
 
+    void requestSubmitSucess(String payData);
+
     void onClickCoupon();
 
     void onClickTime();

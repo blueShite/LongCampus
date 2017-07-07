@@ -106,10 +106,10 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mBannerShopCart.setImageLoader(new PicassoImageLoader());
 
         mPresenter.setContext(FootListActivity.this);
-        mRecommendFragment = new RecommendFragment(mBean);
-        mFeatureFragment = new FeatureFragment(mBean);
-        mSaleFragment = new SaleFragment(mBean);
-        mMyPackageFragment = new MyPackageFragment(mBean);
+        mRecommendFragment = RecommendFragment.newInstance(mBean);
+        mFeatureFragment = FeatureFragment.newInstance(mBean);
+        mSaleFragment = SaleFragment.newInstance(mBean);
+        mMyPackageFragment = MyPackageFragment.newInstance(mBean);
         loadMultipleRootFragment(R.id.layout_footList, 0, mRecommendFragment, mSaleFragment, mFeatureFragment, mMyPackageFragment);
         mTextFootListShopCart.setVisibility(View.INVISIBLE);
         mTextFootListShopCartSub.setVisibility(View.VISIBLE);

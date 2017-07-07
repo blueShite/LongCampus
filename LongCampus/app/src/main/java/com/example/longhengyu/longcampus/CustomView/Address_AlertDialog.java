@@ -47,6 +47,10 @@ public class Address_AlertDialog {
                     selectBean = bean;
                 }
             }
+            if(selectBean==null){
+                list.get(0).setAcc_state("1");
+                selectBean = list.get(0);
+            }
         }else {
             selectBean = addressBean;
             for (AddressBean bean:list){

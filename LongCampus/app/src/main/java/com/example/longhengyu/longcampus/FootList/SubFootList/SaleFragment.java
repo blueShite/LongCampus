@@ -66,8 +66,13 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
     private List<PackpageClassesBean> mClassesList = new ArrayList<>();
     private PackpageClassesBean selectClassesBean;
 
-    public SaleFragment(CanteenBean canteenBean) {
-        mCanteenBean = canteenBean;
+    public static SaleFragment newInstance(CanteenBean canteenBean) {
+        SaleFragment newFragment = new SaleFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("canteenBean",canteenBean);
+        newFragment.setArguments(bundle);
+        return newFragment;
+
     }
 
     @Override
@@ -75,6 +80,7 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_sale, container, false);
+        mCanteenBean =(CanteenBean) getArguments().getSerializable("canteenBean");
         ButterKnife.bind(this, mView);
         customView();
         if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
