@@ -24,6 +24,7 @@ import com.example.longhengyu.longcampus.PersonSubs.Collection.CollectionActivit
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.CouponActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Feedback.FeedbackActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.IntegralActivity;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderActivity;
 import com.example.longhengyu.longcampus.PersonSubs.SetLike.Bean.SetLikeBean;
 import com.example.longhengyu.longcampus.PersonSubs.SetLike.SetLikeActivity;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.SetPersonActivity;
@@ -111,6 +112,8 @@ public class PersonFragment extends SupportFragment implements PersonInterface {
                 getActivity().startActivity(integralIntent);
                 break;
             case 2:
+                Intent orderIntent = new Intent(getActivity(), OrderActivity.class);
+                startActivity(orderIntent);
                 break;
             default:
                 break;
