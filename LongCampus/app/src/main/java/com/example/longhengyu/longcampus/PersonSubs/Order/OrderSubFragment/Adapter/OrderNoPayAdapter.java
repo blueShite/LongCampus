@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Bean.OrderBean;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Interface.OrderOnPayListInterface;
 import com.example.longhengyu.longcampus.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -49,12 +51,19 @@ public class OrderNoPayAdapter extends RecyclerView.Adapter<OrderNoPayAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         OrderBean bean = mList.get(position);
+
+        holder.mTextOrderNopayNum.setText("订单号"+bean.getId());
+        holder.mTextOrderNopayTime.setText(bean.getAdd_time());
+        Picasso.with(mContext).load(RequestTools.BaseUrl+bean.getRes_img()).resize(150, 150).into(holder.mCircleImageView);
+        holder.mTextOrderNopayWindow.setText(bean.getRes_name());
+        holder.mTextOrderNopayCommNum.setText("数量"+bean.getNums()+"份");
+        holder.mTextOrderNopayPrice.setText("总价"+bean.getTotals()+"元");
         if(adapterType==1){
             holder.mButtonOrderNopayPay.setVisibility(View.INVISIBLE);
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         holder.mOrderNopayCommRecycle.setLayoutManager(layoutManager);
-        OrderNoPayCommAdapter adapter = new OrderNoPayCommAdapter();
+        OrderNoPayCommAdapter adapter = new OrderNoPayCommAdapter(bean.getItmes());
         holder.mOrderNopayCommRecycle.setAdapter(adapter);
 
         if(bean.isShowComm()){
@@ -78,6 +87,12 @@ public class OrderNoPayAdapter extends RecyclerView.Adapter<OrderNoPayAdapter.Vi
             @Override
             public void onClick(View view) {
                 mInterface.onClickHideComm(position);
+            }
+        });
+        holder.selfView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickOrderItem(position);
             }
         });
 
@@ -113,9 +128,12 @@ public class OrderNoPayAdapter extends RecyclerView.Adapter<OrderNoPayAdapter.Vi
         @BindView(R.id.layout_order_nopay_comm)
         ConstraintLayout mLayoutOrderNopayComm;
 
+        View selfView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            selfView = itemView;
         }
     }
 }

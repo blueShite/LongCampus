@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Bean.OrderBean;
 import com.example.longhengyu.longcampus.R;
+
+import java.util.List;
 
 /**
  * Created by longhengyu on 2017/7/8.
@@ -14,6 +17,11 @@ import com.example.longhengyu.longcampus.R;
 
 public class OrderNoPayCommAdapter extends RecyclerView.Adapter<OrderNoPayCommAdapter.ViewHolder> {
 
+    private List<OrderBean.ItmesBean> mList;
+
+    public OrderNoPayCommAdapter(List<OrderBean.ItmesBean> list){
+        mList = list;
+    }
 
     @Override
     public OrderNoPayCommAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -25,12 +33,14 @@ public class OrderNoPayCommAdapter extends RecyclerView.Adapter<OrderNoPayCommAd
 
     @Override
     public void onBindViewHolder(OrderNoPayCommAdapter.ViewHolder holder, int position) {
-        holder.itemText.setText("呵呵呵");
+        OrderBean.ItmesBean bean = mList.get(position);
+        holder.itemText.setText(bean.getDish()+"x"+bean.getNum());
+
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return mList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

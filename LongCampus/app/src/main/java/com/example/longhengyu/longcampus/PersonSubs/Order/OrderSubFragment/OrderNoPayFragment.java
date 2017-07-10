@@ -1,5 +1,6 @@
 package com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderDetail.OrderDetailActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Adapter.OrderNoPayAdapter;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Bean.OrderBean;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Interface.OrderOnPayListInterface;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Presenter.OrderNoPayPresenter;
 import com.example.longhengyu.longcampus.R;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -39,6 +43,7 @@ public class OrderNoPayFragment extends SupportFragment implements OrderOnPayLis
     private String page;
     private OrderNoPayAdapter mAdapter;
     private List<OrderBean> mList = new ArrayList<>();
+    private OrderNoPayPresenter mPresenter = new OrderNoPayPresenter(this);
 
 
     @Nullable
@@ -52,20 +57,15 @@ public class OrderNoPayFragment extends SupportFragment implements OrderOnPayLis
         return mView;
     }
 
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        mPresenter.requestOrderList(LoginManage.getInstance().getLoginBean().getId(),page,"3");
+    }
+
     private void customView(){
 
-        OrderBean orderBean = new OrderBean();
-        orderBean.setShowComm(true);
-        OrderBean orderBean1 = new OrderBean();
-        orderBean1.setShowComm(false);
-        OrderBean orderBean2 = new OrderBean();
-        orderBean2.setShowComm(true);
-        OrderBean orderBean3 = new OrderBean();
-        orderBean3.setShowComm(false);
-        mList.add(orderBean);
-        mList.add(orderBean1);
-        mList.add(orderBean2);
-        mList.add(orderBean3);
+        mPresenter.setContext(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mOrderNopayRecycler.setLayoutManager(layoutManager);
         mAdapter = new OrderNoPayAdapter(mList,this,getContext(),0);
@@ -83,14 +83,33 @@ public class OrderNoPayFragment extends SupportFragment implements OrderOnPayLis
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
                 page="1";
+                mPresenter.requestOrderList(LoginManage.getInstance().getLoginBean().getId(),page,"3");
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
                 int indexPage = Integer.parseInt(page)+1;
                 page = indexPage+"";
+                mPresenter.requestOrderList(LoginManage.getInstance().getLoginBean().getId(),page,"3");
             }
         });
+    }
+
+    @Override
+    public void requestOrderList(List<OrderBean> list) {
+        mOrderNopayRefresh.finishRefreshing();
+        mOrderNopayRefresh.finishLoadmore();
+        if(page.equals("1")){
+            mList.clear();
+        }
+        mList.addAll(list);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void requestListError(String error) {
+        mOrderNopayRefresh.finishRefreshing();
+        mOrderNopayRefresh.finishLoadmore();
     }
 
     @Override
@@ -103,5 +122,11 @@ public class OrderNoPayFragment extends SupportFragment implements OrderOnPayLis
     public void onClickHideComm(int poist) {
         mList.get(poist).setShowComm(false);
         mAdapter.notifyItemChanged(poist);
+    }
+
+    @Override
+    public void onClickOrderItem(int poist) {
+        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+        startActivity(intent);
     }
 }

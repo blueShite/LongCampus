@@ -92,6 +92,16 @@ public class OrderNoReceiveFragment extends SupportFragment implements OrderOnPa
     }
 
     @Override
+    public void requestOrderList(List<OrderBean> list) {
+
+    }
+
+    @Override
+    public void requestListError(String error) {
+
+    }
+
+    @Override
     public void onClickShowComm(int poist) {
         mList.get(poist).setShowComm(true);
         mAdapter.notifyItemChanged(poist);
@@ -101,5 +111,10 @@ public class OrderNoReceiveFragment extends SupportFragment implements OrderOnPa
     public void onClickHideComm(int poist) {
         mList.get(poist).setShowComm(false);
         mAdapter.notifyItemChanged(poist);
+    }
+
+    @Override
+    public void onClickOrderItem(int poist) {
+
     }
 }
