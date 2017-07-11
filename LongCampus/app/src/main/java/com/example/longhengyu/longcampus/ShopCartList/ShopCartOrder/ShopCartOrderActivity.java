@@ -25,6 +25,7 @@ import com.example.longhengyu.longcampus.PersonSubs.Address.AddressListActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Address.Bean.AddressBean;
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.Bean.CouponBean;
 import com.example.longhengyu.longcampus.PersonSubs.Coupon.CouponActivity;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderActivity;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.SetPersonActivity;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartItemBean;
@@ -84,6 +85,16 @@ public class ShopCartOrderActivity extends BaseActivity implements ShopCartOrder
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         Toasty.success(ShopCartOrderActivity.this,"支付成功").show();
+                        new Handler().postDelayed(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Intent orderIntent = new Intent(ShopCartOrderActivity.this, OrderActivity.class);
+                                orderIntent.putExtra("selectIndex","1");
+                                startActivity(orderIntent);
+                                finish();
+                            }
+                        }, 2000);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Toasty.error(ShopCartOrderActivity.this,"支付失败").show();
@@ -152,7 +163,7 @@ public class ShopCartOrderActivity extends BaseActivity implements ShopCartOrder
         mList.addAll(mPresenter.handleList(list));
         mFootBean = new ShopCartOrderFootBean();
         mFootBean.setCouponSub("请选择优惠券!");
-        mFootBean.setGiveType(2);
+        mFootBean.setGiveType(0);
         mFootBean.setTime("请选择用餐时间");
         mFootBean.setShopId(paramShopId);
         mFootBean.setTotalPrice(mPriceBean.getTotal()+"");
@@ -241,8 +252,17 @@ public class ShopCartOrderActivity extends BaseActivity implements ShopCartOrder
             Toasty.error(ShopCartOrderActivity.this,"请选择用餐时间").show();
             return;
         }
+        if(mFootBean.getGiveType()==0){
+            Toasty.error(ShopCartOrderActivity.this,"请选择配送方式").show();
+            return;
+        }
+        if(mFootBean.getGiveType()==1){
+            if(mFootBean.getAddressId()==null||mFootBean.getAddressId().length()<1){
+                Toasty.error(ShopCartOrderActivity.this,"请选择收货地址").show();
+                return;
+            }
+        }
         mPresenter.requestSubmitOrder(mFootBean);
-
     }
 
 
@@ -293,33 +313,34 @@ public class ShopCartOrderActivity extends BaseActivity implements ShopCartOrder
 
     @Override
     public void onClickGiveType(int type) {
-        if(mAddressList.size()<1){
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(ShopCartOrderActivity.this);
-            builder.setTitle("提示");
-            builder.setMessage("没有收获地址,是否新增?");
-            builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface anInterface, int i) {
-                    Intent intent = new Intent(ShopCartOrderActivity.this,AddAddressActivity.class);
-                    intent.putExtra("isSeting","0");
-                    startActivity(intent);
-                }
-            });
-            builder.setNegativeButton("否", null);
-            builder.show();
-            return;
-        }
-        mFootBean.setGiveType(type);
-        mAdapter.reloadFootView(mFootBean);
         if(type==1){
+            if(mAddressList.size()<1){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ShopCartOrderActivity.this);
+                builder.setTitle("提示");
+                builder.setMessage("没有收获地址,是否新增?");
+                builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface anInterface, int i) {
+                        Intent intent = new Intent(ShopCartOrderActivity.this,AddAddressActivity.class);
+                        intent.putExtra("isSeting","0");
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("否", null);
+                builder.show();
+                return;
+            }
             new Address_AlertDialog(ShopCartOrderActivity.this,mAddressList,selectAddressBean)
                     .builder()
+                    .setGivePrice(mPriceBean.getDelivery()+"")
                     .setOnClickSubmitBtn(new Address_AlertDialog.OnClickAddressAlertInterface() {
                         @Override
                         public void selectAddressItem(AddressBean bean) {
                             selectAddressBean = bean;
                             mFootBean.setAddressId(selectAddressBean.getId());
+                            mFootBean.setPayPrice(mPriceBean.getPack()+mPriceBean.getTotal()+mPriceBean.getDelivery()+"");
+                            mAdapter.reloadFootView(mFootBean);
                         }
                     })
                     .setCanCelBtn(new View.OnClickListener() {
@@ -337,6 +358,19 @@ public class ShopCartOrderActivity extends BaseActivity implements ShopCartOrder
                             startActivity(intent);
                         }
                     }).show();
+            mFootBean.setGiveType(type);
+            mAdapter.reloadFootView(mFootBean);
+        }else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ShopCartOrderActivity.this);
+            builder.setTitle("提示");
+            builder.setMessage("现在只支持校内送餐的方式!");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface anInterface, int i) {
+                }
+            });
+            builder.show();
+            return;
         }
     }
 

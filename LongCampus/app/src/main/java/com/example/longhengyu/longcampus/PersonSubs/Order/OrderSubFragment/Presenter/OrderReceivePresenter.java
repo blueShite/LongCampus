@@ -8,7 +8,7 @@ import com.example.longhengyu.longcampus.NetWorks.RequestBean;
 import com.example.longhengyu.longcampus.NetWorks.RequestCallBack;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Bean.OrderBean;
-import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Interface.OrderOnPayListInterface;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Interface.OrderReceiveInterface;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,14 +18,14 @@ import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 
 /**
- * Created by longhengyu on 2017/7/10.
+ * Created by longhengyu on 2017/7/11.
  */
 
-public class OrderNoPayPresenter extends BasePresenter {
+public class OrderReceivePresenter extends BasePresenter {
 
-    private OrderOnPayListInterface mInterface;
+    private OrderReceiveInterface mInterface;
 
-    public OrderNoPayPresenter (OrderOnPayListInterface anInterface){
+    public OrderReceivePresenter(OrderReceiveInterface anInterface){
         mInterface = anInterface;
     }
 
@@ -60,25 +60,31 @@ public class OrderNoPayPresenter extends BasePresenter {
         });
     }
 
-    public void requestPay(String orderId){
+    public void requestRemark(String orderId, final String remarkStr, final int poist){
+        showDialog();
         Map<String,String> map = new HashMap<>();
         map.put("id",orderId);
-        RequestTools.getInstance().postRequest("/api/pay.api.php", false, map, "", new RequestCallBack(mContext) {
+        map.put("order_reply",remarkStr);
+        RequestTools.getInstance().postRequest("/api/addOrderReply.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
+                dismissDialog();
                 super.onError(call, e, id);
             }
 
             @Override
             public void onResponse(RequestBean response, int id) {
+                dismissDialog();
                 super.onResponse(response, id);
                 if(response.isRes()){
-                    mInterface.requestPay(response.getData());
+                    Toasty.success(mContext,"评论成功").show();
+                    mInterface.requestPingLunSucess(poist,remarkStr);
                 }else {
                     Toasty.error(mContext,response.getMes()).show();
                 }
             }
         });
+
     }
 
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderDetail.Bean.OrderDetailBean;
 import com.example.longhengyu.longcampus.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,13 +24,19 @@ import butterknife.ButterKnife;
 public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.ViewHolder> {
 
 
-    private List<OrderDetailBean> mList;
+    private OrderDetailBean mDetailBean;
+    private List<OrderDetailBean.ItmesBean> mList = new ArrayList<>();
     private Context mContext;
     private View headerView;
     private View footView;
 
-    public OrderDetailAdapter(List<OrderDetailBean> list, Context context) {
-        mList = list;
+    public OrderDetailAdapter(OrderDetailBean detailBean, Context context) {
+        mDetailBean = detailBean;
+        for (List<OrderDetailBean.ItmesBean> beanList:detailBean.getItmes()){
+            for (OrderDetailBean.ItmesBean bean:beanList){
+                mList.add(bean);
+            }
+        }
         mContext = context;
     }
 
@@ -66,7 +73,68 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (position == 0) {
 
+            switch (Integer.parseInt(mDetailBean.getDispatching())){
+                case 3:
+                    holder.dian4.setSelected(true);
+                case 2:
+                    holder.dian3.setSelected(true);
+                    holder.xian5.setSelected(true);
+                    holder.xian6.setSelected(true);
+                case 1:
+                    holder.dian2.setSelected(true);
+                    holder.xian3.setSelected(true);
+                    holder.xian4.setSelected(true);
+                case 0:
+                    holder.dian1.setSelected(true);
+                    holder.xian1.setSelected(true);
+                    holder.xian2.setSelected(true);
+                    break;
+            }
+            switch (Integer.parseInt(mDetailBean.getDispatching())){
+                case 3:
+                    holder.headerOrderType.setText("订单已完成");
+                    break;
+                case 2:
+                    holder.headerOrderType.setText("订单正在配送");
+                    break;
+                case 1:
+                    holder.headerOrderType.setText("制作完成");
+                    break;
+                case 0:
+                    holder.headerOrderType.setText("已接单");
+                    break;
+            }
+            holder.headerWindowName.setText(mDetailBean.getRes_name());
+            return ;
+        }
+        if (position == mList.size()+1) {
+
+            holder.mTextOrderDetailFootTotalPrice.setText(mDetailBean.getTotal()+"");
+            holder.mTextOrderDetailFootPackPrice.setText(mDetailBean.getPack());
+            holder.mTextOrderDetailFootGivePrice.setText(mDetailBean.getDelivery());
+            holder.mTextOrderDetailFootSalePrice.setText(mDetailBean.getDiscount());
+            holder.mTextOrderDetailFootUserName.setText(mDetailBean.getAddress().getName());
+            holder.mTextOrderDetailFootUserPhone.setText(mDetailBean.getAddress().getPhone());
+            holder.mTextOrderDetailFootUserAddress.setText(mDetailBean.getAddress().getDizhi());
+            holder.mTextOrderDetailFootGiveType.setText("校内送餐");
+            holder.mTextOrderDetailFootTime.setText(mDetailBean.getDiner_time());
+            holder.mTextOrderDetailFootOrderNum.setText(mDetailBean.getId());
+            holder.mTextOrderDetailFootOrderTime.setText(mDetailBean.getAdd_time());
+            holder.mTextOrderDetailFootPayType.setText("在线支付");
+
+            return ;
+        }
+
+        OrderDetailBean.ItmesBean bean =  mList.get(position-1);
+        holder.itemName.setText(bean.getDish());
+        holder.itemNum.setText("x"+bean.getNum());
+        holder.itemPrice.setText(bean.getPrice()+"元");
+        if(bean.getText()==null){
+            bean.setText("");
+        }
+        holder.itemRemark.setText("备注:"+bean.getText());
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
@@ -95,6 +96,12 @@ public class OrderNoPayAdapter extends RecyclerView.Adapter<OrderNoPayAdapter.Vi
                 mInterface.onClickOrderItem(position);
             }
         });
+        holder.mButtonOrderNopayPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickPay(position);
+            }
+        });
 
     }
 
@@ -110,7 +117,7 @@ public class OrderNoPayAdapter extends RecyclerView.Adapter<OrderNoPayAdapter.Vi
         @BindView(R.id.text_order_nopay_num)
         TextView mTextOrderNopayNum;
         @BindView(R.id.circleImageView)
-        CircleImageView mCircleImageView;
+        ImageView mCircleImageView;
         @BindView(R.id.text_order_nopay_time)
         TextView mTextOrderNopayTime;
         @BindView(R.id.text_order_nopay_window)

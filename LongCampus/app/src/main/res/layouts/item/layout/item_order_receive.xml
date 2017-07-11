@@ -67,7 +67,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView70"
             android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/circleImageView2"/>
+            android:id="@+id/Image_order_receive"/>
 
         <TextView
             android:id="@+id/textView75"
@@ -79,7 +79,7 @@
             android:background="@color/ColorLine"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/circleImageView2"/>
+            app:layout_constraintTop_toBottomOf="@+id/Image_order_receive"/>
 
         <TextView
             android:id="@+id/text_order_receive_time"
@@ -104,7 +104,7 @@
             android:textColor="@color/ColorBlcak"
             android:textSize="15dp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toRightOf="@+id/circleImageView2"
+            app:layout_constraintLeft_toRightOf="@+id/Image_order_receive"
             app:layout_constraintRight_toLeftOf="@+id/text_order_receive_time"
             app:layout_constraintTop_toBottomOf="@+id/textView70"/>
 
@@ -117,7 +117,7 @@
             android:textSize="12dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/textView75"
-            app:layout_constraintLeft_toRightOf="@+id/circleImageView2"
+            app:layout_constraintLeft_toRightOf="@+id/Image_order_receive"
             android:layout_marginLeft="8dp"/>
 
         <TextView
@@ -130,7 +130,7 @@
             android:textColor="@color/ColorBlcak"
             android:textSize="12dp"
             app:layout_constraintBottom_toTopOf="@+id/text_order_receive_price"
-            app:layout_constraintLeft_toRightOf="@+id/circleImageView2"/>
+            app:layout_constraintLeft_toRightOf="@+id/Image_order_receive"/>
 
         <TextView
             android:id="@+id/text_order_receive_pingsub"

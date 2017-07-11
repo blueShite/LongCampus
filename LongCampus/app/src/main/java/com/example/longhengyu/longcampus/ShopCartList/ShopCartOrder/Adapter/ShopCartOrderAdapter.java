@@ -100,7 +100,11 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
             holder.mTextShopcartOrderFootTotal.setText("总价:" + mFootBean.getTotalPrice() + "元");
             holder.mTextShopcartOrderFootPackprice.setText("打包费:" + mFootBean.getPackPrice() + "元");
             holder.mTextShopcartOrderFootPayprice.setText("应付:" + mFootBean.getPayPrice() + "元");
-            if (mFootBean.getGiveType() == 1) {
+            if(mFootBean.getGiveType() == 0){
+                holder.mButtonShopcartOrderFootOthergive.setSelected(false);
+                holder.mButtonShopcartOrderFootPackgive.setSelected(false);
+                holder.mButtonShopcartOrderFootCanteengive.setSelected(false);
+            } else if (mFootBean.getGiveType() == 1) {
                 holder.mButtonShopcartOrderFootOthergive.setSelected(true);
                 holder.mButtonShopcartOrderFootPackgive.setSelected(false);
                 holder.mButtonShopcartOrderFootCanteengive.setSelected(false);

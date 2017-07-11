@@ -39,6 +39,7 @@ public class Address_AlertDialog {
     private Display display;
     private AddressAlertAdapter mAdapter;
     private AddressBean  selectBean;
+    private TextView givePriceText;
 
     public Address_AlertDialog(Context context, List<AddressBean> list,AddressBean addressBean) {
         if(addressBean==null){
@@ -75,6 +76,7 @@ public class Address_AlertDialog {
         cancelBtn = (Button) view.findViewById(R.id.button_address_alert_cancel);
         setBtn = (Button) view.findViewById(R.id.button_address_alert_set);
         submitBtn = (Button) view.findViewById(R.id.button_address_alert_submit);
+        givePriceText = (TextView) view.findViewById(R.id.text_address_alert_packPrice);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.address_alert_recycle);
         LinearLayoutManager manager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(manager);
@@ -102,6 +104,11 @@ public class Address_AlertDialog {
         // 调整dialog背景大小
         lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
                 .getWidth() * 0.87), LinearLayout.LayoutParams.WRAP_CONTENT));
+        return this;
+    }
+
+    public Address_AlertDialog setGivePrice(String price){
+        givePriceText.setText("配送费"+price+"元");
         return this;
     }
 

@@ -113,6 +113,7 @@ public class PersonFragment extends SupportFragment implements PersonInterface {
                 break;
             case 2:
                 Intent orderIntent = new Intent(getActivity(), OrderActivity.class);
+                orderIntent.putExtra("selectIndex","0");
                 startActivity(orderIntent);
                 break;
             default:

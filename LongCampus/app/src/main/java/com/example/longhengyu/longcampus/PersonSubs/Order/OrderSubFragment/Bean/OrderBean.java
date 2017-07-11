@@ -24,6 +24,24 @@ public class OrderBean {
     private List<ItmesBean> itmes;
     private double totals;
     private int nums;
+    private String remark;
+    private String order_reply;
+
+    public String getOrder_reply() {
+        return order_reply;
+    }
+
+    public void setOrder_reply(String order_reply) {
+        this.order_reply = order_reply;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public double getTotals() {
         return totals;

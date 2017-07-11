@@ -5,22 +5,21 @@ import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Bean.
 import java.util.List;
 
 /**
- * Created by longhengyu on 2017/7/8.
+ * Created by longhengyu on 2017/7/11.
  */
 
-public interface OrderOnPayListInterface {
+public interface OrderReceiveInterface {
 
     void requestOrderList(List<OrderBean> list);
 
     void requestListError(String error);
 
-    void requestPay(String payData);
-
-    void onClickShowComm(int poist);
-
-    void onClickHideComm(int poist);
+    void requestPingLunSucess(int poist,String remarkStr);
 
     void onClickOrderItem(int poist);
 
-    void onClickPay(int poist);
+    void itemEditText(int poist,String remarkStr);
+
+    void onClickPinglunBtn(int poist);
+
 }

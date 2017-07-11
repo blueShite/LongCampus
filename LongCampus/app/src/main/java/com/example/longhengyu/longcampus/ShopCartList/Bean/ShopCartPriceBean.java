@@ -15,6 +15,15 @@ public class ShopCartPriceBean implements Serializable {
 
     private double total;
     private double pack;
+    private double delivery;
+
+    public double getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(double delivery) {
+        this.delivery = delivery;
+    }
 
     public double getTotal() {
         return total;

@@ -1,5 +1,6 @@
 package com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,22 +9,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderDetail.OrderDetailActivity;
 import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Adapter.OrderReceiveAdapter;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Bean.OrderBean;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Interface.OrderReceiveInterface;
+import com.example.longhengyu.longcampus.PersonSubs.Order.OrderSubFragment.Presenter.OrderReceivePresenter;
 import com.example.longhengyu.longcampus.R;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by longhengyu on 2017/7/8.
  */
 
-public class OrderReceiveFragment extends SupportFragment {
+public class OrderReceiveFragment extends SupportFragment implements OrderReceiveInterface {
 
     @BindView(R.id.order_receive_recycle)
     RecyclerView mOrderReceiveRecycle;
@@ -33,6 +43,8 @@ public class OrderReceiveFragment extends SupportFragment {
     private View mView;
     private OrderReceiveAdapter mAdapter;
     private String page;
+    private OrderReceivePresenter mPresenter = new OrderReceivePresenter(this);
+    private List<OrderBean> mList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -45,11 +57,20 @@ public class OrderReceiveFragment extends SupportFragment {
         return mView;
     }
 
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        page = "1";
+        mPresenter.requestOrderList(LoginManage.getInstance().getLoginBean().getId(),page,"3");
+    }
+
     private void customView() {
+
+        mPresenter.setContext(getContext());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mOrderReceiveRecycle.setLayoutManager(layoutManager);
-        mAdapter = new OrderReceiveAdapter();
+        mAdapter = new OrderReceiveAdapter(mList,getContext(),this);
         mOrderReceiveRecycle.setAdapter(mAdapter);
         //定制刷新加载
         SinaRefreshView headerView = new SinaRefreshView(getContext());
@@ -63,14 +84,66 @@ public class OrderReceiveFragment extends SupportFragment {
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
                 page="1";
+                mPresenter.requestOrderList(LoginManage.getInstance().getLoginBean().getId(),page,"3");
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
                 int indexPage = Integer.parseInt(page)+1;
                 page = indexPage+"";
+                mPresenter.requestOrderList(LoginManage.getInstance().getLoginBean().getId(),page,"3");
             }
         });
     }
 
+    @Override
+    public void requestOrderList(List<OrderBean> list) {
+
+        mOrderReceiveRefresh.finishRefreshing();
+        mOrderReceiveRefresh.finishLoadmore();
+        if(page.equals("1")){
+            mList.clear();
+        }
+        mList.addAll(list);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void requestListError(String error) {
+
+        mOrderReceiveRefresh.finishRefreshing();
+        mOrderReceiveRefresh.finishLoadmore();
+        if(page.equals("1")){
+            mList.clear();
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void requestPingLunSucess(int poist,String remarkStr) {
+        mList.get(poist).setOrder_reply(remarkStr);
+        mAdapter.notifyItemChanged(poist);
+    }
+
+    @Override
+    public void onClickOrderItem(int poist) {
+        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+        intent.putExtra("orderId",mList.get(poist).getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void itemEditText(int poist, String remarkStr) {
+        mList.get(poist).setRemark(remarkStr);
+    }
+
+    @Override
+    public void onClickPinglunBtn(int poist) {
+        OrderBean bean = mList.get(poist);
+        if(bean.getRemark()==null||bean.getRemark().length()<1){
+            Toasty.error(getContext(),"请输入要评论的内容").show();
+            return;
+        }
+        mPresenter.requestRemark(bean.getId(),bean.getRemark(),poist);
+    }
 }

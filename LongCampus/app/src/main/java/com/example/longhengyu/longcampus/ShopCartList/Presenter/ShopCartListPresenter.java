@@ -94,6 +94,7 @@ public class ShopCartListPresenter extends BasePresenter {
                 dismissDialog();
                 super.onResponse(response, id);
                 if(response.isRes()){
+                    Log.e("下单返回的数据:",response.getData());
                     ShopCartPriceBean bean = JSON.parseObject(response.getData(),ShopCartPriceBean.class);
                     mInterface.requestSubmitShopCartSucess(bean,shopId,selecList);
                 }else {

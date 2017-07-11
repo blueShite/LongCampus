@@ -30,6 +30,7 @@ public class OrderActivity extends SupportActivity {
     private OrderNoPayFragment mNoPayFragment;
     private OrderNoReceiveFragment mNoReceiveFragment;
     private OrderReceiveFragment mReceiveFragment;
+    private String selectIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +41,19 @@ public class OrderActivity extends SupportActivity {
     }
 
     private void customView(){
-        mButtonOrderListNoPay.setSelected(true);
 
+        selectIndex = getIntent().getStringExtra("selectIndex");
+        if(selectIndex.equals("0")){
+            mButtonOrderListNoPay.setSelected(true);
+        }
+        if(selectIndex.equals("1")){
+            mButtonOrderListNoreceive.setSelected(true);
+        }
         mNoPayFragment = new OrderNoPayFragment();
         mNoReceiveFragment = new OrderNoReceiveFragment();
         mReceiveFragment = new OrderReceiveFragment();
 
-        loadMultipleRootFragment(R.id.frameLayout_order_list,0,mNoPayFragment,mNoReceiveFragment,mReceiveFragment);
+        loadMultipleRootFragment(R.id.frameLayout_order_list,Integer.parseInt(selectIndex),mNoPayFragment,mNoReceiveFragment,mReceiveFragment);
 
 
     }

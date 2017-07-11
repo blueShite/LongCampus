@@ -52,8 +52,12 @@ public class ShopCartListActivity extends BaseActivity implements ShopCartListIn
         setContentView(R.layout.activity_shop_cart_list);
         ButterKnife.bind(this);
         customView();
-        mPresenter.requestShopCartList(LoginManage.getInstance().getLoginBean().getId(),mResId);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.requestShopCartList(LoginManage.getInstance().getLoginBean().getId(),mResId);
     }
 
     private void customView(){
