@@ -43,7 +43,7 @@ public class InformationDetailActivity extends BaseActivity {
     private void initView(){
 
         mTextInformationDetailTitleName.setText(mInformationBean.getHtinfo());
-        Picasso.with(InformationDetailActivity.this).load(RequestTools.BaseUrl+mInformationBean.getLitpic()).into(mImageInformationDetail);
+        Picasso.with(InformationDetailActivity.this).load(RequestTools.BaseUrl+mInformationBean.getLitpic()).fit().centerCrop().into(mImageInformationDetail);
         mTextInformationDetailName.setText(mInformationBean.getTitle());
         mTextInformationDetailTime.setText(mInformationBean.getDate());
         mTextInformationDetailFrom.setText("内容来自:"+mInformationBean.getForm()+"  "+"作者:"+mInformationBean.getAuthor());

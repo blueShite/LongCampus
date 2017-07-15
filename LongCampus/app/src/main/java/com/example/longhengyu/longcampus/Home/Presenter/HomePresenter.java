@@ -1,5 +1,7 @@
 package com.example.longhengyu.longcampus.Home.Presenter;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BasePresenter;
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
@@ -28,7 +30,7 @@ public class HomePresenter extends BasePresenter {
         mHomeInterface = homeInterface;
     }
 
-    public void requestHomeData(String page){
+    public void requestHomeData(String page,String schId){
 
         showDialog();
         Map<String,String> map = new HashMap<>();
@@ -50,6 +52,7 @@ public class HomePresenter extends BasePresenter {
             public void onResponse(RequestBean response, int id) {
                 dismissDialog();
                 if(response.isRes()){
+                    Log.e("首页数据",response.getData());
                     List<CanteenBean> list = JSON.parseArray(response.getData(),CanteenBean.class);
                     mHomeInterface.requestHomeDataSucess(list);
                 }else {

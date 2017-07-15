@@ -28,7 +28,7 @@ public class CanteenBean implements Serializable {
 
     private String res_id;
     private String sch_id;
-    private String res_name;
+    private String res_names;
     private String res_intro;
     private String res_addr;
     private String res_tel;
@@ -51,12 +51,12 @@ public class CanteenBean implements Serializable {
         this.sch_id = sch_id;
     }
 
-    public String getRes_name() {
-        return res_name;
+    public String getRes_names() {
+        return res_names;
     }
 
-    public void setRes_name(String res_name) {
-        this.res_name = res_name;
+    public void setRes_names(String res_names) {
+        this.res_names = res_names;
     }
 
     public String getRes_intro() {

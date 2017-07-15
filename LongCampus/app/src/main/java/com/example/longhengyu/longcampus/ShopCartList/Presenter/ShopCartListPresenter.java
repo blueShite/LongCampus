@@ -66,12 +66,12 @@ public class ShopCartListPresenter extends BasePresenter {
         for (ShopCartListBean listBean:list){
             ShopCartItemBean bean = new ShopCartItemBean();
             bean.setItemType("0");
-            bean.setSelectType("0");
+            bean.setSelectType("1");
             bean.setRes_name(listBean.getName());
             itemBeanList.add(bean);
             for (ShopCartItemBean itemBean:listBean.getItmes()){
                 itemBean.setItemType("1");
-                itemBean.setSelectType("0");
+                itemBean.setSelectType("1");
                 itemBeanList.add(itemBean);
             }
         }

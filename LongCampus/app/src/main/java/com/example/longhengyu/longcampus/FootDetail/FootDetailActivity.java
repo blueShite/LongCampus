@@ -71,6 +71,13 @@ public class FootDetailActivity extends BaseActivity implements FootDetailInterf
         }
         FootDetailAdapter adapter = new FootDetailAdapter(list,detailBean,FootDetailActivity.this,this);
         mRecycleFootDetail.setAdapter(adapter);
+        String isCollection = getIntent().getStringExtra("isCollection");
+        if(isCollection==null){
+            adapter.reloadHeader("0");
+        }else {
+            adapter.reloadHeader(isCollection);
+        }
+
     }
 
     @Override

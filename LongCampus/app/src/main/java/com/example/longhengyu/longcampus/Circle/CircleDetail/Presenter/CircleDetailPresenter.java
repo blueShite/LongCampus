@@ -36,7 +36,7 @@ public class CircleDetailPresenter extends BasePresenter {
         Map<String,String> map = new HashMap<>();
         map.put("group_id",groupId);
         map.put("com_page",page);
-        RequestTools.getInstance().postRequest("/api/getGroupCommentList.api.php", false, map, "", new RequestCallBack(mContext) {
+        RequestTools.getInstance().postRequest("/api/groupCommentList.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 dismissDialog();
@@ -52,7 +52,6 @@ public class CircleDetailPresenter extends BasePresenter {
                     mList = JSON.parseArray(response.getData(),CircleDetailItemBean.class);
                     mInterface.requestSucess(mList);
                 }else {
-                    Toasty.error(mContext,"获取列表失败").show();
                     mInterface.requestError(response.getMes());
                 }
             }
@@ -91,7 +90,7 @@ public class CircleDetailPresenter extends BasePresenter {
         map.put("group_id",groupId);
         map.put("text",comment);
         map.put("u_id",uId);
-        RequestTools.getInstance().postRequest("/api/groupComment.api.php", false, map, "", new RequestCallBack(mContext) {
+        RequestTools.getInstance().postRequest("/api/group_add.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 super.onError(call, e, id);

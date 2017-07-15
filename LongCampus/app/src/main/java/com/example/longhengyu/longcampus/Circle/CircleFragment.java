@@ -68,8 +68,14 @@ public class CircleFragment extends SupportFragment implements CircleInterface {
         customView();
         page="1";
         mPresenter.requestBanner();
-        mPresenter.requestItem(page);
         return view;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        page="1";
+        mPresenter.requestItem(page);
     }
 
     private void customView() {

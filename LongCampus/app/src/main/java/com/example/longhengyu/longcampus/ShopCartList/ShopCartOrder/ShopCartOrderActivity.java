@@ -376,8 +376,9 @@ public class ShopCartOrderActivity extends BaseActivity implements ShopCartOrder
 
     @Override
     public void itemEditText(int poist, String editText) {
-        ShopCartItemBean bean = mList.get(poist);
-        bean.setRemark(editText);
-        Log.e("tag2","-------"+poist+"-------"+editText);
+
+            ShopCartItemBean bean = mList.get(poist);
+            bean.setRemark(editText);
+            Log.e("tag2","-------"+poist+"-------"+editText);
     }
 }

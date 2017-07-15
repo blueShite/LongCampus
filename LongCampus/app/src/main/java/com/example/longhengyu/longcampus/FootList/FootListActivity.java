@@ -171,7 +171,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         }
         mBannerShopCart.setImages(list);
         mBannerShopCart.start();
-        mTextFootListTitle.setText(headerBean.getRes_name());
+        mTextFootListTitle.setText(headerBean.getRes_names());
     }
 
     @Override

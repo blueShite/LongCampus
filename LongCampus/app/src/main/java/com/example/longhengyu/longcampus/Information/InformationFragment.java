@@ -108,6 +108,8 @@ public class InformationFragment extends SupportFragment implements InformationI
 
     @Override
     public void requestHeaderSucess(List<InformationBean> bannerList) {
+        mbannerList.clear();
+        mbannerList.addAll(bannerList);
         InformationAdapter adapter = (InformationAdapter) mRecyclerviewInformation.getAdapter();
         adapter.reloadHeader(bannerList);
     }

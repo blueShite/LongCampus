@@ -38,6 +38,11 @@ public class IntegralAdapter extends RecyclerView.Adapter<IntegralAdapter.ViewHo
         return 1;
     }
 
+    public void reloadIntegral(String integralString){
+        this.integralString = integralString;
+        notifyItemChanged(0);
+    }
+
     @Override
     public IntegralAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 

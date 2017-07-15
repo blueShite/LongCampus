@@ -127,9 +127,6 @@ public class OrderReceiveFragment extends SupportFragment implements OrderReceiv
 
     @Override
     public void onClickOrderItem(int poist) {
-        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-        intent.putExtra("orderId",mList.get(poist).getId());
-        startActivity(intent);
     }
 
     @Override

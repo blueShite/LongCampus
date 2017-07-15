@@ -162,7 +162,6 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
             holder.mEditShopcartOrderRemark.removeTextChangedListener((TextWatcher) holder.mEditShopcartOrderRemark.getTag());
         }
         holder.mEditShopcartOrderRemark.setText(bean.getRemark());
-
         /*holder.mEditShopcartOrderRemark.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -176,24 +175,22 @@ public class ShopCartOrderAdapter extends RecyclerView.Adapter<ShopCartOrderAdap
                 return false;
             }
         });*/
-        holder.mEditShopcartOrderRemark.addTextChangedListener(new TextWatcher() {
+        TextWatcher watcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence sequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence sequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
-            public void afterTextChanged(Editable editable) {
-                Log.e("tag1","-------"+position+"-------"+holder.mEditShopcartOrderRemark.getText().toString());
+            public void afterTextChanged(Editable s) {
                 mInterface.itemEditText(position, holder.mEditShopcartOrderRemark.getText().toString());
             }
-        });
-        holder.mEditShopcartOrderRemark.setTag(position);
+        };
+
+        holder.mEditShopcartOrderRemark.addTextChangedListener(watcher);
+        holder.mEditShopcartOrderRemark.setTag(watcher);
+
         /*holder.mEditShopcartOrderRemark.setText(bean.getRemark());
         holder.mEditShopcartOrderRemark.setTag(position);
         if (mTouchItemPosition == position) {

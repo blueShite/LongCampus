@@ -14,5 +14,6 @@ public interface CollectionInterface {
     void requestCollectionError(String error);
     void onClickCollectSelect(int index);
     void requestCancelCollection(int index);
+    void onClickItemView(int poist);
 
 }

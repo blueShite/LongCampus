@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
 import com.example.longhengyu.longcampus.Home.Interface.HomeAdapterInterface;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.squareup.picasso.Picasso;
 
@@ -76,12 +77,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             return;
         }
         CanteenBean bean = mList.get(position);
-        String[] all=bean.getRes_img().split("[=]");
-        if(!bean.getRes_img().isEmpty()){
-            Picasso.with(mContext).load(bean.getRes_img()).resize(90,90).into(holder.mImageView);
-        }
+        Picasso.with(mContext).load(RequestTools.BaseUrl+bean.getRes_img()).resize(120,120).into(holder.mImageView);
         holder.subText.setText(bean.getRes_intro());
-        holder.nameText.setText(bean.getRes_name());
+        holder.nameText.setText(bean.getRes_names());
         holder.selfView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

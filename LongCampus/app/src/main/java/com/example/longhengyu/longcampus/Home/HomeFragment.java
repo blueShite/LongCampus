@@ -19,14 +19,18 @@ import com.example.longhengyu.longcampus.Home.Bean.CanteenBean;
 import com.example.longhengyu.longcampus.Home.Interface.HomeAdapterInterface;
 import com.example.longhengyu.longcampus.Home.Interface.HomeInterface;
 import com.example.longhengyu.longcampus.Home.Presenter.HomePresenter;
+import com.example.longhengyu.longcampus.Home.SearchSchool.SearchSchoolActivity;
 import com.example.longhengyu.longcampus.LocationAbout.LongLocation;
 import com.example.longhengyu.longcampus.LocationAbout.LongLocationListener;
+import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCart.ShopCartActivity;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +58,7 @@ public class HomeFragment extends SupportFragment implements HomeInterface,HomeA
     private HomePresenter mPresenter = new HomePresenter(this);
     private String page;
     private String locationStr = "正在定位中...";
+    private String schId;
 
     private LongLocation mLongLocation;
 
@@ -73,9 +78,33 @@ public class HomeFragment extends SupportFragment implements HomeInterface,HomeA
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
         initView();
-        mPresenter.requestHomeData(page);
+        page = "1";
+        if(LoginManage.getInstance().getLoginBean().getStuid().isEmpty()){
+            schId = "1";
+        }else {
+            schId= LoginManage.getInstance().getLoginBean().getStuid();
+        }
+        mPresenter.requestHomeData(page,schId);
         mLongLocation.startLocation();
         return view;
+    }
+
+    /*@Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        page = "1";
+        if(LoginManage.getInstance().getLoginBean().getStuid().isEmpty()){
+            schId = "1";
+        }else {
+            schId= LoginManage.getInstance().getLoginBean().getStuid();
+        }
+        mPresenter.requestHomeData(page,schId);
+    }*/
+
+    public void reloadHomeData(String schId){
+        this.schId = schId;
+        page = "1";
+        mPresenter.requestHomeData(page,schId);
     }
 
     protected void initView() {
@@ -108,14 +137,23 @@ public class HomeFragment extends SupportFragment implements HomeInterface,HomeA
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
                 page = "1";
-                mPresenter.requestHomeData(page);
+                mPresenter.requestHomeData(page,schId);
             }
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
                 int pageIndex = Integer.parseInt(page)+1;
                 page = pageIndex+"";
-                mPresenter.requestHomeData(page);
+                mPresenter.requestHomeData(page,schId);
+            }
+        });
+
+        mTextHomeDingwei.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SearchSchoolActivity.class);
+                intent.putExtra("dingwei",mTextHomeDingwei.getText().toString());
+                startActivity(intent);
             }
         });
     }

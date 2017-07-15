@@ -78,7 +78,7 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
         mButtonSetLikeBottomFootType.setSelected(true);
         mButtonSetLikeBottomFlavor.setSelected(false);
         String likeStr = LoginManage.getInstance().getLoginBean().getLike_id();
-        String hateStr = LoginManage.getInstance().getLoginBean().getHate();
+        final String hateStr = LoginManage.getInstance().getLoginBean().getHate();
 
         if (likeStr != null && likeStr.length() > 0) {
             String[] likeArray = likeStr.split(",");
@@ -138,11 +138,23 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
                                 return true;
                             }
                         }
+                        for (SetLikeBean hateBean : hateList){
+                            if (hateBean.getFood().equals(bean.getFood())) {
+                                Toasty.error(SetLikeActivity.this,"添加过厌恶的口味不能添加到喜欢").show();
+                                return true;
+                            }
+                        }
                         topList.add(bean);
                     } else {
                         bean.setFood(bean.getPrefer());
                         for (SetLikeBean likeBean : topList) {
                             if (likeBean.getFood().equals(bean.getFood())) {
+                                return true;
+                            }
+                        }
+                        for (SetLikeBean hateBean : hateList){
+                            if (hateBean.getFood().equals(bean.getFood())) {
+                                Toasty.error(SetLikeActivity.this,"添加过厌恶的口味不能添加到喜欢").show();
                                 return true;
                             }
                         }
@@ -157,11 +169,23 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
                                 return true;
                             }
                         }
+                        for (SetLikeBean likeBean : likeList){
+                            if (likeBean.getFood().equals(bean.getFood())) {
+                                Toasty.error(SetLikeActivity.this,"添加过喜好的口味不能添加到厌恶").show();
+                                return true;
+                            }
+                        }
                         topList.add(bean);
                     } else {
                         bean.setFood(bean.getPrefer());
                         for (SetLikeBean likeBean : topList) {
                             if (likeBean.getFood().equals(bean.getFood())) {
+                                return true;
+                            }
+                        }
+                        for (SetLikeBean likeBean : likeList){
+                            if (likeBean.getFood().equals(bean.getFood())) {
+                                Toasty.error(SetLikeActivity.this,"添加过喜好的口味不能添加到厌恶").show();
                                 return true;
                             }
                         }
@@ -173,6 +197,24 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
                 return true;
             }
         });
+
+        mTagLayoutTop.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if(mButtonSetLikeTopLike.isSelected()){
+
+                    topList.remove(position);
+                    likeList.remove(position);
+
+                }else {
+                    topList.remove(position);
+                    hateList.remove(position);
+                }
+                mTagLayoutTop.getAdapter().notifyDataChanged();
+                return true;
+            }
+        });
+
     }
 
     @OnClick({R.id.button_setLike_TopLike, R.id.button_setLike_TopHate, R.id.button_setLike_bottomFootType, R.id.button_setLike_bottomFlavor})
@@ -219,53 +261,33 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
 
     @OnClick(R.id.text_setLike_submit)
     public void onViewClicked() {
-
-        if(mButtonSetLikeTopLike.isSelected()){
-            if(likeList.size()<1){
-                Toasty.error(SetLikeActivity.this,"请选择你喜欢的类别").show();
-                return;
-            }
-            StringBuilder sb = new StringBuilder();
-            for (SetLikeBean bean : likeList) {// 增强for循环.
-                sb.append(bean.getFood() + ",");
-            }
-            String result = sb.toString();
-            String data = result.substring(0, result.length()-1);
-            mPresenter.requestSubmitLike(data,LoginManage.getInstance().getLoginBean().getId());
-        }else {
-            if(hateList.size()<1){
-                Toasty.error(SetLikeActivity.this,"请选择你厌恶的类别").show();
-                return;
-            }
-            StringBuilder sb = new StringBuilder();
-            for (SetLikeBean bean : hateList) {// 增强for循环.
-                sb.append(bean.getFood() + ",");
-            }
-            String result = sb.toString();
-            String data = result.substring(0, result.length()-1);
-            mPresenter.requestSubmitHate(data,LoginManage.getInstance().getLoginBean().getId());
+        if(likeList.size()<1){
+            Toasty.error(SetLikeActivity.this,"请选择你喜欢的类别").show();
+            return;
         }
+        if(hateList.size()<1){
+            Toasty.error(SetLikeActivity.this,"请选择你厌恶的类别").show();
+            return;
+        }
+        StringBuilder likeSb = new StringBuilder();
+        for (SetLikeBean bean : likeList) {// 增强for循环.
+            likeSb.append(bean.getFood() + ",");
+        }
+        String likeResult = likeSb.toString();
+        String likeData = likeResult.substring(0, likeResult.length()-1);
+        StringBuilder sb = new StringBuilder();
+        for (SetLikeBean bean : hateList) {// 增强for循环.
+            sb.append(bean.getFood() + ",");
+        }
+        String result = sb.toString();
+        String hadeData = result.substring(0, result.length()-1);
+        mPresenter.requestSubmitLike(likeData,hadeData,LoginManage.getInstance().getLoginBean().getId());
     }
 
-
     @Override
-    public void requestSubmitLike(String likeStr) {
+    public void requestSubmit(String likeStr, String hateStr) {
         LoginBean bean = LoginManage.getInstance().getLoginBean();
         bean.setLike_id(likeStr);
-        LoginManage.getInstance().saveLoginBean(bean);
-        Toasty.success(SetLikeActivity.this,"提交成功").show();
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                finish();
-            }
-        }, 2000);
-    }
-
-    @Override
-    public void requestSubmitHate(String hateStr) {
-        LoginBean bean = LoginManage.getInstance().getLoginBean();
         bean.setHate(hateStr);
         LoginManage.getInstance().saveLoginBean(bean);
         Toasty.success(SetLikeActivity.this,"提交成功").show();
@@ -298,6 +320,4 @@ public class SetLikeActivity extends BaseActivity implements SetLikeInterface {
         bottomList.addAll(list);
         mTagLayoutBottom.getAdapter().notifyDataChanged();
     }
-
-
 }

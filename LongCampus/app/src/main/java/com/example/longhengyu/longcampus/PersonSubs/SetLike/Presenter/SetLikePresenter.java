@@ -70,13 +70,15 @@ public class SetLikePresenter extends BasePresenter {
         });
     }
 
-    public void requestSubmitLike(final String likeStr, String uId){
+    public void requestSubmitLike(final String likeStr, final String hadeStr, final String uId){
+        showDialog();
         Map<String,String> map = new HashMap<>();
         map.put("perf",likeStr);
         map.put("uid",uId);
         RequestTools.getInstance().postRequest("/api/addPersonPerf.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
+                dismissDialog();
                 super.onError(call, e, id);
             }
 
@@ -84,36 +86,36 @@ public class SetLikePresenter extends BasePresenter {
             public void onResponse(RequestBean response, int id) {
                 super.onResponse(response, id);
                 if(response.isRes()){
-                    mInterface.requestSubmitLike(likeStr);
+                    requestSubmitHate(likeStr,hadeStr,uId);
                 }else {
+                    dismissDialog();
                     Toasty.error(mContext,response.getMes()).show();
                 }
             }
         });
     }
 
-    public void requestSubmitHate(final String hateStr, String uId){
+    public void requestSubmitHate(final String likeStr, final String hateStr, String uId){
         Map<String,String> map = new HashMap<>();
         map.put("hate",hateStr);
         map.put("uid",uId);
         RequestTools.getInstance().postRequest("/api/addPersonHate.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
+                dismissDialog();
                 super.onError(call, e, id);
             }
 
             @Override
             public void onResponse(RequestBean response, int id) {
+                dismissDialog();
                 super.onResponse(response, id);
                 if(response.isRes()){
-                    Toasty.success(mContext,"提交成功").show();
-                    mInterface.requestSubmitHate(hateStr);
+                    mInterface.requestSubmit(likeStr,hateStr);
                 }else {
                     Toasty.error(mContext,response.getMes()).show();
                 }
             }
         });
     }
-
-
 }

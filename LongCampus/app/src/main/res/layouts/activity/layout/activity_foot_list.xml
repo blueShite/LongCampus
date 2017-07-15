@@ -71,7 +71,8 @@
             android:textSize="@dimen/mainText"
             android:textColor="@color/appwhite"
             android:layout_gravity="right"
-            android:text="立即支付"
+            android:text="去下单"
+            android:background="#F8D545"
             android:layout_width="100dp"
             android:layout_height="match_parent"/>
 

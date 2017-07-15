@@ -39,8 +39,6 @@ public class LoginActivity extends BaseActivity implements LoginInterface {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mLoginPresenter.setContext(this);
-        mEditLoginAccount.setText("13676917233");
-        mEditLoginPassword.setText("123456");
         mTextLoginRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

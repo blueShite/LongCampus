@@ -62,7 +62,7 @@ public class ShopCartActivity extends BaseActivity implements ShopCartInterface 
 
     private void customView(){
 
-        mTextShopCartTitleName.setText(mBean.getRes_name());
+        mTextShopCartTitleName.setText(mBean.getRes_names());
         mPresenter.setContext(ShopCartActivity.this);
         LinearLayoutManager manager = new LinearLayoutManager(ShopCartActivity.this);
         mRecyclerviewShopCart.setLayoutManager(manager);

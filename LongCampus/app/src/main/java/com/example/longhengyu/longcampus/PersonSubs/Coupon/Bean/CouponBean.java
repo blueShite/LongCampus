@@ -32,6 +32,15 @@ public class CouponBean {
     private String etime;
     private String confine;
     private String lCouponType;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getlCouponType() {
         return lCouponType;

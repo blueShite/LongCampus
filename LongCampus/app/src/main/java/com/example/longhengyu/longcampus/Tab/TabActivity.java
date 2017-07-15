@@ -7,13 +7,19 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.longhengyu.longcampus.Circle.CircleFragment;
+import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
 import com.example.longhengyu.longcampus.Home.HomeFragment;
+import com.example.longhengyu.longcampus.Home.SearchSchool.Event.SearchSchoolEvent;
 import com.example.longhengyu.longcampus.Information.InformationFragment;
+import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.Person.PersonFragment;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.Tools.ActivityCollector;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,8 +46,21 @@ public class TabActivity extends SupportActivity {
         setContentView(R.layout.activity_tab);
         ActivityCollector.addActivity(this);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         injectPages();
         initBottomBar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(SearchSchoolEvent event) {
+
+        mHomeFragment.reloadHomeData(event.schId);
     }
 
     private void injectPages() {

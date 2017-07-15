@@ -45,7 +45,6 @@ import okhttp3.Call;
 
 public class ReleaseCircleActivity extends TakePhotoActivity implements ReleaseCircleInterface {
 
-
     @BindView(R.id.edit_release_circle_sub)
     EditText mEditReleaseCircleSub;
     @BindView(R.id.release_circle_recycle)
@@ -145,9 +144,9 @@ public class ReleaseCircleActivity extends TakePhotoActivity implements ReleaseC
         Map<String,String> map = new HashMap<>();
         map.put("title",titleStr);
         map.put("text",subStr);
-        map.put("litpic", JSON.toJSONString(litpic));
         map.put("uid", LoginManage.getInstance().getLoginBean().getId());
-        RequestTools.getInstance().postRequest("/api/addDietCircle.api.php", false, map, "", new RequestCallBack(ReleaseCircleActivity.this) {
+        map.put("litpic",JSON.toJSONString(litpic));
+        RequestTools.getInstance().postRequest("/api/addDietCir_a.api.php", false, map, "", new RequestCallBack(ReleaseCircleActivity.this) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 super.onError(call, e, id);

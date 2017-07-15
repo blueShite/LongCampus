@@ -61,6 +61,12 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
                 mInterface.onClickCollectSelect(position);
             }
         });
+        holder.selfView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onClickItemView(position);
+            }
+        });
     }
 
     @Override
@@ -80,9 +86,12 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         TextView mTextCollectionPrice;
         @BindView(R.id.button_collection_select)
         ImageView mButtonCollectionSelect;
+        View selfView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            selfView = itemView;
         }
     }
 }

@@ -30,6 +30,7 @@ public class FootDetailAdapter extends RecyclerView.Adapter<FootDetailAdapter.Vi
     private List<FootDetailItemBean> mList;
     private FootDetailBean mShopCartBean;
     private FootDetailInterface mInterface;
+    private String mIsCollection;
 
     public FootDetailAdapter(List<FootDetailItemBean> list, FootDetailBean shopCartBean, Context context,FootDetailInterface anInterface){
 
@@ -37,6 +38,10 @@ public class FootDetailAdapter extends RecyclerView.Adapter<FootDetailAdapter.Vi
         mShopCartBean = shopCartBean;
         mContext = context;
         mInterface = anInterface;
+    }
+
+    public void reloadHeader(String isCollection){
+        mIsCollection = isCollection;
     }
 
     @Override
@@ -89,6 +94,15 @@ public class FootDetailAdapter extends RecyclerView.Adapter<FootDetailAdapter.Vi
                     mInterface.onClickRedux(holder.addNumText);
                 }
             });
+            if(mIsCollection.equals("1")){
+                holder.addImage.setVisibility(View.INVISIBLE);
+                holder.jianImage.setVisibility(View.INVISIBLE);
+                holder.addNumText.setVisibility(View.INVISIBLE);
+            }else {
+                holder.addImage.setVisibility(View.VISIBLE);
+                holder.jianImage.setVisibility(View.VISIBLE);
+                holder.addNumText.setVisibility(View.VISIBLE);
+            }
             return;
         }
 

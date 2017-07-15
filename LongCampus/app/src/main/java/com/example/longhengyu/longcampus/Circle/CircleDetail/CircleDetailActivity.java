@@ -108,7 +108,8 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
             return;
         }
 
-        mPresenter.requestComment(groupId,mEditCircleDetail.getText().toString(), LoginManage.getInstance().getLoginBean().getId());
+        mPresenter.requestComment(groupId,mEditCircleDetail.getText().toString(),
+                LoginManage.getInstance().getLoginBean().getId());
 
     }
 

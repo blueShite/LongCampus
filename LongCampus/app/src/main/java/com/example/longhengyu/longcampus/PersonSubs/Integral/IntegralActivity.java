@@ -7,8 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BaseActivity;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.NetWorks.RequestBean;
+import com.example.longhengyu.longcampus.NetWorks.RequestCallBack;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
+import com.example.longhengyu.longcampus.Person.Bean.PersonBalanceBean;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.Adapter.IntegralAdapter;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.Bean.IntegralBean;
 import com.example.longhengyu.longcampus.PersonSubs.Integral.IntegralExchange.IntegralExchangeActivity;
@@ -21,10 +26,14 @@ import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
+import okhttp3.Call;
 
 public class IntegralActivity extends BaseActivity implements IntegralInterface {
 
@@ -46,9 +55,13 @@ public class IntegralActivity extends BaseActivity implements IntegralInterface 
         setContentView(R.layout.activity_integral);
         ButterKnife.bind(this);
         customView();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
         page = "1";
         mPresenter.requestIntegralData(LoginManage.getInstance().getLoginBean().getId(),page);
-
+        requestIntergral();
     }
 
     private void customView(){
@@ -86,6 +99,29 @@ public class IntegralActivity extends BaseActivity implements IntegralInterface 
                 int pageIndex = Integer.parseInt(page)+1;
                 page = pageIndex+"";
                 mPresenter.requestIntegralData(LoginManage.getInstance().getLoginBean().getId(),page);
+            }
+        });
+    }
+
+    private void requestIntergral(){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("uid",LoginManage.getInstance().getLoginBean().getId());
+        RequestTools.getInstance().postRequest("/api/getAllPref.api.php", false, map, "", new RequestCallBack(IntegralActivity.this) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    PersonBalanceBean balanceBean = JSON.parseArray(response.getData(),PersonBalanceBean.class).get(0);
+                    integralAdapter.reloadIntegral(balanceBean.getIntegral());
+                }else {
+                    Toasty.error(IntegralActivity.this,response.getMes()).show();
+                }
             }
         });
     }

@@ -41,7 +41,7 @@ public class PersonPresenter extends BasePresenter {
         list.add(new PersonBean("饮食偏好", R.drawable.gerenxihao));
         list.add(new PersonBean("意见反馈", R.drawable.yijianfankui));
         list.add(new PersonBean("关于我们", R.drawable.guanyuwomen));
-        list.add(new PersonBean("清楚缓存", R.drawable.qingchuhuancun));
+        list.add(new PersonBean("清除缓存", R.drawable.qingchuhuancun));
         list.add(new PersonBean("",0));
 
         return list;

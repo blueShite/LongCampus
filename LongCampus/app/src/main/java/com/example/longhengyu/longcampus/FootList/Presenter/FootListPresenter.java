@@ -1,5 +1,7 @@
 package com.example.longhengyu.longcampus.FootList.Presenter;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BasePresenter;
 import com.example.longhengyu.longcampus.FootList.Interface.FootListInterface;
@@ -27,10 +29,10 @@ public class FootListPresenter extends BasePresenter {
         mInterface = anInterface;
     }
 
-    public void requestFootListHeader(String resId){
+    public void requestFootListHeader(final String resId){
 
         Map<String,String> map = new HashMap<>();
-        map.put("resid",resId);
+        map.put("res_id",resId);
         RequestTools.getInstance().postRequest("/api/getResTop.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -41,6 +43,7 @@ public class FootListPresenter extends BasePresenter {
             public void onResponse(RequestBean response, int id) {
                 super.onResponse(response, id);
                 if(response.isRes()){
+                    Log.e("购物车Banner数据",response.getData());
                     ShopCartHeaderBean headerBean = JSON.parseArray(response.getData(),ShopCartHeaderBean.class).get(0);
                     mInterface.requestSucess(headerBean);
                 }else {

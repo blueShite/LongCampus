@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.Information.InformationDetail.InformationDetailActivity;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCartList.Bean.ShopCartItemBean;
 import com.example.longhengyu.longcampus.ShopCartList.Interface.ShopCartListInterface;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -84,6 +87,8 @@ public class ShopCartListAdapter extends RecyclerView.Adapter<ShopCartListAdapte
         holder.mTextShopcartListName.setText(itemBean.getDish());
         holder.mTextShopcartListPrice.setText("¥" + itemBean.getTotal());
         holder.mTextShopcartListNum.setText(itemBean.getNum());
+        Picasso.with(mContext).load(RequestTools.BaseUrl+itemBean.getLitpic()).fit().centerCrop()
+                .into(holder.mImageShopcartListCommImage);
         holder.mImageShopcartListAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

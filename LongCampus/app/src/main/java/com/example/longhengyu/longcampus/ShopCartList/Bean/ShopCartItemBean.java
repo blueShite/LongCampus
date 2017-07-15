@@ -20,6 +20,15 @@ public class ShopCartItemBean implements Serializable {
     private String flag;
     private String id;
     private String selectType;
+    private String litpic;
+
+    public String getLitpic() {
+        return litpic;
+    }
+
+    public void setLitpic(String litpic) {
+        this.litpic = litpic;
+    }
 
     public String getSelectType() {
         return selectType;

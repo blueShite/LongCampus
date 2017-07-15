@@ -36,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -144,6 +145,19 @@ public class PersonFragment extends SupportFragment implements PersonInterface {
             case 5:
                 Intent aboutIntent = new Intent(getActivity(), AboutUsActivity.class);
                 startActivity(aboutIntent);
+                break;
+            case 6:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("提示");
+                builder.setMessage("确定清除缓存吗?");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface anInterface, int i) {
+                        Toasty.success(getContext(),"清除缓存成功!").show();
+                    }
+                });
+                builder.setNegativeButton("取消", null);
+                builder.show();
                 break;
             default:
                 break;

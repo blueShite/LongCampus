@@ -1,9 +1,13 @@
 package com.example.longhengyu.longcampus.Splash;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.longhengyu.longcampus.Login.Bean.LoginBean;
@@ -45,4 +49,6 @@ public class SplashActivity extends Activity {
         startActivity(intent);
         finish();
     }
+
+
 }

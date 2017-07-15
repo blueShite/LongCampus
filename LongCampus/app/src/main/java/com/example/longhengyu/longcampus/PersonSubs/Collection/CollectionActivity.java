@@ -1,11 +1,14 @@
 package com.example.longhengyu.longcampus.PersonSubs.Collection;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.longhengyu.longcampus.Base.BaseActivity;
+import com.example.longhengyu.longcampus.FootDetail.FootDetailActivity;
+import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.FeatureBean;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.PersonSubs.Collection.Adapter.CollectionAdapter;
 import com.example.longhengyu.longcampus.PersonSubs.Collection.Bean.CollectionBean;
@@ -105,5 +108,16 @@ public class CollectionActivity extends BaseActivity implements CollectionInterf
     public void requestCancelCollection(int index) {
         mList.remove(index);
         collectAdapter.notifyItemRemoved(index);
+    }
+
+    @Override
+    public void onClickItemView(int poist) {
+        Intent intent = new Intent(CollectionActivity.this, FootDetailActivity.class);
+        FeatureBean bean = new FeatureBean();
+        bean.setMenu_id(mList.get(poist).getMenu_id());
+        intent.putExtra("featureBean",bean);
+        intent.putExtra("isCollection","1");
+        intent.putExtra("isMyMenu","0");
+        startActivity(intent);
     }
 }

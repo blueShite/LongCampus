@@ -96,7 +96,7 @@ public class CouponReceiveActivity extends BaseActivity implements CouponInterfa
 
     @Override
     public void onClickCoupon(int poist) {
-        mPresenter.requestReceiveCoupon(mList.get(poist).getCpid(),LoginManage.getInstance().getLoginBean().getId(),poist);
+        mPresenter.requestReceiveCoupon(mList.get(poist).getId(),LoginManage.getInstance().getLoginBean().getId(),poist);
     }
 
     @Override

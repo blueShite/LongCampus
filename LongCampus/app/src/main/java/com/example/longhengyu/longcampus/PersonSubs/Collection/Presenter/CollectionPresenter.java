@@ -62,7 +62,7 @@ public class CollectionPresenter extends BasePresenter {
         Map<String,String> map = new HashMap<>();
         map.put("u_id",uId);
         map.put("menu_id",menuId);
-        RequestTools.getInstance().postRequest("/api/delKeep.api.php", false, map, "", new RequestCallBack(mContext) {
+        RequestTools.getInstance().postRequest("/api/del_Keeps.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 super.onError(call, e, id);
