@@ -56,7 +56,8 @@ public class InformationPresenter extends BasePresenter {
         showDialog();
         Map<String ,String> map = new HashMap<>();
         map.put("page",page);
-        RequestTools.getInstance().getRequest("/api/getHTinfo.api.php", false, map, "", new RequestCallBack(mContext) {
+        map.put("rows","10");
+        RequestTools.getInstance().postRequest("/api/getHTinfo.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 dismissDialog();
@@ -72,7 +73,7 @@ public class InformationPresenter extends BasePresenter {
                     mInterface.requestSuccess(list);
                 }else {
                     mInterface.requestError(response.getMes());
-                    Toasty.error(mContext,"资讯请求失败").show();
+                    Toasty.error(mContext,response.getMes()).show();
 
                 }
                 super.onResponse(response, id);

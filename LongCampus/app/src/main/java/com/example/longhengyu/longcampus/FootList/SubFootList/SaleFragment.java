@@ -83,8 +83,8 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
         mCanteenBean =(CanteenBean) getArguments().getSerializable("canteenBean");
         ButterKnife.bind(this, mView);
         customView();
-        if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
-            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
+        //if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
+            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(),"2", getContext(), new ClassesRequest.ClassesRequestInterface() {
                 @Override
                 public void requestClassesList(List<PackpageClassesBean> list) {
                     ClassesManage.getInstance().saveClasses(list);
@@ -97,37 +97,21 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
                     mPresenter.requestList(selectClassesBean.getRes_id(), page);
                 }
             });
-        }else {
-            mClassesList.clear();
+        //}else {
+            /*mClassesList.clear();
             mClassesList.addAll(ClassesManage.getInstance().returnClasses());
             mClassesList.get(0).setSelect(true);
             selectClassesBean = mClassesList.get(0);
             mClassesAdapter.notifyDataSetChanged();
             page = "1";
-            mPresenter.requestList(mCanteenBean.getRes_id(), page);
-        }
+            mPresenter.requestList(mCanteenBean.getRes_id(), page);*/
+        //}
         return mView;
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if(ClassesManage.getInstance().mList==null||ClassesManage.getInstance().mList.size()<1){
-            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
-                @Override
-                public void requestClassesList(List<PackpageClassesBean> list) {
-                    ClassesManage.getInstance().saveClasses(list);
-                    mClassesList.clear();
-                    mClassesList.addAll(list);
-                    mClassesList.get(0).setSelect(true);
-                    selectClassesBean = mClassesList.get(0);
-                    mClassesAdapter.notifyDataSetChanged();
-                    page = "1";
-                    mPresenter.requestList(mCanteenBean.getRes_id(), page);
-                }
-            });
-            return;
-        }
         if(selectClassesBean==null||selectClassesBean.getRes_id()==null){
             return;
         }
@@ -196,7 +180,9 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
 
         mSaleRefresh.finishLoadmore();
         mSaleRefresh.finishRefreshing();
-        mList.clear();
+        if(page.equals("1")){
+            mList.clear();
+        }
         mList.addAll(list);
         mAdapter.notifyDataSetChanged();
     }
@@ -205,6 +191,10 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
     public void requestError(String error) {
         mSaleRefresh.finishLoadmore();
         mSaleRefresh.finishRefreshing();
+        if(page.equals("1")){
+            mList.clear();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -260,5 +250,4 @@ public class SaleFragment extends SupportFragment implements SaleInterface {
             }
         });
     }
-
 }

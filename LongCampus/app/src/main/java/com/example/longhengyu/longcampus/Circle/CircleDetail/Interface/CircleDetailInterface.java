@@ -15,4 +15,5 @@ public interface CircleDetailInterface {
     void requestSucess(List<CircleDetailItemBean> list);
     void requestError(String error);
     void requestCommentSucess(String commentStr);
+    void onClickZan();
 }

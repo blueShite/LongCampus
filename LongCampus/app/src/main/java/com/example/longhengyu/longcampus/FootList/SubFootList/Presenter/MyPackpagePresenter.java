@@ -34,6 +34,7 @@ public class MyPackpagePresenter extends BasePresenter {
 
         Map<String,String> map = new HashMap<>();
         map.put("res_cid",resId);
+        map.put("flag","4");
         RequestTools.getInstance().postRequest("/api/get_window.api.php", false, map, "", new RequestCallBack(mContext) {
             @Override
             public void onError(Call call, Exception e, int id) {

@@ -98,6 +98,16 @@ public class ShopCartOrderActivity extends BaseActivity implements ShopCartOrder
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Toasty.error(ShopCartOrderActivity.this,"支付失败").show();
+                        new Handler().postDelayed(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Intent orderIntent = new Intent(ShopCartOrderActivity.this, OrderActivity.class);
+                                orderIntent.putExtra("selectIndex","0");
+                                startActivity(orderIntent);
+                                finish();
+                            }
+                        }, 2000);
                     }
                     break;
                 }

@@ -24,7 +24,7 @@ public class SetPersonPresenter extends BasePresenter {
 
         List<SetPersonBean> beanList = new ArrayList<>();
 
-        beanList.add(new SetPersonBean("姓名", LoginManage.getInstance().getLoginBean().getNickname()));
+        beanList.add(new SetPersonBean("姓名", LoginManage.getInstance().getLoginBean().getTname()));
         String sex;
         if(LoginManage.getInstance().getLoginBean().getSex().equals("1")){
             sex = "男";

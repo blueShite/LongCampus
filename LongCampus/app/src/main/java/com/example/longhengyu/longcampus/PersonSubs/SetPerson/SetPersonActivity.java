@@ -3,19 +3,25 @@ package com.example.longhengyu.longcampus.PersonSubs.SetPerson;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BaseActivity;
+import com.example.longhengyu.longcampus.Login.Bean.LoginBean;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.NetWorks.RequestBean;
+import com.example.longhengyu.longcampus.NetWorks.RequestCallBack;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.PersonSubs.Address.AddressListActivity;
+import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Adapter.NationalityBean;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Adapter.SetPersonAdapter;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Bean.SetPersonBean;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Interface.SetPersonInterface;
@@ -23,13 +29,19 @@ import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Presenter.SetPerso
 import com.example.longhengyu.longcampus.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import okhttp3.Call;
+
+import static android.R.id.edit;
 
 public class SetPersonActivity extends BaseActivity implements SetPersonInterface {
 
@@ -39,8 +51,10 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
     private SetPersonPresenter mPresenter = new SetPersonPresenter(this);
     private List<SetPersonBean> mList = new ArrayList<>();
     private SetPersonAdapter mPersonAdapter;
+    private List<NationalityBean> nationalityBeanList = new ArrayList<>();
 
     private String[] sexArray = new String[]{"男", "女"};
+    private String[] nationalityArray;
     int mYear, mMonth, mDay;
 
     @Override
@@ -53,6 +67,7 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
         mMonth = ca.get(Calendar.MONTH);
         mDay = ca.get(Calendar.DAY_OF_MONTH);
         customView();
+        requestNavion(true);
     }
 
     @Override
@@ -88,18 +103,36 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
                             Toasty.error(SetPersonActivity.this, "请输入您要填写的文字").show();
                             return;
                         }
-                        SetPersonBean bean = mList.get(index);
-                        bean.setSub(edit.getText().toString());
-                        mPersonAdapter.notifyItemChanged(index + 1);
+                        switch (index){
+                            case 0:
+                                requestSubmitPerson("tname",edit.getText().toString(),index);
+                                break;
+                            case 2:
+                                requestSubmitPerson("tel",edit.getText().toString(),index);
+                                break;
+                            case 3:
+                                requestSubmitPerson("stuid",edit.getText().toString(),index);
+                                break;
+                            case 6:
+                                requestSubmitPerson("school",edit.getText().toString(),index);
+                                break;
+                            case 8:
+                                requestSubmitPerson("qq",edit.getText().toString(),index);
+                                break;
+                            case 9:
+                                requestSubmitPerson("wechat",edit.getText().toString(),index);
+                                break;
+                            case 10:
+                                requestSubmitPerson("email",edit.getText().toString(),index);
+                                break;
+                            default:
+                                break;
+                        }
+
                     }
                 })
                 .setNegativeButton("取消", null).create().show();
     }
-
-    @OnClick(R.id.text_setPerson_submit)
-    public void onViewClicked() {
-    }
-
     @Override
     public void onClickPersonItem(final int itemIndex) {
         switch (itemIndex) {
@@ -119,11 +152,10 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(which==0){
-                                    mList.get(1).setSub("男");
+                                    requestSubmitPerson("sex","男",1);
                                 }else {
-                                    mList.get(1).setSub("女");
+                                    requestSubmitPerson("sex","女",1);
                                 }
-                                mPersonAdapter.notifyItemChanged(itemIndex+1);
                                 dialog.dismiss();
                             }
                         }).show();
@@ -142,8 +174,9 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
                         mMonth = i1;
                         mDay = i2;
                         StringBuffer string = new StringBuffer().append(mYear).append("-").append(mMonth + 1).append("-").append(mDay).append(" ");
-                        mList.get(itemIndex).setSub(String.valueOf(string));
-                        mPersonAdapter.notifyItemChanged(itemIndex+1);
+                        requestSubmitPerson("birth",String.valueOf(string),4);
+//                        mList.get(itemIndex).setSub(String.valueOf(string));
+//                        mPersonAdapter.notifyItemChanged(itemIndex+1);
                     }
                 }, mYear, mMonth, mDay).show();
                 break;
@@ -155,23 +188,26 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
                 showEditAlert(itemIndex, "请输入学校");
                 break;
             case 7:
-                String[] nationArray = new String[]{"汉族", "回族"};
-                int index;
-                if(mList.get(7).getSub().equals("汉族")){
+                int index = 0;
+
+                if(mList.get(7).getSub()==null||mList.get(7).getSub().length()<1){
                     index = 0;
                 }else {
-                    index = 1;
+                    for (int i=0;i<nationalityBeanList.size();i++){
+                        NationalityBean bean = nationalityBeanList.get(i);
+                        if(mList.get(7).getSub().equals(bean.getNation())){
+                            index = i;
+                            break;
+                        }
+                    }
+
                 }
                 new AlertDialog.Builder(this)
                         .setTitle("选择民族")
-                        .setSingleChoiceItems(nationArray, index, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(nationalityArray, index, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(which==0){
-                                    mList.get(7).setSub("汉族");
-                                }else {
-                                    mList.get(7).setSub("回族");
-                                }
+                                requestSubmitPerson("natid",nationalityBeanList.get(which).getId(),7);
                                 mPersonAdapter.notifyItemChanged(itemIndex+1);
                                 dialog.dismiss();
                             }
@@ -194,6 +230,108 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
     @Override
     public void requestSubmitSucess() {
 
+    }
+
+    private void requestNavion(boolean isFirst){
+        RequestTools.getInstance().postRequest("/api/getNationality.api.php", false, null, "", new RequestCallBack(SetPersonActivity.this) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    Log.e("民族数据",response.getData());
+                    nationalityBeanList = JSON.parseArray(response.getData(),NationalityBean.class);
+                    List<String> stringList = new ArrayList<String>();
+                    for (NationalityBean bean:nationalityBeanList){
+                        stringList.add(bean.getNation());
+                    }
+                    nationalityArray = stringList.toArray(new String[stringList.size()]);
+                }else {
+                    Toasty.error(SetPersonActivity.this,response.getMes()).show();
+                }
+            }
+        });
+    }
+
+    private void requestSubmitPerson(String key, final String vaule, final int index){
+        Map<String,String> map = new HashMap<>();
+        map.put("key",key);
+        map.put("value",vaule);
+        map.put("id",LoginManage.getInstance().getLoginBean().getId());
+        RequestTools.getInstance().postRequest("/api/updata_datum.api.php", false, map, "", new RequestCallBack(SetPersonActivity.this) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    SetPersonBean bean = mList.get(index);
+                    if(index==7){
+                        for (NationalityBean naBean:nationalityBeanList){
+                            if(naBean.getId().equals(vaule)){
+                                bean.setSub(naBean.getNation());
+                                break;
+                            }
+                        }
+                    }else {
+                        bean.setSub(vaule);
+                    }
+                    mPersonAdapter.notifyItemChanged(index + 1);
+                    LoginBean loginBean = LoginManage.getInstance().getLoginBean();
+                    switch (index){
+                        case 0:
+                            loginBean.setTname(vaule);
+                            break;
+                        case 1:
+                            loginBean.setSex(vaule);
+                            break;
+                        case 2:
+                            loginBean.setTel(vaule);
+                            break;
+                        case 3:
+                            loginBean.setStuid(vaule);
+                            break;
+                        case 4:
+                            loginBean.setBirth(vaule);
+                            break;
+                        case 6:
+                            loginBean.setSchool(vaule);
+                            break;
+                        case 7:
+                            for (NationalityBean naBean:nationalityBeanList){
+                                if(naBean.getId().equals(vaule)){
+                                    loginBean.setNation(naBean.getNation());
+                                    loginBean.setNatid(naBean.getId());
+                                    break;
+                                }
+                            }
+                            break;
+                        case 8:
+                            loginBean.setQq(vaule);
+                            break;
+                        case 9:
+                            loginBean.setWechat(vaule);
+                            break;
+                        case 10:
+                            loginBean.setEmail(vaule);
+                            break;
+                        default:
+                            break;
+                    }
+                    LoginManage.getInstance().saveLoginBean(loginBean);
+                }else {
+                    Toasty.error(SetPersonActivity.this,response.getMes()).show();
+                }
+
+            }
+        });
     }
 
 

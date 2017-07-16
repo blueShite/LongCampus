@@ -2,11 +2,12 @@ package com.example.longhengyu.longcampus.Circle.CircleDetail;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.longhengyu.longcampus.Base.BaseActivity;
 import com.example.longhengyu.longcampus.Circle.Bean.CircleHeaderBean;
@@ -17,6 +18,9 @@ import com.example.longhengyu.longcampus.Circle.CircleDetail.Bean.CircleDetailIt
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Interface.CircleDetailInterface;
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Presenter.CircleDetailPresenter;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.NetWorks.RequestBean;
+import com.example.longhengyu.longcampus.NetWorks.RequestCallBack;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -24,12 +28,15 @@ import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import okhttp3.Call;
 
 public class CircleDetailActivity extends BaseActivity implements CircleDetailInterface {
 
@@ -39,6 +46,8 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
     TwinklingRefreshLayout mRefreshLayoutCircleDetail;
     @BindView(R.id.edit_circle_detail)
     EditText mEditCircleDetail;
+    @BindView(R.id.image_circle_detail)
+    ImageView imageCircleDetail;
 
     private String groupId;
     private String page;
@@ -69,11 +78,17 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
         if (itemBean != null && !itemBean.getGroup_id().isEmpty()) {
             groupId = itemBean.getGroup_id();
         }
-
+        imageCircleDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestDianZan();
+            }
+        });
         LinearLayoutManager manager = new LinearLayoutManager(CircleDetailActivity.this);
         mRecyclerviewCircleDetail.setLayoutManager(manager);
         CircleDetailAdapter adapter = new CircleDetailAdapter(mList, mBean, CircleDetailActivity.this);
         mRecyclerviewCircleDetail.setAdapter(adapter);
+        adapter.setmInterface(this);
 
         //定制刷新加载
         SinaRefreshView headerView = new SinaRefreshView(CircleDetailActivity.this);
@@ -92,8 +107,8 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
-                int pageIndex = Integer.parseInt(page)+1;
-                page = pageIndex+"";
+                int pageIndex = Integer.parseInt(page) + 1;
+                page = pageIndex + "";
                 mPresenter.requestData(groupId, page);
             }
         });
@@ -103,12 +118,12 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
     @OnClick(R.id.text_circle_detail_Submit)
     public void onViewClicked() {
 
-        if(mEditCircleDetail.getText().length()<1){
-            Toasty.error(CircleDetailActivity.this,"请输入要评论的文字").show();
+        if (mEditCircleDetail.getText().length() < 1) {
+            Toasty.error(CircleDetailActivity.this, "请输入要评论的文字").show();
             return;
         }
 
-        mPresenter.requestComment(groupId,mEditCircleDetail.getText().toString(),
+        mPresenter.requestComment(groupId, mEditCircleDetail.getText().toString(),
                 LoginManage.getInstance().getLoginBean().getId());
 
     }
@@ -116,6 +131,7 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
     @Override
     public void requestHeaderData(CircleDetailHeaderBean headerBean) {
 
+        mBean = headerBean;
         CircleDetailAdapter adapter = (CircleDetailAdapter) mRecyclerviewCircleDetail.getAdapter();
         adapter.reloadHeader(headerBean);
     }
@@ -125,7 +141,7 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
 
         mRefreshLayoutCircleDetail.finishLoadmore();
         mRefreshLayoutCircleDetail.finishRefreshing();
-        if(page.equals("1")){
+        if (page.equals("1")) {
             mList.clear();
         }
         mList.addAll(list);
@@ -147,10 +163,39 @@ public class CircleDetailActivity extends BaseActivity implements CircleDetailIn
         InputMethodManager imm = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEditCircleDetail.getWindowToken(), 0);
-        page="1";
-        mPresenter.requestData(groupId,"1");
+        page = "1";
+        mPresenter.requestData(groupId, "1");
 
     }
 
+    @Override
+    public void onClickZan() {
+    }
 
+    private void requestDianZan() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("group_id", groupId);
+        map.put("u_id", LoginManage.getInstance().getLoginBean().getId());
+        RequestTools.getInstance().postRequest("/api/add_click.api.php", false, map, "", new RequestCallBack(CircleDetailActivity.this) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if (response.isRes()) {
+                    int zanIndex = Integer.parseInt(mBean.getNum()) + 1;
+                    mBean.setNum(zanIndex + "");
+                    CircleDetailAdapter adapter = (CircleDetailAdapter) mRecyclerviewCircleDetail.getAdapter();
+                    adapter.reloadHeader(mBean);
+
+                } else {
+                    Toasty.error(CircleDetailActivity.this, response.getMes()).show();
+                }
+            }
+        });
+    }
 }

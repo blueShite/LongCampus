@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Bean.CircleDetailHeaderBean;
 import com.example.longhengyu.longcampus.Circle.CircleDetail.Bean.CircleDetailItemBean;
+import com.example.longhengyu.longcampus.Circle.CircleDetail.Interface.CircleDetailInterface;
+import com.example.longhengyu.longcampus.Circle.Interface.CircleInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.squareup.picasso.Picasso;
@@ -25,6 +27,15 @@ public class CircleDetailAdapter extends RecyclerView.Adapter<CircleDetailAdapte
     private CircleDetailHeaderBean mBean;
     private List<CircleDetailItemBean> mList;
     private Context mContext;
+    public CircleDetailInterface mInterface;
+
+    public CircleDetailInterface getmInterface() {
+        return mInterface;
+    }
+
+    public void setmInterface(CircleDetailInterface mInterface) {
+        this.mInterface = mInterface;
+    }
 
     private View headerView;
 
@@ -80,6 +91,12 @@ public class CircleDetailAdapter extends RecyclerView.Adapter<CircleDetailAdapte
             holder.headerTimeText.setText(mBean.getGroup_time());
             holder.headerPingText.setText("评论("+mBean.getReply_num()+")");
             holder.headerZanText.setText("点赞("+mBean.getNum()+")");
+            holder.headerZanText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mInterface.onClickZan();
+                }
+            });
             return;
         }
 

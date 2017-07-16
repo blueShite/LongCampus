@@ -27,6 +27,13 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/image_circle_detail"
+            android:src="@drawable/dianzan"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
+            android:layout_width="40dp"
+            android:layout_height="20dp" />
         </android.support.v7.widget.Toolbar>
 
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout

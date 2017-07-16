@@ -67,6 +67,7 @@ public class IntegralActivity extends BaseActivity implements IntegralInterface 
     private void customView(){
 
         mPresenter.setContext(IntegralActivity.this);
+        mTextIntegralExchange.setVisibility(View.GONE);
         mTextIntegralExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

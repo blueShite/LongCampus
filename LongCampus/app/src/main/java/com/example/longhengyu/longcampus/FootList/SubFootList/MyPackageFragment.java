@@ -190,6 +190,11 @@ public class MyPackageFragment extends SupportFragment implements MyPackpageInte
     public void requestCommodityError(String error) {
         mPackpageCommRefresh.finishLoadmore();
         mPackpageCommRefresh.finishRefreshing();
+        if(page.equals("1")){
+            mCommodityBeenList.clear();
+            mCommAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override

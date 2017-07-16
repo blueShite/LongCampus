@@ -85,8 +85,8 @@ public class FeatureFragment extends SupportFragment implements FeatureInterface
         mCanteenBean =(CanteenBean) getArguments().getSerializable("canteenBean");
         ButterKnife.bind(this, mView);
         customView();
-        if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
-            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
+        //if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
+            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(),"3", getContext(), new ClassesRequest.ClassesRequestInterface() {
                 @Override
                 public void requestClassesList(List<PackpageClassesBean> list) {
                     ClassesManage.getInstance().saveClasses(list);
@@ -99,37 +99,21 @@ public class FeatureFragment extends SupportFragment implements FeatureInterface
                     mPresenter.requestList(page, selectClassesBean.getRes_id());
                 }
             });
-        }else {
-            mClassesList.clear();
+        //}else {
+            /*mClassesList.clear();
             mClassesList.addAll(ClassesManage.getInstance().returnClasses());
             mClassesList.get(0).setSelect(true);
             selectClassesBean = mClassesList.get(0);
             mClassesAdapter.notifyDataSetChanged();
             page = "1";
-            mPresenter.requestList(page, selectClassesBean.getRes_id());
-        }
+            mPresenter.requestList(page, selectClassesBean.getRes_id());*/
+       // }
         return mView;
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if(ClassesManage.getInstance().mList==null||ClassesManage.getInstance().mList.size()<1){
-            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
-                @Override
-                public void requestClassesList(List<PackpageClassesBean> list) {
-                    ClassesManage.getInstance().saveClasses(list);
-                    mClassesList.clear();
-                    mClassesList.addAll(list);
-                    mClassesList.get(0).setSelect(true);
-                    selectClassesBean = mClassesList.get(0);
-                    mClassesAdapter.notifyDataSetChanged();
-                    page = "1";
-                    mPresenter.requestList(page, selectClassesBean.getRes_id());
-                }
-            });
-            return;
-        }
         if(selectClassesBean==null||selectClassesBean.getRes_id()==null){
             return;
         }
@@ -206,6 +190,11 @@ public class FeatureFragment extends SupportFragment implements FeatureInterface
     public void requestError(String error) {
         mFeatureRefresh.finishLoadmore();
         mFeatureRefresh.finishRefreshing();
+        if(page.equals("1")){
+            mList.clear();
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override

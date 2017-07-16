@@ -80,7 +80,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mBean = (CanteenBean) getIntent().getSerializableExtra("canteenBean");
         customView();
         mPresenter.requestFootListHeader(mBean.getRes_id());
-        mPresenter.requestShopCartNum(LoginManage.getInstance().getLoginBean().getId(),mBean.getRes_id());
+        //mPresenter.requestShopCartNum(LoginManage.getInstance().getLoginBean().getId(),mBean.getRes_id());
 
     }
 
@@ -97,7 +97,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
 
     @Subscribe
     public void onMessageEvent(FootListShopEvent event) {
-        mPresenter.requestShopCartNum(LoginManage.getInstance().getLoginBean().getId(),mBean.getRes_id());
+        //mPresenter.requestShopCartNum(LoginManage.getInstance().getLoginBean().getId(),mBean.getRes_id());
     }
 
     private void customView() {
@@ -111,8 +111,8 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
         mSaleFragment = SaleFragment.newInstance(mBean);
         mMyPackageFragment = MyPackageFragment.newInstance(mBean);
         loadMultipleRootFragment(R.id.layout_footList, 0, mRecommendFragment, mSaleFragment, mFeatureFragment, mMyPackageFragment);
-        mTextFootListShopCart.setVisibility(View.INVISIBLE);
-        mTextFootListShopCartSub.setVisibility(View.VISIBLE);
+        mTextFootListShopCart.setVisibility(View.VISIBLE);
+        mTextFootListShopCartSub.setVisibility(View.INVISIBLE);
 
         mTextFootListShopCart.setOnClickListener(new View.OnClickListener() {
             @Override

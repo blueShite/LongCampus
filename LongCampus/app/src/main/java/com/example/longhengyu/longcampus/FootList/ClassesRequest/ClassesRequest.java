@@ -23,9 +23,10 @@ import okhttp3.Call;
 
 public class ClassesRequest {
 
-    public static void requestClassesList(String resId, final Context context, final ClassesRequestInterface requestInterface){
+    public static void requestClassesList(String resId,String flag, final Context context, final ClassesRequestInterface requestInterface){
         Map<String,String> map = new HashMap<>();
         map.put("res_cid",resId);
+        map.put("flag",flag);
         RequestTools.getInstance().postRequest("/api/get_window.api.php", false, map, "", new RequestCallBack(context) {
             @Override
             public void onError(Call call, Exception e, int id) {

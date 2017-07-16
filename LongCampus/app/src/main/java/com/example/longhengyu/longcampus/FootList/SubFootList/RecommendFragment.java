@@ -83,8 +83,8 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
         mCanteenBean =(CanteenBean) getArguments().getSerializable("canteenBean");
         ButterKnife.bind(this, mView);
         customView();
-        if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
-            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
+        //if(ClassesManage.getInstance().returnClasses()==null||ClassesManage.getInstance().returnClasses().size()<1){
+            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(),"1", getContext(), new ClassesRequest.ClassesRequestInterface() {
                 @Override
                 public void requestClassesList(List<PackpageClassesBean> list) {
                     ClassesManage.getInstance().saveClasses(list);
@@ -97,38 +97,22 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
                     mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
                 }
             });
-        }else {
-            mClassesList.clear();
+        //}else {
+            /*mClassesList.clear();
             mClassesList.addAll(ClassesManage.getInstance().returnClasses());
             mClassesList.get(0).setSelect(true);
             selectClassesBean = mClassesList.get(0);
             selectClassesBean.setSelect(true);
             mClassesAdapter.notifyDataSetChanged();
             page = "1";
-            mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
-        }
+            mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");*/
+        //}
         return mView;
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if(ClassesManage.getInstance().mList==null||ClassesManage.getInstance().mList.size()<1){
-            ClassesRequest.requestClassesList(mCanteenBean.getRes_id(), getContext(), new ClassesRequest.ClassesRequestInterface() {
-                @Override
-                public void requestClassesList(List<PackpageClassesBean> list) {
-                    ClassesManage.getInstance().saveClasses(list);
-                    mClassesList.clear();
-                    mClassesList.addAll(list);
-                    mClassesList.get(0).setSelect(true);
-                    selectClassesBean = mClassesList.get(0);
-                    mClassesAdapter.notifyDataSetChanged();
-                    page = "1";
-                    mPresenter.requestList(page, selectClassesBean.getRes_id(), "1");
-                }
-            });
-            return;
-        }
         if(selectClassesBean==null||selectClassesBean.getRes_id()==null){
             return;
         }
@@ -210,6 +194,10 @@ public class RecommendFragment extends SupportFragment implements RecommendInter
     public void requestError(String error) {
         mRecommendRefresh.finishLoadmore();
         mRecommendRefresh.finishRefreshing();
+        if(page.equals("1")){
+            mList.clear();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
