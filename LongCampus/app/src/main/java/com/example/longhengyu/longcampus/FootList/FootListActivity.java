@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.FootList.ClassesRequest.ClassesRequest;
 import com.example.longhengyu.longcampus.FootList.Event.FootListShopEvent;
+import com.example.longhengyu.longcampus.FootList.FootListBanner.FootListBannerActivity;
 import com.example.longhengyu.longcampus.FootList.Interface.FootListInterface;
 import com.example.longhengyu.longcampus.FootList.Presenter.FootListPresenter;
 import com.example.longhengyu.longcampus.FootList.SubFootList.Bean.PackpageClassesBean;
@@ -27,6 +28,7 @@ import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
 import com.example.longhengyu.longcampus.ShopCartList.ShopCartListActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,6 +72,7 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
     private MyPackageFragment mMyPackageFragment;
     private CanteenBean mBean;
     private FootListPresenter mPresenter = new FootListPresenter(this);
+    private String mUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,13 +166,24 @@ public class FootListActivity extends SupportActivity implements FootListInterfa
     }
 
     @Override
-    public void requestSucess(ShopCartHeaderBean headerBean) {
+    public void requestSucess(ShopCartHeaderBean headerBean, final String uri) {
 
+        mUri = uri;
         List<String> list = new ArrayList<>();
         for (int i = 0; i < headerBean.getRes_img().size(); i++) {
             list.add(RequestTools.BaseUrl + headerBean.getRes_img().get(i));
         }
         mBannerShopCart.setImages(list);
+        mBannerShopCart.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int posit) {
+                Intent intent = new Intent(FootListActivity.this, FootListBannerActivity.class);
+                intent.putExtra("uri",mUri);
+                intent.putExtra("res_id",mBean.getRes_id());
+                intent.putExtra("titleName",mBean.getRes_names());
+                startActivity(intent);
+            }
+        });
         mBannerShopCart.start();
         mTextFootListTitle.setText(headerBean.getRes_names());
     }

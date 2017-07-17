@@ -56,6 +56,15 @@ public class LoginBean {
     private String like_id;
     private String hate_menu;
     private String hate;
+    private String sch_id;
+
+    public String getSch_id() {
+        return sch_id;
+    }
+
+    public void setSch_id(String sch_id) {
+        this.sch_id = sch_id;
+    }
 
     public String getLaddressId() {
         return laddressId;

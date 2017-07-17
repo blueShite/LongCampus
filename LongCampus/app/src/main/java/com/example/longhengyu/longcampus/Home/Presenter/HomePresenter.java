@@ -34,10 +34,11 @@ public class HomePresenter extends BasePresenter {
 
         showDialog();
         Map<String,String> map = new HashMap<>();
-        if(LoginManage.getInstance().getLoginBean().getStuid().isEmpty()){
+        if(LoginManage.getInstance().getLoginBean().getSch_id()==null
+                ||LoginManage.getInstance().getLoginBean().getSch_id().isEmpty()){
             map.put("sch_id", "1");
         }else {
-            map.put("sch_id", LoginManage.getInstance().getLoginBean().getStuid());
+            map.put("sch_id", LoginManage.getInstance().getLoginBean().getSch_id());
         }
         map.put("page",page);
         RequestTools.getInstance().postRequest("/api/getResList.api.php", false, map, "", new RequestCallBack(mContext) {

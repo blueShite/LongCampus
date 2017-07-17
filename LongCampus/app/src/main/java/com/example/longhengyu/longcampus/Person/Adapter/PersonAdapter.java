@@ -11,13 +11,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.longhengyu.longcampus.Manage.LoginManage;
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.Person.Bean.PersonBalanceBean;
 import com.example.longhengyu.longcampus.Person.Bean.PersonBean;
 import com.example.longhengyu.longcampus.Person.Interface.PersonInterface;
 import com.example.longhengyu.longcampus.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     private Context mContext;
     private PersonInterface mInterface;
     private PersonBalanceBean mBalanceBean;
+    private String headerImagePath;
 
     public PersonAdapter(List<PersonBean> list, Context context,PersonInterface anInterface){
 
@@ -54,6 +58,11 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     public void reloadHeader(PersonBalanceBean balanceBean){
 
         mBalanceBean = balanceBean;
+        notifyItemChanged(0);
+    }
+
+    public void reloadHeaderImage(String str){
+        headerImagePath = str;
         notifyItemChanged(0);
     }
 
@@ -95,6 +104,14 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
         if(position==0){
 
+            if(headerImagePath!=null&&headerImagePath.length()>0){
+
+                if(headerImagePath.contains("userhead")){
+                    Picasso.with(mContext).load(RequestTools.BaseUrl+headerImagePath).placeholder(R.drawable.touxinag).into(holder.headerImage);
+                }else {
+                    Picasso.with(mContext).load(new File(headerImagePath)).placeholder(R.drawable.touxinag).into(holder.headerImage);
+                }
+            }
             for (int i=0;i<holder.mRelativeLayouts.size();i++){
                 RelativeLayout relativeLayout = holder.mRelativeLayouts.get(i);
                 final int finalI = i;
@@ -151,6 +168,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         private List<RelativeLayout> mRelativeLayouts = new ArrayList<>();
         private TextView titleNameText;
         private TextView titlejifenText;
+        private ImageView headerImage;
 
         //footerView的视图
         private Button footerBtn;
@@ -168,6 +186,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
                 mRelativeLayouts.add(dingdanRelat);
                 titleNameText = (TextView)itemView.findViewById(R.id.text_person_headerName);
                 titlejifenText = (TextView)itemView.findViewById(R.id.text_person_titlejifen);
+                headerImage = (ImageView)itemView.findViewById(R.id.image_preson_headerIcon);
 
                 return;
             }

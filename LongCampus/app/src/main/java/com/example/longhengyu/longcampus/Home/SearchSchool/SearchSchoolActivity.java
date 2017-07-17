@@ -97,7 +97,7 @@ public class SearchSchoolActivity extends BaseActivity implements SearchSchoolIn
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 //EventBus.getDefault().post(new SearchSchoolEvent(mItemList.get(position).getId()));
                 LoginBean bean = LoginManage.getInstance().getLoginBean();
-                bean.setStuid(mItemList.get(position).getId());
+                bean.setSch_id(mItemList.get(position).getId());
                 LoginManage.getInstance().saveLoginBean(bean);
                 finish();
                 return true;

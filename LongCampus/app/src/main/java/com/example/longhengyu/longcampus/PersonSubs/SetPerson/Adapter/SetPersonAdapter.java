@@ -5,12 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Bean.SetPersonBean;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Interface.SetPersonInterface;
 import com.example.longhengyu.longcampus.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -23,12 +27,19 @@ public class SetPersonAdapter extends RecyclerView.Adapter<SetPersonAdapter.View
     private List<SetPersonBean> mList;
     private Context mContext;
     private SetPersonInterface mInterface;
+    private String headerStr;
 
     public SetPersonAdapter(List<SetPersonBean> list,Context context,SetPersonInterface anInterface){
         mList = list;
         mContext = context;
         mInterface = anInterface;
     }
+
+    public void reloadPersonHeader(String str){
+        headerStr = str;
+        notifyItemChanged(0);
+    }
+
     @Override
     public int getItemViewType(int position) {
 
@@ -54,6 +65,21 @@ public class SetPersonAdapter extends RecyclerView.Adapter<SetPersonAdapter.View
     @Override
     public void onBindViewHolder(SetPersonAdapter.ViewHolder holder, final int position) {
         if(position==0){
+            holder.backImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mInterface.onClickHeaderView();
+                }
+            });
+
+            if(headerStr!=null&&headerStr.length()>0){
+
+                if(headerStr.contains("userhead")){
+                    Picasso.with(mContext).load(RequestTools.BaseUrl+headerStr).placeholder(R.drawable.touxinag).into(holder.headerImage);
+                }else {
+                    Picasso.with(mContext).load(new File(headerStr)).placeholder(R.drawable.touxinag).into(holder.headerImage);
+                }
+            }
             return;
         }
         SetPersonBean bean = mList.get(position-1);
@@ -79,9 +105,15 @@ public class SetPersonAdapter extends RecyclerView.Adapter<SetPersonAdapter.View
         private TextView subText;
         private View selfView;
 
+        //headerView
+        private ImageView backImage;
+        private ImageView headerImage;
+
         public ViewHolder(View itemView) {
             super(itemView);
             if(headerView!=null&&itemView==headerView){
+                backImage = (ImageView) itemView.findViewById(R.id.image_setPreson_header_back);
+                headerImage = (ImageView) itemView.findViewById(R.id.image_setPreson_header_icon);
                 return;
             }
             selfView = itemView;

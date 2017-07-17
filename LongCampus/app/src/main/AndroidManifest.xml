@@ -47,10 +47,10 @@
 
         <activity android:name=".Login.LoginActivity">
         </activity>
-        <activity android:name=".Tab.TabActivity"
-                  android:windowSoftInputMode="adjustUnspecified|stateHidden"
-                  android:configChanges="orientation|keyboardHidden">
-
+        <activity
+            android:name=".Tab.TabActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden">
         </activity>
         <activity android:name=".Information.InformationDetail.InformationDetailActivity">
         </activity>
@@ -128,6 +128,8 @@
         <activity android:name=".Login.Register.RegisterActivity">
         </activity>
         <activity android:name=".Home.SearchSchool.SearchSchoolActivity">
+        </activity>
+        <activity android:name=".FootList.FootListBanner.FootListBannerActivity">
         </activity>
     </application>
 

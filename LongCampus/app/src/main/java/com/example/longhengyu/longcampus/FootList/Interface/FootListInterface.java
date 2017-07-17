@@ -8,7 +8,7 @@ import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
 
 public interface FootListInterface {
 
-    void requestSucess(ShopCartHeaderBean headerBean);
+    void requestSucess(ShopCartHeaderBean headerBean,String uri);
 
     void requestShopNum(String shopNum);
 }

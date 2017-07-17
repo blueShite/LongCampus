@@ -4,12 +4,15 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BasePresenter;
+import com.example.longhengyu.longcampus.FootList.Bean.FootListBannerBean;
 import com.example.longhengyu.longcampus.FootList.Interface.FootListInterface;
 import com.example.longhengyu.longcampus.NetWorks.RequestBean;
 import com.example.longhengyu.longcampus.NetWorks.RequestCallBack;
 import com.example.longhengyu.longcampus.NetWorks.RequestTools;
 import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.ShopCart.Bean.ShopCartHeaderBean;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,28 +33,31 @@ public class FootListPresenter extends BasePresenter {
     }
 
     public void requestFootListHeader(final String resId){
-
         Map<String,String> map = new HashMap<>();
         map.put("res_id",resId);
-        RequestTools.getInstance().postRequest("/api/getResTop.api.php", false, map, "", new RequestCallBack(mContext) {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                super.onError(call, e, id);
-            }
+        OkHttpUtils
+                .post()
+                .url(RequestTools.BaseUrl+"/api/getResTop.api.php")
+                .params(map)
+                .tag("")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Toasty.error(mContext,"请求失败").show();
+                    }
 
-            @Override
-            public void onResponse(RequestBean response, int id) {
-                super.onResponse(response, id);
-                if(response.isRes()){
-                    Log.e("购物车Banner数据",response.getData());
-                    ShopCartHeaderBean headerBean = JSON.parseArray(response.getData(),ShopCartHeaderBean.class).get(0);
-                    mInterface.requestSucess(headerBean);
-                }else {
-                    Toasty.error(mContext,response.getMes()).show();
-                }
-
-            }
-        });
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("轮播图的数据",response);
+                        FootListBannerBean bean = JSON.parseObject(response,FootListBannerBean.class);
+                        if(bean.isRes()){
+                            mInterface.requestSucess(bean.getData().get(0),bean.getUri());
+                        }else {
+                            Toasty.error(mContext,bean.getMes()).show();
+                        }
+                    }
+                });
     }
 
     public void requestShopCartNum(String uId,String restId){

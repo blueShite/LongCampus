@@ -3,10 +3,13 @@ package com.example.longhengyu.longcampus.PersonSubs.SetPerson;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,8 @@ import android.widget.EditText;
 
 import com.alibaba.fastjson.JSON;
 import com.example.longhengyu.longcampus.Base.BaseActivity;
+import com.example.longhengyu.longcampus.Circle.ReleaseCircle.Adapter.ReleaseCircleAdapter;
+import com.example.longhengyu.longcampus.Circle.ReleaseCircle.ReleaseCircleActivity;
 import com.example.longhengyu.longcampus.Login.Bean.LoginBean;
 import com.example.longhengyu.longcampus.Manage.LoginManage;
 import com.example.longhengyu.longcampus.NetWorks.RequestBean;
@@ -27,7 +32,16 @@ import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Bean.SetPersonBean
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Interface.SetPersonInterface;
 import com.example.longhengyu.longcampus.PersonSubs.SetPerson.Presenter.SetPersonPresenter;
 import com.example.longhengyu.longcampus.R;
+import com.example.longhengyu.longcampus.Tools.Common.utils.BitmapUtils;
+import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TImage;
+import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.model.TakePhotoOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -43,7 +57,7 @@ import okhttp3.Call;
 
 import static android.R.id.edit;
 
-public class SetPersonActivity extends BaseActivity implements SetPersonInterface {
+public class SetPersonActivity extends TakePhotoActivity implements SetPersonInterface {
 
     @BindView(R.id.set_person_recycler)
     RecyclerView mSetPersonRecycler;
@@ -57,6 +71,9 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
     private String[] nationalityArray;
     int mYear, mMonth, mDay;
 
+    private TakePhoto mPhoto;
+    private CropOptions.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +84,7 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
         mMonth = ca.get(Calendar.MONTH);
         mDay = ca.get(Calendar.DAY_OF_MONTH);
         customView();
+        customTakePhoto();
         requestNavion(true);
     }
 
@@ -78,6 +96,7 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
         mPersonAdapter.notifyDataSetChanged();
     }
 
+    //定制视图
     private void customView() {
 
         mPresenter.setContext(SetPersonActivity.this);
@@ -85,9 +104,49 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
         mSetPersonRecycler.setLayoutManager(layoutManager);
         mPersonAdapter = new SetPersonAdapter(mList, SetPersonActivity.this, this);
         mSetPersonRecycler.setAdapter(mPersonAdapter);
+        mPersonAdapter.reloadPersonHeader(LoginManage.getInstance().getLoginBean().getHeadimg());
 
     }
 
+    //定制照片选择器
+    private void customTakePhoto() {
+
+        mPhoto = getTakePhoto();
+        CompressConfig config = new CompressConfig.Builder()
+                .setMaxSize(102400)
+                .setMaxPixel(800)
+                .enableReserveRaw(true)
+                .create();
+        mPhoto.onEnableCompress(config, true);
+        builder = new CropOptions.Builder();
+        builder.setOutputX(800).setOutputY(800);
+        builder.setWithOwnCrop(true);
+        TakePhotoOptions.Builder builderOptions = new TakePhotoOptions.Builder();
+        builderOptions.setWithOwnGallery(true);
+        mPhoto.setTakePhotoOptions(builderOptions.create());
+
+    }
+
+    //选取照片的操作
+    @Override
+    public void takeCancel() {
+        super.takeCancel();
+    }
+
+    @Override
+    public void takeFail(TResult result, String msg) {
+        super.takeFail(result, msg);
+    }
+
+    @Override
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        String headeStr = result.getImages().get(0).getOriginalPath();
+        String bimpStr = disposeImage(BitmapUtils.getCompressedBitmap(headeStr));
+        requestSubmitHeader(bimpStr,headeStr);
+    }
+
+    //实现弹出框
     private void showEditAlert(final int index, String hintStr) {
         LayoutInflater factory = LayoutInflater.from(SetPersonActivity.this);//提示框
         final View view = factory.inflate(R.layout.view_alert_edittext, null);//这里必须是final的
@@ -133,6 +192,8 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
                 })
                 .setNegativeButton("取消", null).create().show();
     }
+
+    //item点击事件
     @Override
     public void onClickPersonItem(final int itemIndex) {
         switch (itemIndex) {
@@ -228,10 +289,17 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
     }
 
     @Override
+    public void onClickHeaderView() {
+
+        mPhoto.onPickMultipleWithCrop(1, builder.create());
+    }
+
+    @Override
     public void requestSubmitSucess() {
 
     }
 
+    //请求民族数据
     private void requestNavion(boolean isFirst){
         RequestTools.getInstance().postRequest("/api/getNationality.api.php", false, null, "", new RequestCallBack(SetPersonActivity.this) {
             @Override
@@ -257,6 +325,7 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
         });
     }
 
+    //请求设置个人信息
     private void requestSubmitPerson(String key, final String vaule, final int index){
         Map<String,String> map = new HashMap<>();
         map.put("key",key);
@@ -334,5 +403,38 @@ public class SetPersonActivity extends BaseActivity implements SetPersonInterfac
         });
     }
 
+    private void requestSubmitHeader(String headerPath, final String imagePath){
+        Map<String,String> map = new HashMap<>();
+        map.put("headimg",headerPath);
+        map.put("imgname","header"+LoginManage.getInstance().getLoginBean().getId());
+        map.put("uid",LoginManage.getInstance().getLoginBean().getId());
+        RequestTools.getInstance().postRequest("/api/UpdataPersonImg.api.php", false, map, "", new RequestCallBack(SetPersonActivity.this) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+            }
 
+            @Override
+            public void onResponse(RequestBean response, int id) {
+                super.onResponse(response, id);
+                if(response.isRes()){
+                    mPersonAdapter.reloadPersonHeader(imagePath);
+                    LoginBean bean = LoginManage.getInstance().getLoginBean();
+                    bean.setHeadimg(imagePath);
+                    LoginManage.getInstance().saveLoginBean(bean);
+                }else {
+                    Toasty.error(SetPersonActivity.this,response.getMes()).show();
+                }
+            }
+        });
+    }
+
+    //图片处理
+    public String disposeImage(Bitmap bit) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bit.compress(Bitmap.CompressFormat.JPEG, 40, bos);// 参数100表示不压缩
+        byte[] bytes = bos.toByteArray();
+        String imgBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return imgBase64;
+    }
 }

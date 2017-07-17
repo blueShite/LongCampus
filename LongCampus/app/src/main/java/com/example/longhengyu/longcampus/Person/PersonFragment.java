@@ -77,6 +77,8 @@ public class PersonFragment extends SupportFragment implements PersonInterface {
     public void onSupportVisible() {
         super.onSupportVisible();
         mPresenter.requestBalance(LoginManage.getInstance().getLoginBean().getId());
+        PersonAdapter adapter = (PersonAdapter) mRecycleMy.getAdapter();
+        adapter.reloadHeaderImage(LoginManage.getInstance().getLoginBean().getHeadimg());
     }
 
     private void customView(){

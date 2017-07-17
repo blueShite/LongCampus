@@ -7,6 +7,7 @@ package com.example.longhengyu.longcampus.PersonSubs.SetPerson.Interface;
 public interface SetPersonInterface {
 
     void onClickPersonItem(int itemIndex);
+    void onClickHeaderView();
     void requestSubmitSucess();
 
 }
