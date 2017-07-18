@@ -17,6 +17,8 @@ import com.example.longhengyu.longcampus.R;
 import com.example.longhengyu.longcampus.Tab.TabActivity;
 import com.squareup.picasso.Picasso;
 
+import qiu.niorgai.StatusBarCompat;
+
 public class SplashActivity extends Activity {
 
     private ImageView mImageView;
@@ -25,6 +27,8 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        //SDK >= 21时, 取消状态栏的阴影
+        StatusBarCompat.translucentStatusBar(SplashActivity.this, true);
         mImageView = (ImageView)findViewById(R.id.image_splash);
         Picasso.with(SplashActivity.this).load(R.drawable.splash).fit().centerCrop().into(mImageView);
         new Handler().postDelayed(new Runnable() {

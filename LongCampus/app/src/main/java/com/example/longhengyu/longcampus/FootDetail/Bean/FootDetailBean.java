@@ -57,6 +57,15 @@ public class FootDetailBean {
     private String mealname;
     private String meal_litpic;
     private boolean isMy;
+    private String ifkeep;
+
+    public String getIfkeep() {
+        return ifkeep;
+    }
+
+    public void setIfkeep(String ifkeep) {
+        this.ifkeep = ifkeep;
+    }
 
     public boolean isMy() {
         return isMy;
